@@ -49,7 +49,7 @@ TAGGER_ROLE_ID=""
 
 If it starts successfully, the bot will log a "READY" message with informations on your server.
 
-### Static analysis
+### Static analysis and tests
 
 All these checks run in CI and prevent a merge to the production branch, please run them before committing your code:
 
@@ -58,6 +58,7 @@ npm run check-format  # fix: npm run format
 npm run lint  # try to fix: npm run lint -- --fix
 npm run check-types
 npm run check-dead-code
+npm test
 ```
 
 ## Deployment
