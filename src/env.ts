@@ -12,7 +12,6 @@ export default createEnv({
       .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
       .default("info"),
 
-    APPLICATION_ID: Snowflake,
     DISCORD_TOKEN: z.string(),
 
     ROLE_PREFIX: z.string().default("ps "),

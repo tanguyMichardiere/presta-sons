@@ -7,8 +7,6 @@ See [env.ts](src/env.ts)
 Required:
 
 ```bash
-# the bot's client ID
-APPLICATION_ID=""
 # the bot's client secret
 DISCORD_TOKEN=""
 ```
@@ -42,7 +40,6 @@ TAGGER_ROLE_ID=""
 - Create your env file:
   - Copy `.env` to `.env.local`
   - Set the required environment variables:
-    - `APPLICATION_ID`: on the Developer Portal, in General Information, click "Copy" under Application ID
     - `DISCORD_TOKEN`: on the Developer Portal, in Bot, click "Reset Token", confirm, then click "Copy"
 - `npm install`
 - `npm run dev`
