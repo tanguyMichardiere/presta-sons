@@ -35,19 +35,46 @@ export const extractPendingMembers = (members: Members): Array<string> =>
     .filter(({ status }) => status === undefined)
     .map(({ id }) => id);
 
-export const extractMissingGroups = (members: Members): Array<string> =>
+export const extractMissingGroups = (
+  members: Members,
+): Array<{ groupName: string; overlaps?: Array<{ userId: string; otherGroupName: string }> }> =>
   members
+    // list groups where everybody said no
     .filter(([_, value]) => value.every(({ status }) => status === Status.No))
-    .map(([key]) => key);
+    .map(([groupName]) => ({ groupName }))
+    // list groups where the only members who said yes are also part of another group
+    .concat(
+      members.reduce<
+        Array<{ groupName: string; overlaps: Array<{ userId: string; otherGroupName: string }> }>
+      >(
+        (groups, [groupName, groupMembers]) => [
+          ...groups,
+          ...groupMembers
+            .filter(({ status }) => status === Status.Ok)
+            .map(({ id: userId }) => ({
+              groupName,
+              overlaps: members
+                .filter(
+                  ([otherGroupName, otherGroupMembers]) =>
+                    otherGroupName !== groupName &&
+                    otherGroupMembers.map(({ id }) => id).includes(userId),
+                )
+                .map(([otherGroupName]) => ({ userId, otherGroupName })),
+            })),
+        ],
+        [],
+      ),
+    );
 
 export const extractPerhapsMissingGroups = (members: Members): Array<string> =>
   members
+    // list groups where nobody said yes
     .filter(
       ([_, value]) =>
-        value.every(({ status }) => status === Status.Perhaps || status === Status.No) &&
+        value.every(({ status }) => status !== Status.Ok) &&
         !value.every(({ status }) => status === Status.No),
     )
-    .map(([key]) => key);
+    .map(([groupName]) => groupName);
 
 export const buildGroupFields = (members: Members): Array<APIEmbedField> =>
   members.map(([groupName, groupMembers]) => ({

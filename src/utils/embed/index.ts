@@ -40,7 +40,18 @@ export function embedFromMembers(members: Members): APIEmbed {
 
   const missing = extractMissingGroups(members);
   if (missing.length > 0) {
-    fields.push({ name: `${Status.No} Pupitres manquants`, value: missing.join(", ") });
+    fields.push({
+      name: `${Status.No} Pupitres manquants`,
+      value: missing
+        .map(({ groupName, overlaps }) =>
+          overlaps !== undefined
+            ? `${groupName} (si ${overlaps
+                .map(({ userId, otherGroupName }) => `${tagFromId(userId)} -> ${otherGroupName}`)
+                .join(" et ")})`
+            : groupName,
+        )
+        .join(", "),
+    });
   }
 
   const perhapsMissing = extractPerhapsMissingGroups(members);
