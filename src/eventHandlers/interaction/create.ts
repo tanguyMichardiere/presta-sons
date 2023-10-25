@@ -5,9 +5,9 @@ import {
   handleCreateSurveyCommand,
 } from "../../interactions/commands/createSurvey";
 import {
-  Data as SurveyButtonComponentInteractionData,
-  handleSurveyButtonComponentInteraction,
-} from "../../interactions/components/surveyButton";
+  Data as SurveyComponentInteractionData,
+  handleSurveyComponentInteraction,
+} from "../../interactions/components/survey";
 
 export const handleInteractionCreate = createEventHandler(
   GatewayDispatchEvents.InteractionCreate,
@@ -17,9 +17,9 @@ export const handleInteractionCreate = createEventHandler(
       return handleCreateSurveyCommand(api, createSurveyCommandData.data);
     }
 
-    const statusButtonInteractionData = SurveyButtonComponentInteractionData.safeParse(data);
+    const statusButtonInteractionData = SurveyComponentInteractionData.safeParse(data);
     if (statusButtonInteractionData.success) {
-      return handleSurveyButtonComponentInteraction(api, statusButtonInteractionData.data);
+      return handleSurveyComponentInteraction(api, statusButtonInteractionData.data);
     }
   },
 );
