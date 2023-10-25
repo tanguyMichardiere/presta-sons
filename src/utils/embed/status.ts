@@ -1,5 +1,5 @@
 import type { APIEmbedField } from "@discordjs/core";
-import type { Members } from "./members";
+import type { Members } from "../../globalState/members";
 import { idFromTag, tagFromId } from "./tag";
 
 export enum Status {
@@ -33,7 +33,8 @@ export const extractPendingMembers = (members: Members): Array<string> =>
     .map(([_, groupMembers]) => groupMembers)
     .flat()
     .filter(({ status }) => status === undefined)
-    .map(({ id }) => id);
+    .map(({ id }) => id)
+    .filter((id, index, array) => array.indexOf(id) === index);
 
 export const extractMissingGroups = (
   members: Members,
@@ -60,7 +61,8 @@ export const extractMissingGroups = (
                     otherGroupMembers.map(({ id }) => id).includes(userId),
                 )
                 .map(([otherGroupName]) => ({ userId, otherGroupName })),
-            })),
+            }))
+            .filter(({ overlaps }) => overlaps.length > 0),
         ],
         [],
       ),

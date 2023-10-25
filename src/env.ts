@@ -15,9 +15,8 @@ export default createEnv({
     APPLICATION_ID: Snowflake,
     DISCORD_TOKEN: z.string(),
 
-    GUILD_ID: Snowflake,
-    FORUM_ID: Snowflake,
     ROLE_PREFIX: z.string().default("ps "),
+    TAGGER_ROLE_ID: z.optional(Snowflake),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

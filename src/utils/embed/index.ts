@@ -1,6 +1,7 @@
-import type { API, APIEmbed, APIEmbedField } from "@discordjs/core";
-import type { Members } from "./members";
-import { getMembersFromRoles } from "./members";
+import type { APIEmbed, APIEmbedField } from "@discordjs/core";
+import type { Members } from "../../globalState/members";
+import { pendingMembers } from "../../globalState/members";
+import { logger } from "../../logger";
 import {
   Status,
   buildGroupFields,
@@ -13,10 +14,12 @@ import { tagFromId } from "./tag";
 
 const separator: APIEmbedField = { name: "", value: "\b" };
 
-export async function membersFromEmbed(api: API, embed: APIEmbed): Promise<Members> {
-  const members = await getMembersFromRoles(api);
+export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const members = structuredClone(pendingMembers[guildId]!);
 
   if (embed.fields === undefined) {
+    logger.warn(embed, "embed has no fields");
     return members;
   }
 

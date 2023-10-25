@@ -1,25 +1,25 @@
 import { GatewayDispatchEvents } from "@discordjs/core";
 import { createEventHandler } from "..";
 import {
-  Data as MentionPendingCommandData,
-  handleMentionPendingCommand,
-} from "../../interactions/commands/mentionPending";
+  Data as CreateSurveyCommandData,
+  handleCreateSurveyCommand,
+} from "../../interactions/commands/createSurvey";
 import {
-  Data as StatusButtonComponentInteractionData,
-  handleStatusButtonComponentInteraction,
-} from "../../interactions/components/statusButton";
+  Data as SurveyButtonComponentInteractionData,
+  handleSurveyButtonComponentInteraction,
+} from "../../interactions/components/surveyButton";
 
 export const handleInteractionCreate = createEventHandler(
   GatewayDispatchEvents.InteractionCreate,
   async function ({ data, api }) {
-    const statusButtonInteractionData = StatusButtonComponentInteractionData.safeParse(data);
-    if (statusButtonInteractionData.success) {
-      return handleStatusButtonComponentInteraction(api, statusButtonInteractionData.data);
+    const createSurveyCommandData = CreateSurveyCommandData.safeParse(data);
+    if (createSurveyCommandData.success) {
+      return handleCreateSurveyCommand(api, createSurveyCommandData.data);
     }
 
-    const mentionPendingCommandData = MentionPendingCommandData.safeParse(data);
-    if (mentionPendingCommandData.success) {
-      return handleMentionPendingCommand(api, mentionPendingCommandData.data);
+    const statusButtonInteractionData = SurveyButtonComponentInteractionData.safeParse(data);
+    if (statusButtonInteractionData.success) {
+      return handleSurveyButtonComponentInteraction(api, statusButtonInteractionData.data);
     }
   },
 );
