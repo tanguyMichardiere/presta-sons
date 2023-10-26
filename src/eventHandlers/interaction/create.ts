@@ -5,9 +5,17 @@ import {
   handleCreateSurveyCommand,
 } from "../../interactions/commands/createSurvey";
 import {
+  Data as TagPendingCommandData,
+  handleTagPendingCommand,
+} from "../../interactions/commands/tagPending";
+import {
   Data as SurveyComponentInteractionData,
   handleSurveyComponentInteraction,
-} from "../../interactions/components/survey";
+} from "../../interactions/components/surveyButton";
+import {
+  Data as TagPendingComponentInteractionData,
+  handleTagPendingComponentInteraction,
+} from "../../interactions/components/tagPending";
 
 export const handleInteractionCreate = createEventHandler(
   GatewayDispatchEvents.InteractionCreate,
@@ -17,9 +25,19 @@ export const handleInteractionCreate = createEventHandler(
       return handleCreateSurveyCommand(api, createSurveyCommandData.data);
     }
 
-    const statusButtonInteractionData = SurveyComponentInteractionData.safeParse(data);
-    if (statusButtonInteractionData.success) {
-      return handleSurveyComponentInteraction(api, statusButtonInteractionData.data);
+    const surveyComponentInteractionData = SurveyComponentInteractionData.safeParse(data);
+    if (surveyComponentInteractionData.success) {
+      return handleSurveyComponentInteraction(api, surveyComponentInteractionData.data);
+    }
+
+    const tagPendingCommandData = TagPendingCommandData.safeParse(data);
+    if (tagPendingCommandData.success) {
+      return handleTagPendingCommand(api, tagPendingCommandData.data);
+    }
+
+    const tagPendingComponentInteractionData = TagPendingComponentInteractionData.safeParse(data);
+    if (tagPendingComponentInteractionData.success) {
+      return handleTagPendingComponentInteraction(api, tagPendingComponentInteractionData.data);
     }
   },
 );

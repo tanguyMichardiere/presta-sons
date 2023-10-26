@@ -4,7 +4,7 @@ import type {
   APIMessageActionRowComponent,
   RESTPutAPIApplicationGuildCommandsJSONBody,
 } from "@discordjs/core";
-import { ApplicationCommandType, ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
+import { ApplicationCommandType, ButtonStyle, ComponentType } from "@discordjs/core";
 import { z } from "zod";
 import { pendingMembers } from "../../globalState/members";
 import { logger } from "../../logger";
@@ -47,17 +47,6 @@ const components = [
         style: ButtonStyle.Secondary,
         emoji: { name: Status.No },
         custom_id: Status.No,
-      },
-    ],
-  },
-  {
-    type: ComponentType.ActionRow,
-    components: [
-      {
-        type: ComponentType.ChannelSelect,
-        channel_types: [ChannelType.GuildText, ChannelType.PublicThread],
-        placeholder: "Mentionner les fanfarons n'ayant pas répondu",
-        custom_id: "tagPending",
       },
     ],
   },
