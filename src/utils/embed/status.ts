@@ -30,7 +30,7 @@ export const extractStatus = (
 
 export const extractPendingMembers = (members: Members): Array<string> =>
   members
-    .map(([_, groupMembers]) => groupMembers)
+    .map(({ groupMembers }) => groupMembers)
     .flat()
     .filter(({ status }) => status === undefined)
     .map(({ id }) => id)
@@ -41,14 +41,14 @@ export const extractMissingGroups = (
 ): Array<{ groupName: string; overlaps?: Array<{ userId: string; otherGroupName: string }> }> =>
   members
     // list groups where everybody said no
-    .filter(([_, value]) => value.every(({ status }) => status === Status.No))
-    .map(([groupName]) => ({ groupName }))
+    .filter(({ groupMembers }) => groupMembers.every(({ status }) => status === Status.No))
+    .map(({ groupName }) => ({ groupName }))
     // list groups where the only members who said yes are also part of another group
     .concat(
       members.reduce<
         Array<{ groupName: string; overlaps: Array<{ userId: string; otherGroupName: string }> }>
       >(
-        (groups, [groupName, groupMembers]) => [
+        (groups, { groupName, groupMembers }) => [
           ...groups,
           ...groupMembers
             .filter(({ status }) => status === Status.Ok)
@@ -56,11 +56,11 @@ export const extractMissingGroups = (
               groupName,
               overlaps: members
                 .filter(
-                  ([otherGroupName, otherGroupMembers]) =>
+                  ({ groupName: otherGroupName, groupMembers: otherGroupMembers }) =>
                     otherGroupName !== groupName &&
                     otherGroupMembers.map(({ id }) => id).includes(userId),
                 )
-                .map(([otherGroupName]) => ({ userId, otherGroupName })),
+                .map(({ groupName: otherGroupName }) => ({ userId, otherGroupName })),
             }))
             .filter(({ overlaps }) => overlaps.length > 0),
         ],
@@ -72,14 +72,14 @@ export const extractPerhapsMissingGroups = (members: Members): Array<string> =>
   members
     // list groups where nobody said yes
     .filter(
-      ([_, value]) =>
-        value.every(({ status }) => status !== Status.Ok) &&
-        !value.every(({ status }) => status === Status.No),
+      ({ groupMembers }) =>
+        groupMembers.every(({ status }) => status !== Status.Ok) &&
+        !groupMembers.every(({ status }) => status === Status.No),
     )
-    .map(([groupName]) => groupName);
+    .map(({ groupName }) => groupName);
 
 export const buildGroupFields = (members: Members): Array<APIEmbedField> =>
-  members.map(([groupName, groupMembers]) => ({
+  members.map(({ groupName, groupMembers }) => ({
     name: groupName,
     value: groupMembers
       .filter((member) => member.status !== undefined)

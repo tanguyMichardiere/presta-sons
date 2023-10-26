@@ -19,8 +19,6 @@ LOG_LEVEL=""  # default: "info"
 
 # the prefix for the roles that the bot will use to categorize members
 ROLE_PREFIX=""  # default: "ps "
-# the ID of the role that is allowed to use the button to tag members that have not responded to a survey
-TAGGER_ROLE_ID=""
 ```
 
 ## Requirements

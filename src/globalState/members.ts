@@ -3,7 +3,10 @@ import env from "../env";
 import { logger } from "../logger";
 import type { Status } from "../utils/embed/status";
 
-export type Members = Array<[string, Array<{ id: string; status?: Status }>]>;
+export type Members = Array<{
+  groupName: string;
+  groupMembers: Array<{ id: string; status?: Status }>;
+}>;
 
 export const pendingMembers: Record<string, Members> = {};
 
@@ -23,8 +26,8 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
         member.user !== undefined && member.roles.some((id) => roleIds.includes(id)),
     )
     .map(({ user: { id }, roles }) => ({ id, roles }));
-  pendingMembers[guildId] = groupRoles.map(({ id: roleId, groupName }) => [
+  pendingMembers[guildId] = groupRoles.map(({ id: roleId, groupName }) => ({
     groupName,
-    members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
-  ]);
+    groupMembers: members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
+  }));
 }

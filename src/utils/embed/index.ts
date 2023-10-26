@@ -24,7 +24,7 @@ export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
   }
 
   const statuses = extractStatus(embed.fields);
-  for (const [groupName, groupMembers] of members) {
+  for (const { groupName, groupMembers } of members) {
     for (const member of groupMembers) {
       member.status = statuses[groupName]?.[member.id];
     }
