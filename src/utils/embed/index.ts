@@ -2,14 +2,12 @@ import type { APIEmbed, APIEmbedField } from "@discordjs/core";
 import type { Members } from "../../globalState/members";
 import { pendingMembers } from "../../globalState/members";
 import { logger } from "../../logger";
-import {
-  Status,
-  buildGroupFields,
-  extractMissingGroups,
-  extractPendingMembers,
-  extractPerhapsMissingGroups,
-  extractStatus,
-} from "./status";
+import { Status } from "./status";
+import { buildGroupFields } from "./status/buildGroupFields";
+import { extractStatus } from "./status/extract";
+import { extractMissingGroups } from "./status/extract/missingGroups";
+import { extractPendingMembers } from "./status/extract/pendingMembers";
+import { extractPerhapsMissingGroups } from "./status/extract/perhapsMissingGroups";
 import { tagFromId } from "./tag";
 
 const separator: APIEmbedField = { name: "", value: "\b" };
@@ -61,7 +59,15 @@ export function embedFromMembers(members: Members): APIEmbed {
   if (perhapsMissing.length > 0) {
     fields.push({
       name: `${Status.Perhaps} Pupitres peut-être manquants`,
-      value: perhapsMissing.join(", "),
+      value: perhapsMissing
+        .map(({ groupName, overlaps }) =>
+          overlaps !== undefined
+            ? `${groupName} (si ${overlaps
+                .map(({ userId, otherGroupName }) => `${tagFromId(userId)} -> ${otherGroupName}`)
+                .join(" et ")})`
+            : groupName,
+        )
+        .join(", "),
     });
   }
 

@@ -9,7 +9,7 @@ import type { Data as SurveyComponentInteractionData } from ".";
 import { logger } from "../../../logger";
 import { Snowflake } from "../../../schemas";
 import { membersFromEmbed } from "../../../utils/embed";
-import { extractPendingMembers } from "../../../utils/embed/status";
+import { extractPendingMembers } from "../../../utils/embed/status/extract/pendingMembers";
 import { tagFromId } from "../../../utils/embed/tag";
 
 export const Data = z
