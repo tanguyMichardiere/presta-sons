@@ -7,15 +7,8 @@ See [env.ts](src/env.ts)
 Required:
 
 ```bash
-# the bot's client ID
-APPLICATION_ID=""
 # the bot's client secret
 DISCORD_TOKEN=""
-
-# the ID of the server the bot will monitor
-GUILD_ID=""
-# the ID of the text or forum channel the bot will monitor
-FORUM_ID=""
 ```
 
 Optional:
@@ -24,7 +17,7 @@ Optional:
 # "fatal", "error", "warn", "info", "debug", "trace" or "silent"
 LOG_LEVEL=""  # default: "info"
 
-# the prefix for the roles that the bot will consider to categorize members
+# the prefix for the roles that the bot will use to categorize members
 ROLE_PREFIX=""  # default: "ps "
 ```
 
@@ -36,9 +29,6 @@ ROLE_PREFIX=""  # default: "ps "
 
 ## Local development
 
-- Enable "Developer Mode" in Discord > Settings > App Settings > Advanced
-- Create a new Discord server or use an existing one
-- Create a text or forum channel or use an existing one
 - Create a Discord Application:
   - Go to the [Discord Developer Portal](https://discord.com/developers/applications)
   - Click `New Application`, choose a name and confirm
@@ -48,16 +38,13 @@ ROLE_PREFIX=""  # default: "ps "
 - Create your env file:
   - Copy `.env` to `.env.local`
   - Set the required environment variables:
-    - `APPLICATION_ID`: on the Developer Portal, in General Information, click "Copy" under Application ID
     - `DISCORD_TOKEN`: on the Developer Portal, in Bot, click "Reset Token", confirm, then click "Copy"
-    - `GUILD_ID`: right-click on your Discord server then click "Copy Server ID"
-    - `FORUM_ID`: right-click on your text or forum channel then click "Copy Channel ID"
 - `npm install`
 - `npm run dev`
 
-If it starts successfully, the bot will log a "READY" message with informations on your server and the forum channel.
+If it starts successfully, the bot will log a "READY" message with informations on your server.
 
-### Static analysis
+### Static analysis and tests
 
 All these checks run in CI and prevent a merge to the production branch, please run them before committing your code:
 
@@ -66,6 +53,7 @@ npm run check-format  # fix: npm run format
 npm run lint  # try to fix: npm run lint -- --fix
 npm run check-types
 npm run check-dead-code
+npm test
 ```
 
 ## Deployment

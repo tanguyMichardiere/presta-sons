@@ -1,5 +1,7 @@
 import type { KnipConfig } from "knip";
 
 export default {
-  ignoreDependencies: ["npm-check-updates", "pino-pretty"],
+  ignore: ["src/**/*.test.ts"],
+  ignoreBinaries: ["glob"],
+  ignoreDependencies: ["node-glob", "npm-check-updates", "pino-pretty"],
 } satisfies KnipConfig;

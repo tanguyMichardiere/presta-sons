@@ -20,6 +20,12 @@ module.exports = {
         "tsdoc/syntax": "off",
       },
     },
+    {
+      files: ["**/*.test.ts"],
+      rules: {
+        "max-lines": "off",
+      },
+    },
   ],
   reportUnusedDisableDirectives: true,
   rules: {
