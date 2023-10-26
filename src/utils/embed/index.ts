@@ -10,7 +10,7 @@ import { extractPendingMembers } from "./status/extract/pendingMembers";
 import { extractPerhapsMissingGroups } from "./status/extract/perhapsMissingGroups";
 import { tagFromId } from "./tag";
 
-const separator: APIEmbedField = { name: "", value: "\b" };
+const separator: APIEmbedField = { name: "", value: "\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~" };
 
 export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
