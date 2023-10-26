@@ -36,7 +36,10 @@ export async function handleTagPendingComponentInteraction(
   if (data.message.interaction.user.id === data.member.user.id) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const channel = componentData.resolved.channels[componentData.values[0]]!;
-    logger.debug(data, `tagging all pending members in ${channel.id}`);
+    logger.debug(
+      data,
+      `tagging all pending members for ${data.message.channel_id}/${data.message.id} in ${channel.id}`,
+    );
     const members = membersFromEmbed(data.message.embeds[0], data.guild_id);
     const pending = extractPendingMembers(members);
     if (pending.length === 0) {
@@ -56,7 +59,7 @@ export async function handleTagPendingComponentInteraction(
     }
   } else {
     await api.interactions.reply(data.id, data.token, {
-      content: "Vous ne pouvez pas faire ça avec un sondage que vous n'avez pas créé",
+      content: "Cette interaction est réservée à la personne ayant créé le sondage",
       flags: MessageFlags.Ephemeral,
     });
   }
