@@ -8,7 +8,7 @@
     "lint": "eslint --max-warnings 0 src",
     "check-types": "tsc --noEmit true",
     "check-dead-code": "knip",
-    "test": "glob -c 'node --require ts-node/register --test' 'src/**/*.test.ts'",
+    "test": "c8 glob -c 'node --require ts-node/register --test' 'src/**/*.test.ts'",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -28,6 +28,7 @@
     "@types/node": "20.8.8",
     "@typescript-eslint/eslint-plugin": "6.9.0",
     "@typescript-eslint/parser": "6.9.0",
+    "c8": "8.0.1",
     "eslint": "8.52.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-tsdoc": "0.2.17",
