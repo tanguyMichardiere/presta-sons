@@ -10,6 +10,10 @@ import { extractPendingMembers } from "./status/extract/pendingMembers";
 import { extractPerhapsMissingGroups } from "./status/extract/perhapsMissingGroups";
 import { tagFromId } from "./tag";
 
+// TODO: find a solution to create a blank field
+// \b works on macOS and iOS but displays a square on Windows
+// \u200B works on macOS and Windows but displays nothing on iOS
+// ```\u200B``` works on iOS but displays a dark rectangle on macOS and Winodws
 const separator: APIEmbedField = { name: "", value: "\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~" };
 
 export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
