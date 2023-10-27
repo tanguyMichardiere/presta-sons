@@ -45,7 +45,7 @@ export async function handleTagPendingCommand(
     });
     return;
   }
-  logger.debug(data, "creating a channel select message");
+  logger.debug(data, "creating a tag prompt message with a channel select");
   await api.interactions.reply(data.id, data.token, {
     content: tagPendingCommandMessages.chooseTheChannel,
     components: [

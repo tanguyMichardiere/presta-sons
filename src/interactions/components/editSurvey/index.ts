@@ -1,5 +1,6 @@
 import type { API } from "@discordjs/core";
 import { ChannelType, MessageFlags } from "@discordjs/core";
+import { logger } from "../../../logger";
 import { editSurveyComponentInteractionMessages, parseChannelUrl } from "../../../messages";
 import { embedFromMembers, membersFromEmbed } from "../../../utils/embed";
 import type { EditSurveyComponentInteractionData } from "./data";
@@ -36,6 +37,7 @@ export async function handleEditSurveyComponentInteraction(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     data.data.custom_id.split("-")[1]!,
   );
+  logger.debug(data, `edit the survey ${surveyMessage.channel_id}/${surveyMessage.id}`);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
   await api.interactions.deferMessageUpdate(data.id, data.token);

@@ -1,5 +1,6 @@
 import type { API } from "@discordjs/core";
 import { ComponentType, MessageFlags, TextInputStyle } from "@discordjs/core";
+import { logger } from "../../../logger";
 import { editSurveyCommandMessages } from "../../../messages";
 import { getAdminRole } from "../../../utils/adminRole";
 import { informationsFromEmbed } from "../../../utils/embed";
@@ -33,6 +34,7 @@ export async function handleEditSurveyCommand(
     });
     return;
   }
+  logger.debug(data, "creating a modal to edit a survey");
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const embed = surveyMessage.embeds[0]!;
   const informations = informationsFromEmbed(embed);

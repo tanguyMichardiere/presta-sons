@@ -2,6 +2,7 @@ import { Status } from "../..";
 import type { Members } from "../../../../../globalState/members";
 import { getGroupsByMemberId } from "./getGroupsByMemberId";
 
+// TOOD: add logging
 export function extractPerhapsMissingGroups(
   members: Members,
 ): Array<{ groupName: string; overlaps?: Array<{ userId: string; otherGroupName: string }> }> {

@@ -21,7 +21,7 @@ export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
   const members = structuredClone(pendingMembers[guildId]!);
 
   if (embed.fields === undefined) {
-    logger.warn(embed, "embed has no fields");
+    logger.warn({ guildId, embed }, "embed has no fields");
     return members;
   }
 
