@@ -19,6 +19,8 @@ LOG_LEVEL=""  # default: "info"
 
 # the prefix for the roles that the bot will use to categorize members
 ROLE_PREFIX=""  # default: "ps "
+# the name of the role that is allowed to create surveys and request tag messages
+ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 ```
 
 ## Requirements

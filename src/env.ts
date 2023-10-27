@@ -14,6 +14,7 @@ export default createEnv({
     DISCORD_TOKEN: z.string(),
 
     ROLE_PREFIX: z.string().default("ps "),
+    ADMIN_ROLE_NAME: z.string().default("Admin Presta'sons"),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

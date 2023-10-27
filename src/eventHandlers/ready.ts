@@ -1,7 +1,7 @@
 import { GatewayDispatchEvents } from "@discordjs/core";
 import { createEventHandler } from ".";
-import { command as createSurveyCommand } from "../interactions/commands/createSurvey";
-import { command as tagPendingCommand } from "../interactions/commands/tagPending";
+import { createSurveyCommand } from "../interactions/commands/createSurvey/command";
+import { tagPendingCommand } from "../interactions/commands/tagPending/command";
 import { logger } from "../logger";
 
 export const handleReady = createEventHandler(
