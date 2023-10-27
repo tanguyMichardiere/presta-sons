@@ -17,8 +17,12 @@ Optional:
 # "fatal", "error", "warn", "info", "debug", "trace" or "silent"
 LOG_LEVEL=""  # default: "info"
 
+# a server ID to optionally limit the scope of the bot to it (makes deploying commands much faster)
+GUILD_ID=""
 # the prefix for the roles that the bot will use to categorize members
 ROLE_PREFIX=""  # default: "ps "
+# the name of the role that is allowed to create surveys and request tag messages
+ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 ```
 
 ## Requirements

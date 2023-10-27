@@ -1,7 +1,7 @@
 import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { Status } from "..";
-import { extractMissingGroups } from "./missingGroups";
+import { Status } from "../..";
+import { extractMissingGroups } from "./missing";
 
 void describe("extractMissingGroups", async function () {
   await it("empty input", function () {
@@ -58,7 +58,10 @@ void describe("extractMissingGroups", async function () {
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.Perhaps }] },
       ]),
-      [],
+      [
+        { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
+        { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+      ],
     );
   });
 

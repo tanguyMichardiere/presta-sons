@@ -1,6 +1,6 @@
 import type { APIEmbedField } from "@discordjs/core";
-import type { Members } from "../../../globalState/members";
-import { tagFromId } from "../tag";
+import type { Members } from "../../globalState/members";
+import { tagFromId } from "./tag";
 
 export const buildGroupFields = (members: Members): Array<APIEmbedField> =>
   members.map(({ groupName, groupMembers }) => ({

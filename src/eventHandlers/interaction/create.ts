@@ -1,21 +1,17 @@
 import { GatewayDispatchEvents } from "@discordjs/core";
 import { createEventHandler } from "..";
-import {
-  Data as CreateSurveyCommandData,
-  handleCreateSurveyCommand,
-} from "../../interactions/commands/createSurvey";
-import {
-  Data as TagPendingCommandData,
-  handleTagPendingCommand,
-} from "../../interactions/commands/tagPending";
-import {
-  Data as SurveyComponentInteractionData,
-  handleSurveyComponentInteraction,
-} from "../../interactions/components/surveyButton";
-import {
-  Data as TagPendingComponentInteractionData,
-  handleTagPendingComponentInteraction,
-} from "../../interactions/components/tagPending";
+import { handleCreateSurveyCommand } from "../../interactions/commands/createSurvey";
+import { CreateSurveyCommandData } from "../../interactions/commands/createSurvey/data";
+import { handleEditSurveyCommand } from "../../interactions/commands/editSurvey.ts";
+import { EditSurveyCommandData } from "../../interactions/commands/editSurvey.ts/data";
+import { handleTagPendingCommand } from "../../interactions/commands/tagPending";
+import { TagPendingCommandData } from "../../interactions/commands/tagPending/data";
+import { handleEditSurveyComponentInteraction } from "../../interactions/components/editSurvey";
+import { EditSurveyComponentInteractionData } from "../../interactions/components/editSurvey/data";
+import { handleSurveyComponentInteraction } from "../../interactions/components/surveyButton";
+import { SurveyButtonComponentInteractionData } from "../../interactions/components/surveyButton/data";
+import { handleTagPendingComponentInteraction } from "../../interactions/components/tagPending";
+import { TagPendingComponentInteractionData } from "../../interactions/components/tagPending/data";
 
 export const handleInteractionCreate = createEventHandler(
   GatewayDispatchEvents.InteractionCreate,
@@ -25,9 +21,24 @@ export const handleInteractionCreate = createEventHandler(
       return handleCreateSurveyCommand(api, createSurveyCommandData.data);
     }
 
-    const surveyComponentInteractionData = SurveyComponentInteractionData.safeParse(data);
-    if (surveyComponentInteractionData.success) {
-      return handleSurveyComponentInteraction(api, surveyComponentInteractionData.data);
+    const editSurveyCommandData = EditSurveyCommandData.safeParse(data);
+    if (editSurveyCommandData.success) {
+      return handleEditSurveyCommand(api, editSurveyCommandData.data);
+    }
+
+    const editInformationsComponentInteractionData =
+      EditSurveyComponentInteractionData.safeParse(data);
+    if (editInformationsComponentInteractionData.success) {
+      return handleEditSurveyComponentInteraction(
+        api,
+        editInformationsComponentInteractionData.data,
+      );
+    }
+
+    const surveyButtonComponentInteractionData =
+      SurveyButtonComponentInteractionData.safeParse(data);
+    if (surveyButtonComponentInteractionData.success) {
+      return handleSurveyComponentInteraction(api, surveyButtonComponentInteractionData.data);
     }
 
     const tagPendingCommandData = TagPendingCommandData.safeParse(data);
