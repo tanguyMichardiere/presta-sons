@@ -14,7 +14,7 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
   logger.debug(`updating the members and roles list for guild ${guildId}`);
   const [allRoles, allMembers] = await Promise.all([
     api.guilds.getRoles(guildId),
-    api.guilds.getMembers(guildId),
+    api.guilds.getMembers(guildId, { limit: 1000 }),
   ]);
   const groupRoles = allRoles
     .filter(({ name }) => name.startsWith(env.ROLE_PREFIX))
