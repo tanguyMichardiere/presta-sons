@@ -28,6 +28,28 @@ export const createSurveyCommandMessages = {
   },
 };
 
+export const editSurveyCommandMessages = {
+  commandName: "Modifier Sondage" as const,
+  modal: {
+    title: "Modifier le sondage",
+    titleInputLabel: "Nom",
+    urlInputLabel: "URL du thread",
+    informationsInputLabel: "Informations",
+  },
+  errors: {
+    onlyUsableOnSurveyMessage: "Cette commande n'est utilisable que sur un message de sondage",
+    adminRoleDoesntExist: `Le rôle "${env.ADMIN_ROLE_NAME}", nécessaire pour modifier les informations d'un sondage, n'existe pas`,
+    userIsNotAdmin: `Le rôle "${env.ADMIN_ROLE_NAME}" est nécessaire pour modifier les informations d'un sondage`,
+  },
+};
+
+export const editSurveyComponentInteractionMessages = {
+  errors: {
+    invalidChannelUrl: "L'URL de thread n'est pas une URL de channel valide",
+    notAThread: "L'URL n'est pas celle d'un thread",
+  },
+};
+
 export const tagPendingCommandMessages = {
   commandName: "Rappel" as const,
   chooseTheChannel: "Choisir le channel dans lequel envoyer le rappel",
@@ -48,6 +70,7 @@ export const tagPendingComponentInteractionMessages = {
 
 export const embedMessages = {
   defaultTitle: "Effectifs",
+  informations: "Informations",
   // TODO: find a solution to create a blank field
   // \b works on macOS and iOS but displays a square on Windows
   // \u200B works on macOS and Windows but displays nothing on iOS

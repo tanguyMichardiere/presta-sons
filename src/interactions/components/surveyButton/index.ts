@@ -1,7 +1,7 @@
 import type { API } from "@discordjs/core";
 import { logger } from "../../../logger";
 import { parseChannelUrl } from "../../../messages";
-import { embedFromMembers, membersFromEmbed } from "../../../utils/embed";
+import { embedFromMembers, informationsFromEmbed, membersFromEmbed } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
 import type { SurveyButtonComponentInteractionData } from "./data";
 
@@ -27,11 +27,17 @@ export async function handleSurveyComponentInteraction(
     if (threadId !== undefined) {
       await api.threads.addMember(threadId, id);
     } else {
-      logger.warn(`invalid channel URL in embed: '${data.message.embeds[0].url}'`);
+      logger.warn(`invalid channel URL in embed: ${data.message.embeds[0].url}`);
     }
   }
 
   await api.interactions.updateMessage(data.id, data.token, {
-    embeds: [embedFromMembers(members, data.message.embeds[0].title, data.message.embeds[0].url)],
+    embeds: [
+      embedFromMembers(members, {
+        title: data.message.embeds[0].title,
+        url: data.message.embeds[0].url,
+        informations: informationsFromEmbed(data.message.embeds[0]),
+      }),
+    ],
   });
 }

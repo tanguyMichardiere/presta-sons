@@ -21,4 +21,4 @@ RUN npm clean-install --only=production
 
 COPY --from=BUILDER /usr/src/app/dist dist
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["node", "dist/index.js"]

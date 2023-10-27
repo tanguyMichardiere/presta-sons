@@ -2,8 +2,12 @@ import { GatewayDispatchEvents } from "@discordjs/core";
 import { createEventHandler } from "..";
 import { handleCreateSurveyCommand } from "../../interactions/commands/createSurvey";
 import { CreateSurveyCommandData } from "../../interactions/commands/createSurvey/data";
+import { handleEditSurveyCommand } from "../../interactions/commands/editSurvey.ts";
+import { EditSurveyCommandData } from "../../interactions/commands/editSurvey.ts/data";
 import { handleTagPendingCommand } from "../../interactions/commands/tagPending";
 import { TagPendingCommandData } from "../../interactions/commands/tagPending/data";
+import { handleEditSurveyComponentInteraction } from "../../interactions/components/editSurvey";
+import { EditSurveyComponentInteractionData } from "../../interactions/components/editSurvey/data";
 import { handleSurveyComponentInteraction } from "../../interactions/components/surveyButton";
 import { SurveyButtonComponentInteractionData } from "../../interactions/components/surveyButton/data";
 import { handleTagPendingComponentInteraction } from "../../interactions/components/tagPending";
@@ -15,6 +19,20 @@ export const handleInteractionCreate = createEventHandler(
     const createSurveyCommandData = CreateSurveyCommandData.safeParse(data);
     if (createSurveyCommandData.success) {
       return handleCreateSurveyCommand(api, createSurveyCommandData.data);
+    }
+
+    const editSurveyCommandData = EditSurveyCommandData.safeParse(data);
+    if (editSurveyCommandData.success) {
+      return handleEditSurveyCommand(api, editSurveyCommandData.data);
+    }
+
+    const editInformationsComponentInteractionData =
+      EditSurveyComponentInteractionData.safeParse(data);
+    if (editInformationsComponentInteractionData.success) {
+      return handleEditSurveyComponentInteraction(
+        api,
+        editInformationsComponentInteractionData.data,
+      );
     }
 
     const surveyButtonComponentInteractionData =

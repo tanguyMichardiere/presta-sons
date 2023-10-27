@@ -1,7 +1,7 @@
 import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { Status } from "..";
-import { extractPerhapsMissingGroups } from "./perhapsMissingGroups";
+import { Status } from "../..";
+import { extractPerhapsMissingGroups } from "./perhapsMissing";
 
 void describe("extractPerhapsMissingGroups", async function () {
   await it("empty input", function () {

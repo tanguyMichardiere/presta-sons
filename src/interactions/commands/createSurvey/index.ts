@@ -50,8 +50,10 @@ export async function handleCreateSurveyCommand(
   const thread = threadId !== undefined ? data.data.resolved!.channels[threadId] : undefined;
   const threadUrl = thread !== undefined ? channelUrl(data.guild_id, thread.id) : undefined;
   await api.interactions.reply(data.id, data.token, {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    embeds: [embedFromMembers(pendingMembers[data.guild_id]!, embedTitle, threadUrl)],
+    embeds: [
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      embedFromMembers(pendingMembers[data.guild_id]!, { title: embedTitle, url: threadUrl }),
+    ],
     components,
   });
 }

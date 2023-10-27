@@ -3,12 +3,12 @@ import type {
   RESTPutAPIApplicationGuildCommandsJSONBody,
 } from "@discordjs/core";
 import { ApplicationCommandType } from "@discordjs/core";
-import { tagPendingCommandMessages } from "../../../messages";
+import { editSurveyCommandMessages } from "../../../messages";
 
-export const tagPendingCommand: (
+export const editSurveyCommand: (
   | RESTPutAPIApplicationCommandsJSONBody
   | RESTPutAPIApplicationGuildCommandsJSONBody
 )[number] = {
   type: ApplicationCommandType.Message,
-  name: tagPendingCommandMessages.commandName,
+  name: editSurveyCommandMessages.commandName,
 };
