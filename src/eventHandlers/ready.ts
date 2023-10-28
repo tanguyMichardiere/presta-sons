@@ -8,14 +8,13 @@ import env from "../env";
 import { createSurveyCommand } from "../interactions/commands/createSurvey/command";
 import { editSurveyCommand } from "../interactions/commands/editSurvey.ts/command";
 import { tagPendingCommand } from "../interactions/commands/tagPending/command";
-import { logger } from "../logger";
 
 const commands: RESTPutAPIApplicationCommandsJSONBody | RESTPutAPIApplicationGuildCommandsJSONBody =
   [createSurveyCommand, editSurveyCommand, tagPendingCommand];
 
 export const handleReady = createEventHandler(
   GatewayDispatchEvents.Ready,
-  async function ({ data, api }) {
+  async function ({ data, api }, logger) {
     if (env.GUILD_ID !== undefined) {
       await api.applicationCommands.bulkOverwriteGuildCommands(
         data.user.id,

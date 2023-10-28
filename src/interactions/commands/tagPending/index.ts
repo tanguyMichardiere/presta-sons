@@ -5,6 +5,7 @@ import { tagPendingCommandMessages } from "../../../messages";
 import { getAdminRole } from "../../../utils/adminRole";
 import { membersFromEmbed } from "../../../utils/embed";
 import { extractPendingMembers } from "../../../utils/embed/status/extract/pendingMembers";
+import { InteractionError } from "../../error";
 import type { TagPendingCommandData } from "./data";
 
 export async function handleTagPendingCommand(
@@ -14,36 +15,20 @@ export async function handleTagPendingCommand(
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const surveyMessage = data.data.resolved.messages[data.data.target_id]!;
   if (surveyMessage.author.id !== data.application_id || surveyMessage.embeds.length !== 1) {
-    await api.interactions.reply(data.id, data.token, {
-      content: tagPendingCommandMessages.errors.onlyUsableOnSurveyMessage,
-      flags: MessageFlags.Ephemeral,
-    });
-    return;
+    throw new InteractionError(tagPendingCommandMessages.errors.onlyUsableOnSurveyMessage);
   }
   const adminRole = await getAdminRole(api, data.guild_id);
   if (adminRole === undefined) {
-    await api.interactions.reply(data.id, data.token, {
-      content: tagPendingCommandMessages.errors.adminRoleDoesntExist,
-      flags: MessageFlags.Ephemeral,
-    });
-    return;
+    throw new InteractionError(tagPendingCommandMessages.errors.adminRoleDoesntExist);
   }
   if (!data.member.roles.some((roleId) => roleId === adminRole.id)) {
-    await api.interactions.reply(data.id, data.token, {
-      content: tagPendingCommandMessages.errors.userIsNotAdmin,
-      flags: MessageFlags.Ephemeral,
-    });
-    return;
+    throw new InteractionError(tagPendingCommandMessages.errors.userIsNotAdmin);
   }
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
   const pending = extractPendingMembers(members);
   if (pending.length === 0) {
-    await api.interactions.reply(data.id, data.token, {
-      content: tagPendingCommandMessages.errors.everybodyAnswered,
-      flags: MessageFlags.Ephemeral,
-    });
-    return;
+    throw new InteractionError(tagPendingCommandMessages.errors.everybodyAnswered);
   }
   logger.debug(data, "creating a tag prompt message with a channel select");
   await api.interactions.reply(data.id, data.token, {

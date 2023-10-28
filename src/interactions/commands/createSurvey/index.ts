@@ -1,14 +1,15 @@
 import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
-import { ButtonStyle, ComponentType, MessageFlags } from "@discordjs/core";
+import { ButtonStyle, ComponentType } from "@discordjs/core";
 import { pendingMembers } from "../../../globalState/members";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
 import { getAdminRole } from "../../../utils/adminRole";
 import { embedFromMembers } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
+import { InteractionError } from "../../error";
 import type { CreateSurveyCommandData } from "./data";
 
-const components = [
+const components: Array<APIActionRowComponent<APIMessageActionRowComponent>> = [
   {
     type: ComponentType.ActionRow,
     components: [Status.Ok, Status.Perhaps, Status.No].map((status) => ({
@@ -18,7 +19,7 @@ const components = [
       custom_id: status,
     })),
   },
-] satisfies Array<APIActionRowComponent<APIMessageActionRowComponent>>;
+];
 
 export async function handleCreateSurveyCommand(
   api: API,
@@ -26,18 +27,10 @@ export async function handleCreateSurveyCommand(
 ): Promise<void> {
   const adminRole = await getAdminRole(api, data.guild_id);
   if (adminRole === undefined) {
-    await api.interactions.reply(data.id, data.token, {
-      content: createSurveyCommandMessages.errors.adminRoleDoesntExist,
-      flags: MessageFlags.Ephemeral,
-    });
-    return;
+    throw new InteractionError(createSurveyCommandMessages.errors.adminRoleDoesntExist);
   }
   if (!data.member.roles.some((roleId) => roleId === adminRole.id)) {
-    await api.interactions.reply(data.id, data.token, {
-      content: createSurveyCommandMessages.errors.userIsNotAdmin,
-      flags: MessageFlags.Ephemeral,
-    });
-    return;
+    throw new InteractionError(createSurveyCommandMessages.errors.userIsNotAdmin);
   }
   logger.debug(data, "creating a survey");
   const embedTitle = data.data.options?.find(

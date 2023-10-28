@@ -1,5 +1,6 @@
 import type { APIMessage } from "@discordjs/core";
 import env from "./env";
+import { snowflakeRegex } from "./schemas";
 import { Status } from "./utils/embed/status";
 import { tagFromId } from "./utils/embed/tag";
 
@@ -8,12 +9,14 @@ export const messageUrl = (guildId: string, channelId: string, messageId: string
 
 export const channelUrl = (guildId: string, channelId: string): string =>
   `https://discord.com/channels/${guildId}/${channelId}`;
+const channelUrlRegex = new RegExp(
+  `^https:\\/\\/discord\\.com\\/channels\\/(?<guildId>${snowflakeRegex.source})\\/(?<channelId>${snowflakeRegex.source})$`,
+);
 export const parseChannelUrl = (
   channelUrl: string,
 ): { guildId: string; channelId: string } | undefined =>
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  channelUrl.match(/^https:\/\/discord\.com\/channels\/(?<guildId>\d+)\/(?<channelId>\d+)$/)
-    ?.groups as { guildId: string; channelId: string } | undefined;
+  channelUrl.match(channelUrlRegex)?.groups as { guildId: string; channelId: string } | undefined;
 
 export const createSurveyCommandMessages = {
   commandName: "sondage" as const,
@@ -47,6 +50,7 @@ export const editSurveyComponentInteractionMessages = {
   errors: {
     invalidChannelUrl: "L'URL de thread n'est pas une URL de channel valide",
     notAThread: "L'URL n'est pas celle d'un thread",
+    channelNotFound: "L'URL ne correspond à aucun channel",
   },
 };
 

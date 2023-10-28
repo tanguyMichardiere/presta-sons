@@ -1,8 +1,9 @@
 import type { API } from "@discordjs/core";
-import { ChannelType, MessageFlags } from "@discordjs/core";
+import { ChannelType } from "@discordjs/core";
 import { logger } from "../../../logger";
 import { editSurveyComponentInteractionMessages, parseChannelUrl } from "../../../messages";
 import { embedFromMembers, membersFromEmbed } from "../../../utils/embed";
+import { InteractionError } from "../../error";
 import type { EditSurveyComponentInteractionData } from "./data";
 
 const notEmptyOrUndefined = (string: string) => (string !== "" ? string : undefined);
@@ -17,19 +18,17 @@ export async function handleEditSurveyComponentInteraction(
   if (url !== undefined) {
     const match = parseChannelUrl(url);
     if (match === undefined) {
-      await api.interactions.reply(data.id, data.token, {
-        content: editSurveyComponentInteractionMessages.errors.invalidChannelUrl,
-        flags: MessageFlags.Ephemeral,
-      });
-      return;
+      throw new InteractionError(editSurveyComponentInteractionMessages.errors.invalidChannelUrl);
     }
-    const thread = await api.channels.get(match.channelId);
-    if (thread.type !== ChannelType.PublicThread) {
-      await api.interactions.reply(data.id, data.token, {
-        content: editSurveyComponentInteractionMessages.errors.notAThread,
-        flags: MessageFlags.Ephemeral,
+    try {
+      const thread = await api.channels.get(match.channelId);
+      if (thread.type !== ChannelType.PublicThread) {
+        throw new InteractionError(editSurveyComponentInteractionMessages.errors.notAThread);
+      }
+    } catch (cause) {
+      throw new InteractionError(editSurveyComponentInteractionMessages.errors.channelNotFound, {
+        cause,
       });
-      return;
     }
   }
   const surveyMessage = await api.channels.getMessage(

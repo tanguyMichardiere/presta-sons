@@ -11,14 +11,22 @@ export type Members = Array<{
 export const pendingMembers: Record<string, Members> = {};
 
 export async function updateMembers(api: API, guildId: string): Promise<void> {
-  logger.debug(`updating the members and roles list for guild ${guildId}`);
+  const childLogger = logger.child({ guildId });
+  childLogger.debug("updating the members and roles list");
   const [allRoles, allMembers] = await Promise.all([
     api.guilds.getRoles(guildId),
     api.guilds.getMembers(guildId, { limit: 1000 }),
   ]);
+  if (allMembers.length === 1000) {
+    childLogger.warn("too many members");
+  }
   const groupRoles = allRoles
     .filter(({ name }) => name.startsWith(env.ROLE_PREFIX))
     .map(({ id, name }) => ({ id, groupName: name.slice(env.ROLE_PREFIX.length) }));
+  const tooLongNames = groupRoles.filter(({ groupName }) => groupName.length > 256);
+  if (tooLongNames.length > 0) {
+    childLogger.warn({ tooLongNames }, "group names too long");
+  }
   const roleIds = groupRoles.map(({ id }) => id);
   const members = allMembers
     .filter(
@@ -30,4 +38,5 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
     groupName,
     groupMembers: members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
   }));
+  logger.debug("successfully updated the members and roles list");
 }
