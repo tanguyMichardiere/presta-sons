@@ -55,12 +55,12 @@ export const editSurveyComponentInteractionMessages = {
 };
 
 export const tagPendingCommandMessages = {
-  commandName: "Rappel" as const,
+  commandName: "Rappel Sondage" as const,
   chooseTheChannel: "Choisir le channel dans lequel envoyer le rappel",
   errors: {
     onlyUsableOnSurveyMessage: "Cette commande n'est utilisable que sur un message de sondage",
-    adminRoleDoesntExist: `Le rôle "${env.ADMIN_ROLE_NAME}", nécessaire pour faire un rappel, n'existe pas`,
-    userIsNotAdmin: `Le rôle "${env.ADMIN_ROLE_NAME}" est nécessaire pour faire un rappel`,
+    adminRoleDoesntExist: `Le rôle "${env.ADMIN_ROLE_NAME}", nécessaire pour faire un rappel de sondage, n'existe pas`,
+    userIsNotAdmin: `Le rôle "${env.ADMIN_ROLE_NAME}" est nécessaire pour faire un rappel de sondage`,
     everybodyAnswered: "Tout le monde a répondu",
   },
 };
