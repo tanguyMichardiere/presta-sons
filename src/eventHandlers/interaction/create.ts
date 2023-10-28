@@ -1,4 +1,4 @@
-import { GatewayDispatchEvents } from "@discordjs/core";
+import { GatewayDispatchEvents, MessageFlags } from "@discordjs/core";
 import { createEventHandler } from "..";
 import { handleCreateSurveyCommand } from "../../interactions/commands/createSurvey";
 import { CreateSurveyCommandData } from "../../interactions/commands/createSurvey/data";
@@ -12,43 +12,64 @@ import { handleSurveyComponentInteraction } from "../../interactions/components/
 import { SurveyButtonComponentInteractionData } from "../../interactions/components/surveyButton/data";
 import { handleTagPendingComponentInteraction } from "../../interactions/components/tagPending";
 import { TagPendingComponentInteractionData } from "../../interactions/components/tagPending/data";
+import { InteractionError } from "../../interactions/error";
 
 export const handleInteractionCreate = createEventHandler(
   GatewayDispatchEvents.InteractionCreate,
-  async function ({ data, api }) {
-    const createSurveyCommandData = CreateSurveyCommandData.safeParse(data);
-    if (createSurveyCommandData.success) {
-      return handleCreateSurveyCommand(api, createSurveyCommandData.data);
-    }
+  async function ({ data, api }, logger) {
+    try {
+      const createSurveyCommandData = CreateSurveyCommandData.safeParse(data);
+      if (createSurveyCommandData.success) {
+        await handleCreateSurveyCommand(api, createSurveyCommandData.data);
+        return;
+      }
 
-    const editSurveyCommandData = EditSurveyCommandData.safeParse(data);
-    if (editSurveyCommandData.success) {
-      return handleEditSurveyCommand(api, editSurveyCommandData.data);
-    }
+      const editSurveyCommandData = EditSurveyCommandData.safeParse(data);
+      if (editSurveyCommandData.success) {
+        await handleEditSurveyCommand(api, editSurveyCommandData.data);
+        return;
+      }
 
-    const editInformationsComponentInteractionData =
-      EditSurveyComponentInteractionData.safeParse(data);
-    if (editInformationsComponentInteractionData.success) {
-      return handleEditSurveyComponentInteraction(
-        api,
-        editInformationsComponentInteractionData.data,
-      );
-    }
+      const editInformationsComponentInteractionData =
+        EditSurveyComponentInteractionData.safeParse(data);
+      if (editInformationsComponentInteractionData.success) {
+        await handleEditSurveyComponentInteraction(
+          api,
+          editInformationsComponentInteractionData.data,
+        );
+        return;
+      }
 
-    const surveyButtonComponentInteractionData =
-      SurveyButtonComponentInteractionData.safeParse(data);
-    if (surveyButtonComponentInteractionData.success) {
-      return handleSurveyComponentInteraction(api, surveyButtonComponentInteractionData.data);
-    }
+      const surveyButtonComponentInteractionData =
+        SurveyButtonComponentInteractionData.safeParse(data);
+      if (surveyButtonComponentInteractionData.success) {
+        await handleSurveyComponentInteraction(api, surveyButtonComponentInteractionData.data);
+        return;
+      }
 
-    const tagPendingCommandData = TagPendingCommandData.safeParse(data);
-    if (tagPendingCommandData.success) {
-      return handleTagPendingCommand(api, tagPendingCommandData.data);
-    }
+      const tagPendingCommandData = TagPendingCommandData.safeParse(data);
+      if (tagPendingCommandData.success) {
+        await handleTagPendingCommand(api, tagPendingCommandData.data);
+        return;
+      }
 
-    const tagPendingComponentInteractionData = TagPendingComponentInteractionData.safeParse(data);
-    if (tagPendingComponentInteractionData.success) {
-      return handleTagPendingComponentInteraction(api, tagPendingComponentInteractionData.data);
+      const tagPendingComponentInteractionData = TagPendingComponentInteractionData.safeParse(data);
+      if (tagPendingComponentInteractionData.success) {
+        await handleTagPendingComponentInteraction(api, tagPendingComponentInteractionData.data);
+        return;
+      }
+
+      logger.warn("unknown interaction");
+    } catch (error) {
+      if (error instanceof InteractionError) {
+        logger.info(error, "interaction error");
+        await api.interactions.reply(data.id, data.token, {
+          content: error.message,
+          flags: MessageFlags.Ephemeral,
+        });
+      } else {
+        throw error;
+      }
     }
   },
 );

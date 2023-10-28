@@ -4,7 +4,9 @@ import type {
 } from "@discordjs/core";
 import { ComponentType } from "@discordjs/core";
 import { z } from "zod";
-import { Snowflake } from "../../../schemas";
+import { Snowflake, snowflakeRegex } from "../../../schemas";
+
+const customIdRegex = new RegExp(`tagPending-${snowflakeRegex.source}`);
 
 export const TagPendingComponentInteractionData = z.object({
   id: Snowflake,
@@ -14,9 +16,7 @@ export const TagPendingComponentInteractionData = z.object({
   data: z
     .object({
       component_type: z.literal(ComponentType.ChannelSelect),
-      custom_id: z.custom<`tagPending-${string}`>(
-        (val) => typeof val === "string" && val.startsWith("tagPending-"),
-      ),
+      custom_id: z.string().regex(customIdRegex),
       values: z.tuple([Snowflake]),
       resolved: z
         .custom<APIInteractionDataResolved>((val) => val !== undefined)

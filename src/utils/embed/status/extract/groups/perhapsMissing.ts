@@ -16,13 +16,14 @@ export function extractPerhapsMissingGroups(
     groupName,
     groupMembers: groupMembers.map(({ id, status }) => ({ id, status: status ?? Status.Perhaps })),
   }))) {
+    // only include groups where some members answered perhaps
     if (groupMembers.some(({ status }) => status === Status.Perhaps)) {
-      // include groups where nobody answered ok and some members answered perhaps
+      // include groups where nobody answered ok
       if (groupMembers.every(({ status }) => status !== Status.Ok)) {
         result.push({ groupName });
         continue;
       }
-      // include groups where some members answered perhaps and the only members who answered ok are part of another group
+      // include groups where the only members who answered ok are part of another group
       const okGroupMembers = groupMembers.filter(({ status }) => status === Status.Ok);
       const overlaps = okGroupMembers
         .flatMap(({ id }) =>
