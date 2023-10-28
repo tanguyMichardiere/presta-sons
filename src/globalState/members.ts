@@ -23,6 +23,7 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
   const groupRoles = allRoles
     .filter(({ name }) => name.startsWith(env.ROLE_PREFIX))
     .map(({ id, name }) => ({ id, groupName: name.slice(env.ROLE_PREFIX.length) }));
+  childLogger.setBindings({ groupRoles });
   const tooLongNames = groupRoles.filter(({ groupName }) => groupName.length > 256);
   if (tooLongNames.length > 0) {
     childLogger.warn({ tooLongNames }, "group names too long");
@@ -34,9 +35,10 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
         member.user !== undefined && member.roles.some((id) => roleIds.includes(id)),
     )
     .map(({ user: { id }, roles }) => ({ id, roles }));
+  childLogger.setBindings({ members });
   pendingMembers[guildId] = groupRoles.map(({ id: roleId, groupName }) => ({
     groupName,
     groupMembers: members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
   }));
-  logger.debug("successfully updated the members and roles list");
+  childLogger.debug("successfully updated the members and roles list");
 }
