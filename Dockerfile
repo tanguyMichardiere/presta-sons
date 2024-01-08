@@ -2,8 +2,8 @@ FROM node:20.9.0 as BUILDER
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm clean-install
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY tsconfig.json ./
 COPY src src
@@ -16,8 +16,8 @@ FROM node:20.9.0-alpine
 WORKDIR /usr/src/app
 ENV NODE_ENV="production"
 
-COPY package*.json ./
-RUN npm clean-install --only=production
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=BUILDER /usr/src/app/dist dist
 
