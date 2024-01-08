@@ -28,6 +28,7 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 ## Requirements
 
 - [Node.js](https://nodejs.org) (version ^20)
+- [pnpm](https://pnpm.io) (version ^8)
 - [Discord](https://discord.com)
 - [VSCode](https://code.visualstudio.com) (optional but recommended)
 
@@ -43,8 +44,8 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
   - Copy `.env` to `.env.local`
   - Set the required environment variables:
     - `DISCORD_TOKEN`: on the Developer Portal, in Bot, click "Reset Token", confirm, then click "Copy"
-- `npm install`
-- `npm run dev`
+- `pnpm install`
+- `pnpm run dev`
 
 If it starts successfully, the bot will log a "READY" message with informations on your server.
 
@@ -53,11 +54,11 @@ If it starts successfully, the bot will log a "READY" message with informations 
 All these checks run in CI and prevent a merge to the production branch, please run them before committing your code:
 
 ```bash
-npm run check-format  # fix: npm run format
-npm run lint  # try to fix: npm run lint -- --fix
-npm run check-types
-npm run check-dead-code
-npm test
+pnpm run check-format  # fix: pnpm run format
+pnpm run lint  # try to fix: pnpm run lint --fix
+pnpm run check-types
+pnpm run check-dead-code
+pnpm run test
 ```
 
 ## Deployment

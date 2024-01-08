@@ -12,7 +12,7 @@
     "editor.wordWrap": "on"
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
   "editor.formatOnSave": true,
   "editor.quickSuggestions": {
@@ -24,7 +24,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     ".env": ".env.*",
-    "package.json": "package-lock.json",
+    "package.json": "pnpm-lock.yaml",
     "README.md": "LICENSE",
     "tsconfig.json": ".eslintrc.js, *.config.js, knip.ts, tsconfig.tsbuildinfo"
   },
