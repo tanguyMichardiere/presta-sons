@@ -22,6 +22,7 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
   }
   const groupRoles = allRoles
     .filter(({ name }) => name.startsWith(env.ROLE_PREFIX))
+    .sort((a, b) => b.position - a.position)
     .map(({ id, name }) => ({ id, groupName: name.slice(env.ROLE_PREFIX.length) }));
   childLogger.setBindings({ groupRoles });
   const tooLongNames = groupRoles.filter(({ groupName }) => groupName.length > 256);
