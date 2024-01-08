@@ -1,4 +1,7 @@
 FROM node:20.9.0 as BUILDER
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /usr/src/app
 
@@ -12,6 +15,9 @@ RUN npm run build
 # ----------------------------------------
 
 FROM node:20.9.0-alpine
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /usr/src/app
 ENV NODE_ENV="production"
