@@ -1,4 +1,4 @@
-FROM node:20.9.0 as BUILDER
+FROM node:21.5.0 as BUILDER
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -14,7 +14,7 @@ RUN npm run build
 
 # ----------------------------------------
 
-FROM node:20.9.0-alpine
+FROM node:21.5.0-alpine
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
