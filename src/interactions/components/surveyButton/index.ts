@@ -25,6 +25,7 @@ export async function handleSurveyComponentInteraction(
   if (status === Status.Ok && data.message.embeds[0].url !== undefined) {
     const threadId = parseChannelUrl(data.message.embeds[0].url)?.channelId;
     if (threadId !== undefined) {
+      // PERMISSIONS: Send Messages in Threads
       await api.threads.addMember(threadId, id);
     } else {
       logger.warn(`invalid channel URL in embed: ${data.message.embeds[0].url}`);

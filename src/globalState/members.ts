@@ -8,17 +8,28 @@ export type Members = Array<{
   groupMembers: Array<{ id: string; status?: Status }>;
 }>;
 
-export const pendingMembers: Record<string, Members> = {};
+export const membersState: Record<
+  string,
+  { adminRoleId: string | undefined; pendingMembers: Members }
+> = {};
 
 export async function updateMembers(api: API, guildId: string): Promise<void> {
   const childLogger = logger.child({ guildId });
   childLogger.debug("updating the members and roles list");
   const [allRoles, allMembers] = await Promise.all([
     api.guilds.getRoles(guildId),
+    // PERMISSIONS: Server Members Intent (Privileged Gateway Intents)
     api.guilds.getMembers(guildId, { limit: 1000 }),
   ]);
   if (allMembers.length === 1000) {
     childLogger.warn("too many members");
+  }
+  childLogger.debug("retrieving the admin role");
+  const adminRole = allRoles.find((role) => role.name === env.ADMIN_ROLE_NAME);
+  if (adminRole !== undefined) {
+    childLogger.debug({ adminRole }, "found the admin role");
+  } else {
+    childLogger.info("admin role not found");
   }
   const groupRoles = allRoles
     .filter(({ name }) => name.startsWith(env.ROLE_PREFIX))
@@ -37,9 +48,12 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
     )
     .map(({ user: { id }, roles }) => ({ id, roles }));
   childLogger.setBindings({ members });
-  pendingMembers[guildId] = groupRoles.map(({ id: roleId, groupName }) => ({
-    groupName,
-    groupMembers: members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
-  }));
+  membersState[guildId] = {
+    adminRoleId: adminRole?.id,
+    pendingMembers: groupRoles.map(({ id: roleId, groupName }) => ({
+      groupName,
+      groupMembers: members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
+    })),
+  };
   childLogger.debug("successfully updated the members and roles list");
 }

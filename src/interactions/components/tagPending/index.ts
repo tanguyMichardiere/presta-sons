@@ -9,6 +9,7 @@ export async function handleTagPendingComponentInteraction(
   api: API,
   data: TagPendingComponentInteractionData,
 ): Promise<void> {
+  // PERMISSIONS: Read Messages/View Channels + Read Message History
   const surveyMessage = await api.channels.getMessage(
     data.channel_id,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -23,6 +24,7 @@ export async function handleTagPendingComponentInteraction(
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
   const pending = extractPendingMembers(members);
+  // PERMISSIONS: Send Messages
   const tagMessage = await api.channels.createMessage(channel.id, {
     content: tagPendingComponentInteractionMessages.pleaseAnswer(
       pending,

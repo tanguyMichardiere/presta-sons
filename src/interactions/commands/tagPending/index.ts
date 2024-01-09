@@ -1,8 +1,8 @@
 import type { API } from "@discordjs/core";
 import { ChannelType, ComponentType, MessageFlags } from "@discordjs/core";
+import { membersState } from "../../../globalState/members";
 import { logger } from "../../../logger";
 import { tagPendingCommandMessages } from "../../../messages";
-import { getAdminRole } from "../../../utils/adminRole";
 import { membersFromEmbed } from "../../../utils/embed";
 import { extractPendingMembers } from "../../../utils/embed/status/extract/pendingMembers";
 import { InteractionError } from "../../error";
@@ -17,11 +17,12 @@ export async function handleTagPendingCommand(
   if (surveyMessage.author.id !== data.application_id || surveyMessage.embeds.length !== 1) {
     throw new InteractionError(tagPendingCommandMessages.errors.onlyUsableOnSurveyMessage);
   }
-  const adminRole = await getAdminRole(api, data.guild_id);
-  if (adminRole === undefined) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const adminRoleId = membersState[data.guild_id]!.adminRoleId;
+  if (adminRoleId === undefined) {
     throw new InteractionError(tagPendingCommandMessages.errors.adminRoleDoesntExist);
   }
-  if (!data.member.roles.some((roleId) => roleId === adminRole.id)) {
+  if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
     throw new InteractionError(tagPendingCommandMessages.errors.userIsNotAdmin);
   }
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
