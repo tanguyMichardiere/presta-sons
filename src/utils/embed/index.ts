@@ -1,6 +1,6 @@
 import type { APIEmbed, APIEmbedField } from "@discordjs/core";
 import type { Members } from "../../globalState/members";
-import { pendingMembers } from "../../globalState/members";
+import { membersState } from "../../globalState/members";
 import { logger } from "../../logger";
 import { embedMessages } from "../../messages";
 import { buildGroupFields } from "./buildGroupFields";
@@ -18,7 +18,7 @@ export const informationsFromEmbed = (embed: APIEmbed): string | undefined =>
 
 export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const members = structuredClone(pendingMembers[guildId]!);
+  const members = structuredClone(membersState[guildId]!.pendingMembers);
 
   if (embed.fields === undefined) {
     logger.warn({ guildId, embed }, "embed has no fields");

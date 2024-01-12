@@ -27,8 +27,8 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) (version ^20)
-- [pnpm](https://pnpm.io) (version ^8)
+- [pnpm](https://pnpm.io) (version ^8) (standalone script)
+- [Node.js](https://nodejs.org) (version 20.9.0) (`pnpm env add --global 20.9.0`)
 - [Discord](https://discord.com)
 - [VSCode](https://code.visualstudio.com) (optional but recommended)
 
@@ -36,9 +36,9 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 
 - Create a Discord Application:
   - Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-  - Click `New Application`, choose a name and confirm
+  - Click "New Application", choose a name and confirm
   - Navigate to Bot and switch on "Server Members Intent" under Privileged Gateway Intents (required to be able to list the server members)
-  - Navigate to OAuth2 > URL Generator, check the "bot" scope then open the URL below in a browser to invite the bot in your Discord server
+  - Navigate to OAuth2 > URL Generator, check the "bot" scope and the "Read Messages/View Channels", "Send Messages", "Send Messages in Threads" and "Read Message History" permissions, then open the URL below in a browser to invite the bot in your Discord server (the URL should be: `https://discord.com/api/oauth2/authorize?client_id=[the bot's application ID]&permissions=274877975552&scope=bot`)
 - Clone this repository
 - Create your env file:
   - Copy `.env` to `.env.local`

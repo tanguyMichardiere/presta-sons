@@ -1,9 +1,8 @@
 import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
 import { ButtonStyle, ComponentType } from "@discordjs/core";
-import { pendingMembers } from "../../../globalState/members";
+import { membersState } from "../../../globalState/members";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
-import { getAdminRole } from "../../../utils/adminRole";
 import { embedFromMembers } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
 import { InteractionError } from "../../error";
@@ -25,11 +24,12 @@ export async function handleCreateSurveyCommand(
   api: API,
   data: CreateSurveyCommandData,
 ): Promise<void> {
-  const adminRole = await getAdminRole(api, data.guild_id);
-  if (adminRole === undefined) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const adminRoleId = membersState[data.guild_id]!.adminRoleId;
+  if (adminRoleId === undefined) {
     throw new InteractionError(createSurveyCommandMessages.errors.adminRoleDoesntExist);
   }
-  if (!data.member.roles.some((roleId) => roleId === adminRole.id)) {
+  if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
     throw new InteractionError(createSurveyCommandMessages.errors.userIsNotAdmin);
   }
   logger.debug(data, "creating a survey");
@@ -45,7 +45,10 @@ export async function handleCreateSurveyCommand(
   await api.interactions.reply(data.id, data.token, {
     embeds: [
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      embedFromMembers(pendingMembers[data.guild_id]!, { title: embedTitle, url: threadUrl }),
+      embedFromMembers(membersState[data.guild_id]!.pendingMembers, {
+        title: embedTitle,
+        url: threadUrl,
+      }),
     ],
     components,
   });

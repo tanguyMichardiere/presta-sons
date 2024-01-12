@@ -26,7 +26,7 @@
     ".env": ".env.*",
     "package.json": "pnpm-lock.yaml",
     "README.md": "LICENSE",
-    "tsconfig.json": ".eslintrc.js, *.config.js, knip.ts, tsconfig.tsbuildinfo"
+    "tsconfig.json": "*.config.mts, *.config.js, .eslintrc.js, knip.ts, tsconfig.tsbuildinfo"
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
@@ -35,12 +35,6 @@
   "html.format.enable": false,
   "javascript.format.enable": false,
   "json.format.enable": false,
-  "nodejs-testing.extensions": [
-    {
-      "extensions": ["ts"],
-      "parameters": ["--require", "ts-node/register"]
-    }
-  ],
   "typescript.format.enable": false,
   "typescript.tsdk": "./node_modules/typescript/lib"
 }

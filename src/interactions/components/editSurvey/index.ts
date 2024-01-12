@@ -31,6 +31,7 @@ export async function handleEditSurveyComponentInteraction(
       });
     }
   }
+  // PERMISSIONS: Read Messages/View Channels + Read Message History
   const surveyMessage = await api.channels.getMessage(
     data.channel_id,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
