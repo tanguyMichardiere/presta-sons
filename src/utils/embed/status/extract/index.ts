@@ -15,8 +15,7 @@ export const extractStatus = (
           field.value.split("\n").map(function (line) {
             // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
             const [status, tag] = line.split(" ") as [Status, string];
-            const id = idFromTag(tag);
-            return [id, status];
+            return [idFromTag(tag), status];
           }),
         ),
       ]),
