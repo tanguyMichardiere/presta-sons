@@ -28,7 +28,7 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 ## Requirements
 
 - [pnpm](https://pnpm.io) (version ^8) (standalone script)
-- [Node.js](https://nodejs.org) (version 21.5.0) (`pnpm env add --global 21.5.0`)
+- [Node.js](https://nodejs.org) (version 20.9.0) (`pnpm env add --global 20.9.0`)
 - [Discord](https://discord.com)
 - [VSCode](https://code.visualstudio.com) (optional but recommended)
 

@@ -1,82 +1,77 @@
-import { deepEqual } from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, expect, test } from "vitest";
 import { Status } from "../..";
 import { extractMissingGroups } from "./missing";
 
-void describe("extractMissingGroups", async function () {
-  await it("empty input", function () {
-    deepEqual(extractMissingGroups([]), []);
+describe("extractMissingGroups", function () {
+  test("empty input", function () {
+    expect(extractMissingGroups([])).toStrictEqual([]);
   });
 
-  await it("1 member, pending", function () {
-    deepEqual(extractMissingGroups([{ groupName: "Trompette", groupMembers: [{ id: "a" }] }]), []);
+  test("1 member, pending", function () {
+    expect(
+      extractMissingGroups([{ groupName: "Trompette", groupMembers: [{ id: "a" }] }]),
+    ).toStrictEqual([]);
   });
 
-  await it("1 member, ok", function () {
-    deepEqual(
+  test("1 member, ok", function () {
+    expect(
       extractMissingGroups([
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Ok }] },
       ]),
-      [],
-    );
+    ).toStrictEqual([]);
   });
 
-  await it("1 member, perhaps", function () {
-    deepEqual(
+  test("1 member, perhaps", function () {
+    expect(
       extractMissingGroups([
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
       ]),
-      [],
-    );
+    ).toStrictEqual([]);
   });
 
-  await it("1 member, no", function () {
-    deepEqual(
+  test("1 member, no", function () {
+    expect(
       extractMissingGroups([
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
       ]),
-      [{ groupName: "Trompette" }],
-    );
+    ).toStrictEqual([{ groupName: "Trompette" }]);
   });
 
-  await it("1 member overlapping, ok", function () {
-    deepEqual(
+  test("1 member overlapping, ok", function () {
+    expect(
       extractMissingGroups([
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Ok }] },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
       ]),
-      [
-        { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-        { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-      ],
-    );
+    ).toStrictEqual([
+      { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
+      { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+    ]);
   });
 
-  await it("1 member overlapping, perhaps", function () {
-    deepEqual(
+  test("1 member overlapping, perhaps", function () {
+    expect(
       extractMissingGroups([
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.Perhaps }] },
       ]),
-      [
-        { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-        { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-      ],
-    );
+    ).toStrictEqual([
+      { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
+      { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+    ]);
   });
 
-  await it("1 member overlapping, no", function () {
-    deepEqual(
+  test("1 member overlapping, no", function () {
+    expect(
       extractMissingGroups([
         { groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.No }] },
       ]),
-      [{ groupName: "Trompette" }, { groupName: "Percus" }],
-    );
+    ).toStrictEqual([{ groupName: "Trompette" }, { groupName: "Percus" }]);
   });
 
-  await it("2 members, 1 overlapping, ok", function () {
-    deepEqual(
+  test("2 members, 1 overlapping, ok", function () {
+    expect(
       extractMissingGroups([
         {
           groupName: "Trompette",
@@ -87,12 +82,13 @@ void describe("extractMissingGroups", async function () {
         },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
       ]),
-      [{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] }],
-    );
+    ).toStrictEqual([
+      { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+    ]);
   });
 
-  await it("2 members, 1 overlapping, perhaps", function () {
-    deepEqual(
+  test("2 members, 1 overlapping, perhaps", function () {
+    expect(
       extractMissingGroups([
         {
           groupName: "Trompette",
@@ -103,12 +99,13 @@ void describe("extractMissingGroups", async function () {
         },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
       ]),
-      [{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] }],
-    );
+    ).toStrictEqual([
+      { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+    ]);
   });
 
-  await it("2 members, 1 overlapping, no", function () {
-    deepEqual(
+  test("2 members, 1 overlapping, no", function () {
+    expect(
       extractMissingGroups([
         {
           groupName: "Trompette",
@@ -119,10 +116,9 @@ void describe("extractMissingGroups", async function () {
         },
         { groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
       ]),
-      [
-        { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-        { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-      ],
-    );
+    ).toStrictEqual([
+      { groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
+      { groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+    ]);
   });
 });
