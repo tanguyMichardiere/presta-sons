@@ -1,5 +1,5 @@
 import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
-import { ButtonStyle, ComponentType } from "@discordjs/core";
+import { ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
 import { membersState } from "../../../globalState/members";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
@@ -36,12 +36,16 @@ export async function handleCreateSurveyCommand(
   const embedTitle = data.data.options?.find(
     (option) => option.name === createSurveyCommandMessages.nameOptionName,
   )?.value;
-  const threadId = data.data.options?.find(
+  let threadId = data.data.options?.find(
     (option) => option.name === createSurveyCommandMessages.threadOptionName,
   )?.value;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const thread = threadId !== undefined ? data.data.resolved!.channels[threadId] : undefined;
-  const threadUrl = thread !== undefined ? channelUrl(data.guild_id, thread.id) : undefined;
+  if (threadId !== undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    threadId = data.data.resolved!.channels[threadId]!.id;
+  } else if (data.channel.type === ChannelType.PublicThread) {
+    threadId = data.channel.id;
+  }
+  const threadUrl = threadId !== undefined ? channelUrl(data.guild_id, threadId) : undefined;
   await api.interactions.reply(data.id, data.token, {
     embeds: [
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

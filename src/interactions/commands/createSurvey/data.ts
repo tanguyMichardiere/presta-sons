@@ -3,7 +3,7 @@ import type {
   APIInteractionDataResolved,
   APIInteractionDataResolvedChannel,
 } from "@discordjs/core";
-import { ApplicationCommandOptionType, ApplicationCommandType } from "@discordjs/core";
+import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from "@discordjs/core";
 import { z } from "zod";
 import { createSurveyCommandMessages } from "../../../messages";
 import { Snowflake } from "../../../schemas";
@@ -12,6 +12,10 @@ export const CreateSurveyCommandData = z.object({
   id: Snowflake,
   token: z.string(),
   guild_id: Snowflake,
+  channel: z.object({
+    id: Snowflake,
+    type: z.nativeEnum(ChannelType),
+  }),
   member: z.custom<APIGuildMember>((val) => val !== undefined),
   data: z
     .object({
