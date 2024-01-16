@@ -1,4 +1,5 @@
-import { MessageFlags, type API } from "@discordjs/core";
+import type { API } from "@discordjs/core";
+import { MessageFlags } from "@discordjs/core";
 import { logger } from "../../../logger";
 import { parseChannelUrl, surveyComponentInteractionMessages } from "../../../messages";
 import { embedFromMembers, informationsFromEmbed, membersFromEmbed } from "../../../utils/embed";
