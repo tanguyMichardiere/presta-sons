@@ -99,3 +99,7 @@ export const embedMessages = {
       )
       .join(", "),
 };
+
+export const surveyComponentInteractionMessages = {
+  temporaryMessage: "😶‍🌫️",
+};
