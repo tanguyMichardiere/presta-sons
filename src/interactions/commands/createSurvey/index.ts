@@ -5,6 +5,7 @@ import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
 import { embedFromMembers } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
+import { exponentialBackoff } from "../../../utils/exponentialBackoff";
 import { InteractionError } from "../../error";
 import type { CreateSurveyCommandData } from "./data";
 
@@ -56,7 +57,9 @@ export async function handleCreateSurveyCommand(
     ],
     components,
   });
-  const surveyMessage = await api.interactions.getOriginalReply(data.application_id, data.token);
+  const surveyMessage = await exponentialBackoff(() =>
+    api.interactions.getOriginalReply(data.application_id, data.token),
+  );
   // PERMISSIONS: Manage Messages
   await api.channels.pinMessage(data.channel.id, surveyMessage.id);
 }
