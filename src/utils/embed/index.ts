@@ -4,6 +4,7 @@ import { membersState } from "../../globalState/members";
 import { logger } from "../../logger";
 import { embedMessages } from "../../messages";
 import { buildGroupFields } from "./buildGroupFields";
+import { buildSummary } from "./buildSummary";
 import { extractStatus } from "./status/extract";
 import { extractMissingGroups } from "./status/extract/groups/missing";
 import { extractPerhapsMissingGroups } from "./status/extract/groups/perhapsMissing";
@@ -83,5 +84,7 @@ export function embedFromMembers(
 
   fields.push(...buildGroupFields(members));
 
-  return { title, fields, url };
+  const footer = buildSummary(members);
+
+  return { title, fields, url, footer };
 }
