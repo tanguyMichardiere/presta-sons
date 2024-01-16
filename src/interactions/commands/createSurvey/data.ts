@@ -11,6 +11,7 @@ import { Snowflake } from "../../../schemas";
 export const CreateSurveyCommandData = z.object({
   id: Snowflake,
   token: z.string(),
+  application_id: Snowflake,
   guild_id: Snowflake,
   channel: z.object({
     id: Snowflake,

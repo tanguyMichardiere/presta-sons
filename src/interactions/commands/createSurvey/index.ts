@@ -56,4 +56,7 @@ export async function handleCreateSurveyCommand(
     ],
     components,
   });
+  const surveyMessage = await api.interactions.getOriginalReply(data.application_id, data.token);
+  // PERMISSIONS: Manage Messages
+  await api.channels.pinMessage(data.channel.id, surveyMessage.id);
 }
