@@ -2,9 +2,14 @@ import { logger } from "../logger";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+type ExponentialBackoffOptions = {
+  ms: number;
+  limit: number;
+};
+
 export async function exponentialBackoff<T>(
   fn: () => Promise<T>,
-  { ms = 100, limit = 3000 }: { ms?: number; limit?: number } = {},
+  { ms = 100, limit = 3000 }: Partial<ExponentialBackoffOptions> = {},
 ): Promise<T> {
   const start = Date.now();
   try {
