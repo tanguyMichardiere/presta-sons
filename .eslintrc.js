@@ -1,5 +1,8 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
+  env: {
+    node: true,
+  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     tsconfigRootDir: __dirname,
@@ -14,7 +17,7 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ["**/*.js", "**/.*.js"],
+      files: ["./*.js", "./.*.js"],
       rules: {
         "@typescript-eslint/no-var-requires": "off",
         "tsdoc/syntax": "off",

@@ -23,7 +23,7 @@
     "incremental": true,
     "types": ["node", "@total-typescript/ts-reset"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "./*.js", "./.*.js", "./*.ts", "./*.mts"],
   "exclude": ["node_modules"],
   "ts-node": {
     "transpileOnly": true
