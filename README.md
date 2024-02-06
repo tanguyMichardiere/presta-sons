@@ -38,7 +38,7 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
   - Go to the [Discord Developer Portal](https://discord.com/developers/applications)
   - Click "New Application", choose a name and confirm
   - Navigate to Bot and switch on "Server Members Intent" under Privileged Gateway Intents (required to be able to list the server members)
-  - Navigate to OAuth2 > URL Generator, check the "bot" scope and the "Read Messages/View Channels", "Send Messages", "Send Messages in Threads", "Manage Messages" and "Read Message History" permissions, then open the URL below in a browser to invite the bot in your Discord server (the URL should be: `https://discord.com/api/oauth2/authorize?client_id=[the bot's application ID]&permissions=274877983744&scope=bot`)
+  - Navigate to OAuth2 > URL Generator, check the "bot" scope and the "Read Messages/View Channels", "Send Messages", "Send Messages in Threads", "Manage Messages", "Embed Links" and "Read Message History" permissions, then open the URL below in a browser to invite the bot in your Discord server (the URL should be: `https://discord.com/api/oauth2/authorize?client_id=[the bot's application ID]&permissions=274878000128&scope=bot`)
 - Clone this repository
 - Create your env file:
   - Copy `.env` to `.env.local`

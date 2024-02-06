@@ -37,10 +37,11 @@ export async function handleEditSurveyComponentInteraction(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     data.data.custom_id.split("-")[1]!,
   );
-  logger.debug(data, `edit the survey ${surveyMessage.channel_id}/${surveyMessage.id}`);
+  logger.debug(data, `editing the survey ${surveyMessage.channel_id}/${surveyMessage.id}`);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
   await api.interactions.deferMessageUpdate(data.id, data.token);
+  // PERMISSIONS: Embed Links
   await api.channels.editMessage(surveyMessage.channel_id, surveyMessage.id, {
     embeds: [embedFromMembers(members, { title, url, informations })],
   });
