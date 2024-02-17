@@ -24,9 +24,9 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     ".env": ".env.*",
-    "package.json": "pnpm-lock.yaml",
+    "package.json": "bun.lockb",
     "README.md": "LICENSE",
-    "tsconfig.json": "*.config.mts, *.config.js, .eslintrc.js, knip.ts, tsconfig.tsbuildinfo"
+    "tsconfig.json": ".eslintrc.js, knip.ts, prettier.config.js"
   },
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,

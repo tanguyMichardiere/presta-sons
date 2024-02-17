@@ -27,8 +27,7 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
 
 ## Requirements
 
-- [pnpm](https://pnpm.io) (version ^8) (standalone script)
-- [Node.js](https://nodejs.org) (version 20.9.0) (`pnpm env add --global 20.9.0`)
+- [Bun](https://bun.sh) (version ^1.0.0)
 - [Discord](https://discord.com)
 - [VSCode](https://code.visualstudio.com) (optional but recommended)
 
@@ -44,8 +43,8 @@ ADMIN_ROLE_NAME=""  # default: "Admin Presta'sons"
   - Copy `.env` to `.env.local`
   - Set the required environment variables:
     - `DISCORD_TOKEN`: on the Developer Portal, in Bot, click "Reset Token", confirm, then click "Copy"
-- `pnpm install`
-- `pnpm run dev`
+- `bun install`
+- `bun run dev`
 
 If it starts successfully, the bot will log a "READY" message with informations on your server.
 
@@ -54,11 +53,11 @@ If it starts successfully, the bot will log a "READY" message with informations 
 All these checks run in CI and prevent a merge to the production branch, please run them before committing your code:
 
 ```bash
-pnpm run check-format  # fix: pnpm run format
-pnpm run lint  # try to fix: pnpm run lint --fix
-pnpm run check-types
-pnpm run check-dead-code
-pnpm run test
+bun run check-format  # fix: bun run format
+bun run lint  # try to fix: bun run lint --fix
+bun run check-types
+bun run check-dead-code
+bun test
 ```
 
 ## Deployment

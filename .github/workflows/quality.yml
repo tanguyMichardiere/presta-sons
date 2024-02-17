@@ -11,18 +11,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.9.0
-          cache: pnpm
+      - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
       - name: Check format
-        run: pnpm run check-format
+        run: bun run check-format
 
   lint:
     name: Lint
@@ -31,18 +24,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.9.0
-          cache: pnpm
+      - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
       - name: Lint
-        run: pnpm run lint
+        run: bun run lint
 
   check-types:
     name: Check types
@@ -51,18 +37,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.9.0
-          cache: pnpm
+      - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
       - name: Check types
-        run: pnpm run check-types
+        run: bun run check-types
 
   check-dead-code:
     name: Check dead code
@@ -71,18 +50,11 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.9.0
-          cache: pnpm
+      - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
       - name: Check dead code
-        run: pnpm run check-dead-code
+        run: bun run check-dead-code
 
   test:
     name: Test
@@ -91,15 +63,8 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.9.0
-          cache: pnpm
+      - uses: oven-sh/setup-bun@v1
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
       - name: Test
-        run: pnpm run test
+        run: bun test
