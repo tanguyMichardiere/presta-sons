@@ -9,7 +9,7 @@
     "lint": "eslint --max-warnings 0 src",
     "check-types": "tsc",
     "check-dead-code": "knip",
-    "quality": "bun run check-format && bun run lint && bun run check-types && bun run check-dead-code && bun run test",
+    "quality": "bun run check-format && bun run lint && bun run check-types && bun run check-dead-code && bun test",
     "start": "bun run src/index.ts"
   },
   "dependencies": {
