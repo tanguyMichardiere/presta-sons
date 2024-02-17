@@ -3,9 +3,12 @@
   "configurations": [
     {
       "name": "Debug",
-      "type": "node-terminal",
+      "type": "bun",
       "request": "launch",
-      "command": "npm run dev"
+      "program": "src/index.ts",
+      "cwd": "${workspaceFolder}",
+      "watchMode": "hot",
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }
