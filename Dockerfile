@@ -6,4 +6,4 @@ COPY package.json bun.lockb ./
 RUN bun install --production --frozen-lockfile
 
 COPY src ./
-ENTRYPOINT ["bun", "index.js"]
+ENTRYPOINT ["bun", "index.ts"]
