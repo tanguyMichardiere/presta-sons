@@ -16,6 +16,6 @@ export function buildSummary(members: Members): APIEmbedFooter {
     }
   }
   return {
-    text: `${Status.Ok} ${totals[Status.Ok].size} - ${Status.Perhaps} ${totals[Status.Perhaps].size} - ${Status.No} ${totals[Status.No].size}`,
+    text: `${Status.Ok} ${totals[Status.Ok].size.toString()} - ${Status.Perhaps} ${totals[Status.Perhaps].size.toString()} - ${Status.No} ${totals[Status.No].size.toString()}`,
   };
 }

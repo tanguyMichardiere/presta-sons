@@ -28,4 +28,6 @@ client.on(GatewayDispatchEvents.GuildMemberUpdate, handleGuildMemberUpdate);
 client.on(GatewayDispatchEvents.GuildMemberRemove, handleGuildMemberRemove);
 client.on(GatewayDispatchEvents.InteractionCreate, handleInteractionCreate);
 
-gateway.connect().catch(logger.error.bind(logger));
+gateway.connect().catch(function (reason) {
+  logger.error(reason);
+});

@@ -27,7 +27,7 @@ export async function exponentialBackoff<T>(
         try {
           return await fn();
         } catch (error) {
-          logger.debug(error, `attempt ${attempt} failed`);
+          logger.debug(error, `attempt ${attempt.toString()} failed`);
           attempt += 1;
           lastError = error;
         }

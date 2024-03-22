@@ -21,7 +21,9 @@ export function createEventHandler<K extends keyof ManagerShardEventsMap>(
     try {
       const result = listener(args, childLogger);
       if (result instanceof Promise) {
-        result.catch(childLogger.error.bind(childLogger));
+        result.catch(function (reason) {
+          childLogger.error(reason);
+        });
       }
     } catch (error) {
       childLogger.error(error);
