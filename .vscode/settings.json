@@ -1,40 +1,40 @@
 {
-  "[css][html][javascript][json][jsonc][markdown][typescript][typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.tabSize": 2
-  },
-  "[markdown]": {
-    "editor.quickSuggestions": {
-      "comments": "off",
-      "other": "off",
-      "strings": "off"
-    },
-    "editor.wordWrap": "on"
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
-  "editor.formatOnSave": true,
-  "editor.quickSuggestions": {
-    "strings": true
-  },
-  "editor.rulers": [100],
-  "editor.wordWrap": "bounded",
-  "editor.wordWrapColumn": 100,
-  "explorer.fileNesting.enabled": true,
-  "explorer.fileNesting.patterns": {
-    ".env": ".env.*",
-    "package.json": "bun.lockb",
-    "README.md": "LICENSE",
-    "tsconfig.json": "bunfig.toml, .eslintrc.js, knip.ts, prettier.config.js"
-  },
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-  "files.trimTrailingWhitespace": true,
-  "git.branchProtection": ["production"],
-  "html.format.enable": false,
-  "javascript.format.enable": false,
-  "json.format.enable": false,
-  "typescript.format.enable": false,
-  "typescript.tsdk": "./node_modules/typescript/lib"
+	"[javascript][typescript][javascriptreact][typescriptreact][json][jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.insertSpaces": false,
+		"editor.tabSize": 2
+	},
+	"[markdown]": {
+		"editor.quickSuggestions": {
+			"comments": "off",
+			"other": "off",
+			"strings": "off"
+		},
+		"editor.wordWrap": "on"
+	},
+	"editor.codeActionsOnSave": {
+		"quickfix.biome": "explicit",
+		"source.organizeImports.biome": "explicit"
+	},
+	"editor.formatOnSave": true,
+	"editor.quickSuggestions": { "strings": true },
+	"editor.rulers": [100],
+	"editor.wordWrap": "bounded",
+	"editor.wordWrapColumn": 100,
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.patterns": {
+		".env": ".env.*",
+		"package.json": "bun.lockb",
+		"README.md": "LICENSE",
+		"tsconfig.json": "bunfig.toml, biome.jsonc, *.config.ts"
+	},
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"files.trimTrailingWhitespace": true,
+	"git.branchProtection": ["production"],
+	"html.format.enable": false,
+	"javascript.format.enable": false,
+	"json.format.enable": false,
+	"typescript.format.enable": false,
+	"typescript.tsdk": "./node_modules/typescript/lib"
 }

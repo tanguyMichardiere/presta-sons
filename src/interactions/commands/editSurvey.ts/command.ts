@@ -1,14 +1,14 @@
 import type {
-  RESTPutAPIApplicationCommandsJSONBody,
-  RESTPutAPIApplicationGuildCommandsJSONBody,
+	RESTPutAPIApplicationCommandsJSONBody,
+	RESTPutAPIApplicationGuildCommandsJSONBody,
 } from "@discordjs/core";
 import { ApplicationCommandType } from "@discordjs/core";
 import { editSurveyCommandMessages } from "../../../messages";
 
 export const editSurveyCommand: (
-  | RESTPutAPIApplicationCommandsJSONBody
-  | RESTPutAPIApplicationGuildCommandsJSONBody
+	| RESTPutAPIApplicationCommandsJSONBody
+	| RESTPutAPIApplicationGuildCommandsJSONBody
 )[number] = {
-  type: ApplicationCommandType.Message,
-  name: editSurveyCommandMessages.commandName,
+	type: ApplicationCommandType.Message,
+	name: editSurveyCommandMessages.commandName,
 };

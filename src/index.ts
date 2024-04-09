@@ -1,7 +1,7 @@
 import { Client, GatewayDispatchEvents, GatewayIntentBits } from "@discordjs/core";
 import { REST } from "@discordjs/rest";
 import { WebSocketManager } from "@discordjs/ws";
-import env from "./env";
+import { env } from "./env";
 import { handleGuildCreate } from "./eventHandlers/guild/create";
 import { handleGuildMemberRemove } from "./eventHandlers/guildMember/remove";
 import { handleGuildMemberUpdate } from "./eventHandlers/guildMember/update";
@@ -13,9 +13,9 @@ import { logger } from "./logger";
 const rest = new REST().setToken(env.DISCORD_TOKEN);
 
 const gateway = new WebSocketManager({
-  token: env.DISCORD_TOKEN,
-  intents: GatewayIntentBits.Guilds | GatewayIntentBits.GuildMembers,
-  rest,
+	token: env.DISCORD_TOKEN,
+	intents: GatewayIntentBits.Guilds | GatewayIntentBits.GuildMembers,
+	rest,
 });
 
 const client = new Client({ rest, gateway });
@@ -28,6 +28,6 @@ client.on(GatewayDispatchEvents.GuildMemberUpdate, handleGuildMemberUpdate);
 client.on(GatewayDispatchEvents.GuildMemberRemove, handleGuildMemberRemove);
 client.on(GatewayDispatchEvents.InteractionCreate, handleInteractionCreate);
 
-gateway.connect().catch(function (reason) {
-  logger.error(reason);
+gateway.connect().catch((reason) => {
+	logger.error(reason);
 });
