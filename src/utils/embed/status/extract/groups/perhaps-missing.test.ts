@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { Status } from "../..";
-import { extractPerhapsMissingGroups } from "./perhapsMissing";
+import { extractPerhapsMissingGroups } from "./perhaps-missing";
 
 describe("extractPerhapsMissingGroups", () => {
 	test("empty input", () => {

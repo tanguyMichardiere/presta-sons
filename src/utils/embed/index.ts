@@ -1,14 +1,14 @@
 import type { APIEmbed, APIEmbedField } from "@discordjs/core";
-import type { Members } from "../../globalState/members";
-import { membersState } from "../../globalState/members";
+import type { Members } from "../../global-state/members";
+import { membersState } from "../../global-state/members";
 import { logger } from "../../logger";
 import { embedMessages } from "../../messages";
-import { buildGroupFields } from "./buildGroupFields";
-import { buildSummary } from "./buildSummary";
+import { buildGroupFields } from "./build-group-fields";
+import { buildSummary } from "./build-summary";
 import { extractStatus } from "./status/extract";
 import { extractMissingGroups } from "./status/extract/groups/missing";
-import { extractPerhapsMissingGroups } from "./status/extract/groups/perhapsMissing";
-import { extractPendingMembers } from "./status/extract/pendingMembers";
+import { extractPerhapsMissingGroups } from "./status/extract/groups/perhaps-missing";
+import { extractPendingMembers } from "./status/extract/pending-members";
 import { tagFromId } from "./tag";
 
 const separator: APIEmbedField = { name: "", value: embedMessages.separator };

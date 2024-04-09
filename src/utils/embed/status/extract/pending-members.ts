@@ -1,4 +1,4 @@
-import type { Members } from "../../../../globalState/members";
+import type { Members } from "../../../../global-state/members";
 
 export const extractPendingMembers = (members: Members): string[] =>
 	members

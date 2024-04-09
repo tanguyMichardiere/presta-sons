@@ -1,10 +1,10 @@
 import type { API } from "@discordjs/core";
 import { ChannelType, ComponentType, MessageFlags } from "@discordjs/core";
-import { membersState } from "../../../globalState/members";
+import { membersState } from "../../../global-state/members";
 import { logger } from "../../../logger";
 import { tagPendingCommandMessages } from "../../../messages";
 import { membersFromEmbed } from "../../../utils/embed";
-import { extractPendingMembers } from "../../../utils/embed/status/extract/pendingMembers";
+import { extractPendingMembers } from "../../../utils/embed/status/extract/pending-members";
 import { InteractionError } from "../../error";
 import type { TagPendingCommandData } from "./data";
 

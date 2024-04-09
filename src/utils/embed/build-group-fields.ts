@@ -1,5 +1,5 @@
 import type { APIEmbedField } from "@discordjs/core";
-import type { Members } from "../../globalState/members";
+import type { Members } from "../../global-state/members";
 import type { Status } from "./status";
 import { tagFromId } from "./tag";
 

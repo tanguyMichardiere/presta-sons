@@ -1,4 +1,4 @@
-import type { Members } from "../../../../../globalState/members";
+import type { Members } from "../../../../../global-state/members";
 
 export const getGroupsByMemberId = (members: Members): Record<string, string[]> =>
 	members

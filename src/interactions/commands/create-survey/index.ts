@@ -1,11 +1,11 @@
 import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
 import { ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
-import { membersState } from "../../../globalState/members";
+import { membersState } from "../../../global-state/members";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
 import { embedFromMembers } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
-import { exponentialBackoff } from "../../../utils/exponentialBackoff";
+import { exponentialBackoff } from "../../../utils/exponential-backoff";
 import { InteractionError } from "../../error";
 import type { CreateSurveyCommandData } from "./data";
 

@@ -1,6 +1,6 @@
 import { Status } from "../..";
-import type { Members } from "../../../../../globalState/members";
-import { getGroupsByMemberId } from "./getGroupsByMemberId";
+import type { Members } from "../../../../../global-state/members";
+import { getGroupsByMemberId } from "./get-groups-by-member-id";
 
 // TOOD: add logging
 export function extractPerhapsMissingGroups(

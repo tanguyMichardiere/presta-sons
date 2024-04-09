@@ -2,5 +2,5 @@ import type { KnipConfig } from "knip";
 
 export default {
 	ignore: ["src/**/*.test.ts"],
-	ignoreDependencies: ["npm-check-updates", "pino-pretty"],
+	ignoreDependencies: ["pino-pretty"],
 } satisfies KnipConfig;

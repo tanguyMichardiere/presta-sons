@@ -1,6 +1,6 @@
 import type { API, APIActionRowComponent, APITextInputComponent } from "@discordjs/core";
 import { ComponentType, TextInputStyle } from "@discordjs/core";
-import { membersState } from "../../../globalState/members";
+import { membersState } from "../../../global-state/members";
 import { logger } from "../../../logger";
 import { editSurveyCommandMessages } from "../../../messages";
 import { informationsFromEmbed } from "../../../utils/embed";

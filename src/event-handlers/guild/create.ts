@@ -1,6 +1,6 @@
 import { GatewayDispatchEvents } from "@discordjs/core";
 import { createEventHandler } from "..";
-import { updateMembers } from "../../globalState/members";
+import { updateMembers } from "../../global-state/members";
 
 export const handleGuildCreate = createEventHandler(
 	GatewayDispatchEvents.GuildCreate,

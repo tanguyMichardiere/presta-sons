@@ -2,7 +2,7 @@ import type { API } from "@discordjs/core";
 import { logger } from "../../../logger";
 import { messageUrl, tagPendingComponentInteractionMessages } from "../../../messages";
 import { membersFromEmbed } from "../../../utils/embed";
-import { extractPendingMembers } from "../../../utils/embed/status/extract/pendingMembers";
+import { extractPendingMembers } from "../../../utils/embed/status/extract/pending-members";
 import type { TagPendingComponentInteractionData } from "./data";
 
 export async function handleTagPendingComponentInteraction(

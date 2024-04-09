@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { extractPendingMembers } from "./pendingMembers";
+import { extractPendingMembers } from "./pending-members";
 
 describe("extractPendingMembers", () => {
 	test("empty input", () => {

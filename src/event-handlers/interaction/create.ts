@@ -1,18 +1,18 @@
 import { GatewayDispatchEvents, MessageFlags } from "@discordjs/core";
-import { createEventHandler } from "..";
-import { handleCreateSurveyCommand } from "../../interactions/commands/createSurvey";
-import { CreateSurveyCommandData } from "../../interactions/commands/createSurvey/data";
-import { handleEditSurveyCommand } from "../../interactions/commands/editSurvey.ts";
-import { EditSurveyCommandData } from "../../interactions/commands/editSurvey.ts/data";
-import { handleTagPendingCommand } from "../../interactions/commands/tagPending";
-import { TagPendingCommandData } from "../../interactions/commands/tagPending/data";
-import { handleEditSurveyComponentInteraction } from "../../interactions/components/editSurvey";
-import { EditSurveyComponentInteractionData } from "../../interactions/components/editSurvey/data";
-import { handleSurveyComponentInteraction } from "../../interactions/components/surveyButton";
-import { SurveyButtonComponentInteractionData } from "../../interactions/components/surveyButton/data";
-import { handleTagPendingComponentInteraction } from "../../interactions/components/tagPending";
-import { TagPendingComponentInteractionData } from "../../interactions/components/tagPending/data";
-import { InteractionError } from "../../interactions/error";
+import { CreateSurveyCommandData } from "../../interactions/commands/create-survey/data.ts";
+import { handleCreateSurveyCommand } from "../../interactions/commands/create-survey/index.ts";
+import { EditSurveyCommandData } from "../../interactions/commands/edit-survey.ts/data.ts";
+import { handleEditSurveyCommand } from "../../interactions/commands/edit-survey.ts/index.ts";
+import { TagPendingCommandData } from "../../interactions/commands/tag-pending/data.ts";
+import { handleTagPendingCommand } from "../../interactions/commands/tag-pending/index.ts";
+import { EditSurveyComponentInteractionData } from "../../interactions/components/edit-survey/data.ts";
+import { handleEditSurveyComponentInteraction } from "../../interactions/components/edit-survey/index.ts";
+import { SurveyButtonComponentInteractionData } from "../../interactions/components/survey-button/data.ts";
+import { handleSurveyComponentInteraction } from "../../interactions/components/survey-button/index.ts";
+import { TagPendingComponentInteractionData } from "../../interactions/components/tag-pending/data.ts";
+import { handleTagPendingComponentInteraction } from "../../interactions/components/tag-pending/index.ts";
+import { InteractionError } from "../../interactions/error.ts";
+import { createEventHandler } from "../index.ts";
 
 export const handleInteractionCreate = createEventHandler(
 	GatewayDispatchEvents.InteractionCreate,

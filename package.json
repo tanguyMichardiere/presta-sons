@@ -17,16 +17,16 @@
 		"@discordjs/rest": "2.2.0",
 		"@discordjs/ws": "1.0.2",
 		"@t3-oss/env-core": "0.9.2",
-		"pino": "8.19.0",
+		"pino": "8.20.0",
 		"zod": "3.22.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.6.4",
 		"@total-typescript/ts-reset": "0.5.1",
-		"@types/bun": "1.0.11",
-		"knip": "5.7.0",
+		"@types/bun": "1.0.12",
+		"knip": "5.9.3",
 		"npm-check-updates": "16.14.18",
 		"pino-pretty": "11.0.0",
-		"typescript": "5.4.3"
+		"typescript": "5.4.4"
 	}
 }
