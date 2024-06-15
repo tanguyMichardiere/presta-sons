@@ -10,7 +10,8 @@
 		"check-types": "tsc",
 		"check-dead-code": "knip",
 		"quality": "bun run check-format && bun run lint && bun run check-types && bun run check-dead-code && bun test",
-		"start": "bun run src/index.ts"
+		"build": "bun build --compile --minify --sourcemap src/index.ts --outfile presta-sons",
+		"postbuild": "rm -f .*.bun-build"
 	},
 	"dependencies": {
 		"@discordjs/core": "1.2.0",
