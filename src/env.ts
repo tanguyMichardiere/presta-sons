@@ -5,9 +5,7 @@ import { Snowflake } from "./schemas";
 export const env = createEnv({
 	server: {
 		NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-		LOG_LEVEL: z
-			.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
-			.default("info"),
+		LOG_LEVEL: z.enum(["error", "warn", "info", "debug", "silent"]).default("info"),
 
 		DISCORD_TOKEN: z.string(),
 

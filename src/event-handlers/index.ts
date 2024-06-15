@@ -1,6 +1,5 @@
 import type { ManagerShardEventsMap } from "@discordjs/core";
-import type { Logger } from "pino";
-import { logger } from "../logger";
+import { logger, type Logger } from "../logger";
 
 type Opts = {
 	logEvent: boolean;
