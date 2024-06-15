@@ -1,4 +1,4 @@
-FROM oven/bun:alpine AS builder
+FROM oven/bun AS builder
 
 WORKDIR /app
 
@@ -10,8 +10,8 @@ RUN bun run build
 
 
 
-FROM alpine
+FROM gcr.io/distroless/base-debian12
 
 COPY --from=builder /app/presta-sons /app/presta-sons
 
-ENTRYPOINT ["/app/presta-sons"]
+CMD ["/app/presta-sons"]
