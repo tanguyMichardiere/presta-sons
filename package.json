@@ -13,20 +13,20 @@
 		"start": "bun run src/index.ts"
 	},
 	"dependencies": {
-		"@discordjs/core": "1.1.1",
-		"@discordjs/rest": "2.2.0",
-		"@discordjs/ws": "1.0.2",
-		"@t3-oss/env-core": "0.9.2",
-		"pino": "8.20.0",
-		"zod": "3.22.4"
+		"@discordjs/core": "1.2.0",
+		"@discordjs/rest": "2.3.0",
+		"@discordjs/ws": "1.1.1",
+		"@t3-oss/env-core": "0.10.1",
+		"pino": "9.2.0",
+		"zod": "3.23.8"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.6.4",
+		"@biomejs/biome": "1.8.1",
 		"@total-typescript/ts-reset": "0.5.1",
-		"@types/bun": "1.0.12",
-		"knip": "5.9.3",
-		"npm-check-updates": "16.14.18",
-		"pino-pretty": "11.0.0",
-		"typescript": "5.4.4"
+		"@types/bun": "1.1.4",
+		"knip": "5.19.0",
+		"npm-check-updates": "16.14.20",
+		"pino-pretty": "11.2.1",
+		"typescript": "5.4.5"
 	}
 }
