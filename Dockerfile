@@ -12,6 +12,8 @@ RUN bun run build
 
 FROM gcr.io/distroless/base-debian12
 
+ENV NODE_ENV="production"
+
 COPY --from=builder /app/presta-sons /app/presta-sons
 
 CMD ["/app/presta-sons"]
