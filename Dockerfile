@@ -1,6 +1,6 @@
-FROM oven/bun AS builder
+FROM oven/bun:alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile
@@ -10,8 +10,8 @@ RUN bun run build
 
 
 
-FROM scratch
+FROM alpine
 
-COPY --from=builder /usr/src/app/presta-sons /presta-sons
+COPY --from=builder /app/presta-sons /app/presta-sons
 
-CMD ["/presta-sons"]
+ENTRYPOINT ["/app/presta-sons"]
