@@ -15,7 +15,7 @@ export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 	childLogger.info("registering a handler");
 	return (args) => {
 		if (logEvent) {
-			logger.info(args.data, eventName);
+			logger.info({ event: args.data }, eventName);
 		}
 		try {
 			const result = listener(args, childLogger);

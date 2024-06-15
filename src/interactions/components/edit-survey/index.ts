@@ -37,7 +37,10 @@ export async function handleEditSurveyComponentInteraction(
 		// biome-ignore lint/style/noNonNullAssertion:
 		data.data.custom_id.split("-")[1]!,
 	);
-	logger.debug(data, `editing the survey ${surveyMessage.channel_id}/${surveyMessage.id}`);
+	logger.debug(
+		{ componentInteractionData: data },
+		`editing the survey ${surveyMessage.channel_id}/${surveyMessage.id}`,
+	);
 	// biome-ignore lint/style/noNonNullAssertion:
 	const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
 	await api.interactions.deferMessageUpdate(data.id, data.token);

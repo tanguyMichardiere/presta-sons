@@ -24,7 +24,7 @@ export const handleReady = createEventHandler(
 		} else {
 			await api.applicationCommands.bulkOverwriteGlobalCommands(data.user.id, commands);
 		}
-		logger.info(data, GatewayDispatchEvents.Ready);
+		logger.info({ event: data }, GatewayDispatchEvents.Ready);
 	},
 	{ logEvent: false },
 );

@@ -33,7 +33,7 @@ export async function handleCreateSurveyCommand(
 	if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
 		throw new InteractionError(createSurveyCommandMessages.errors.userIsNotAdmin);
 	}
-	logger.debug(data, "creating a survey");
+	logger.debug({ commandData: data }, "creating a survey");
 	const embedTitle = data.data.options?.find(
 		(option) => option.name === createSurveyCommandMessages.nameOptionName,
 	)?.value;

@@ -31,7 +31,7 @@ export async function handleTagPendingCommand(
 	if (pending.length === 0) {
 		throw new InteractionError(tagPendingCommandMessages.errors.everybodyAnswered);
 	}
-	logger.debug(data, "creating a tag prompt message with a channel select");
+	logger.debug({ commandData: data }, "creating a tag prompt message with a channel select");
 	await api.interactions.reply(data.id, data.token, {
 		content: tagPendingCommandMessages.chooseTheChannel,
 		components: [
