@@ -1,14 +1,14 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Debug",
-      "type": "bun",
-      "request": "launch",
-      "program": "src/index.ts",
-      "cwd": "${workspaceFolder}",
-      "watchMode": "hot",
-      "internalConsoleOptions": "openOnSessionStart"
-    }
-  ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug",
+			"type": "bun",
+			"request": "launch",
+			"program": "src/index.ts",
+			"cwd": "${workspaceFolder}",
+			"watchMode": "hot",
+			"internalConsoleOptions": "openOnSessionStart"
+		}
+	]
 }

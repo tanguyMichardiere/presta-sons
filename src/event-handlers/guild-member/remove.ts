@@ -1,0 +1,10 @@
+import { GatewayDispatchEvents } from "@discordjs/core";
+import { createEventHandler } from "..";
+import { updateMembers } from "../../global-state/members";
+
+export const handleGuildMemberRemove = createEventHandler(
+	GatewayDispatchEvents.GuildMemberRemove,
+	async ({ data, api }) => {
+		await updateMembers(api, data.guild_id);
+	},
+);

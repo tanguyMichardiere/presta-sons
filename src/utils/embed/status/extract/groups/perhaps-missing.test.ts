@@ -1,21 +1,21 @@
 import { describe, expect, test } from "bun:test";
 import { Status } from "../..";
-import { extractMissingGroups } from "./missing";
+import { extractPerhapsMissingGroups } from "./perhaps-missing";
 
-describe("extractMissingGroups", () => {
+describe("extractPerhapsMissingGroups", () => {
 	test("empty input", () => {
-		expect(extractMissingGroups([])).toStrictEqual([]);
+		expect(extractPerhapsMissingGroups([])).toStrictEqual([]);
 	});
 
 	test("1 member, pending", () => {
 		expect(
-			extractMissingGroups([{ groupName: "Trompette", groupMembers: [{ id: "a" }] }]),
-		).toStrictEqual([]);
+			extractPerhapsMissingGroups([{ groupName: "Trompette", groupMembers: [{ id: "a" }] }]),
+		).toStrictEqual([{ groupName: "Trompette" }]);
 	});
 
 	test("1 member, ok", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([]);
@@ -23,56 +23,50 @@ describe("extractMissingGroups", () => {
 
 	test("1 member, perhaps", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
-			]),
-		).toStrictEqual([]);
-	});
-
-	test("1 member, no", () => {
-		expect(
-			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
 			]),
 		).toStrictEqual([{ groupName: "Trompette" }]);
 	});
 
+	test("1 member, no", () => {
+		expect(
+			extractPerhapsMissingGroups([
+				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
+			]),
+		).toStrictEqual([]);
+	});
+
 	test("1 member overlapping, ok", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Ok }] },
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
-		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-		]);
+		).toStrictEqual([]);
 	});
 
 	test("1 member overlapping, perhaps", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Perhaps }] },
-			]),
-		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-		]);
-	});
-
-	test("1 member overlapping, no", () => {
-		expect(
-			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.No }] },
 			]),
 		).toStrictEqual([{ groupName: "Trompette" }, { groupName: "Percus" }]);
 	});
 
+	test("1 member overlapping, no", () => {
+		expect(
+			extractPerhapsMissingGroups([
+				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
+				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.No }] },
+			]),
+		).toStrictEqual([]);
+	});
+
 	test("2 members, 1 overlapping, ok", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{
 					groupName: "Trompette",
 					groupMembers: [
@@ -82,14 +76,12 @@ describe("extractMissingGroups", () => {
 				},
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
-		).toStrictEqual([
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-		]);
+		).toStrictEqual([]);
 	});
 
 	test("2 members, 1 overlapping, perhaps", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{
 					groupName: "Trompette",
 					groupMembers: [
@@ -100,13 +92,13 @@ describe("extractMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
 		]);
 	});
 
 	test("2 members, 1 overlapping, no", () => {
 		expect(
-			extractMissingGroups([
+			extractPerhapsMissingGroups([
 				{
 					groupName: "Trompette",
 					groupMembers: [
@@ -116,9 +108,6 @@ describe("extractMissingGroups", () => {
 				},
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
-		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
-		]);
+		).toStrictEqual([]);
 	});
 });
