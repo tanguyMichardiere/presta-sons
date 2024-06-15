@@ -11,7 +11,7 @@ export async function handleSurveyComponentInteraction(
 	api: API,
 	data: SurveyButtonComponentInteractionData,
 ): Promise<void> {
-	logger.debug(data, "updating survey results");
+	logger.debug({ componentInteractionData: data }, "updating survey results");
 	const members = membersFromEmbed(data.message.embeds[0], data.guild_id);
 	const id = data.member.user.id;
 	const status = data.data.custom_id;

@@ -14,7 +14,7 @@ DISCORD_TOKEN=""
 Optional:
 
 ```bash
-# "fatal", "error", "warn", "info", "debug", "trace" or "silent"
+# "error", "warn", "info", "debug" or "silent"
 LOG_LEVEL=""  # default: "info"
 
 # a server ID to optionally limit the scope of the bot to it (makes deploying commands much faster)

@@ -18,7 +18,7 @@ export async function handleTagPendingComponentInteraction(
 	// biome-ignore lint/style/noNonNullAssertion:
 	const channel = data.data.resolved.channels[data.data.values[0]]!;
 	logger.debug(
-		data,
+		{ componentInteractionData: data },
 		`tagging all pending members for ${surveyMessage.channel_id}/${surveyMessage.id} in ${channel.id}`,
 	);
 	// biome-ignore lint/style/noNonNullAssertion:

@@ -77,7 +77,7 @@ export async function handleEditSurveyCommand(
 	if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
 		throw new InteractionError(editSurveyCommandMessages.errors.userIsNotAdmin);
 	}
-	logger.debug(data, "creating a modal to edit a survey");
+	logger.debug({ commandData: data }, "creating a modal to edit a survey");
 	// biome-ignore lint/style/noNonNullAssertion:
 	const embed = surveyMessage.embeds[0]!;
 	const informations = informationsFromEmbed(embed);
