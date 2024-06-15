@@ -14,4 +14,4 @@ FROM scratch
 
 COPY --from=builder /usr/src/app/presta-sons /presta-sons
 
-ENTRYPOINT ["/presta-sons"]
+CMD ["/presta-sons"]
