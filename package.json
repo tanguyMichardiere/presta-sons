@@ -2,11 +2,11 @@
 	"name": "presta-sons",
 	"private": true,
 	"scripts": {
-		"update-dependencies": "npm-check-updates -u && bun install && bun update",
+		"update-dependencies": "npm-check-updates -u && bun install && bun update && biome format --write package.json",
 		"dev": "bun run --watch src/index.ts",
 		"format": "biome format --write .",
 		"check-format": "biome format .",
-		"lint": "biome lint .",
+		"lint": "biome lint --error-on-warnings .",
 		"check-types": "tsc",
 		"check-dead-code": "knip",
 		"quality": "bun run check-format && bun run lint && bun run check-types && bun run check-dead-code && bun test",
@@ -22,12 +22,12 @@
 		"zod": "3.23.8"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.8.1",
+		"@biomejs/biome": "1.8.3",
 		"@total-typescript/ts-reset": "0.5.1",
-		"@types/bun": "1.1.4",
-		"knip": "5.19.0",
+		"@types/bun": "1.1.6",
+		"knip": "5.25.1",
 		"npm-check-updates": "16.14.20",
 		"pino-pretty": "11.2.1",
-		"typescript": "5.4.5"
+		"typescript": "5.5.3"
 	}
 }
