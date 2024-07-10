@@ -5,11 +5,10 @@
 		"update-dependencies": "npm-check-updates -u && bun install && bun update && biome format --write package.json",
 		"dev": "bun run --watch src/index.ts",
 		"format": "biome format --write .",
-		"check-format": "biome format .",
-		"lint": "biome lint --error-on-warnings .",
+		"lint": "biome ci --error-on-warnings .",
 		"check-types": "tsc",
 		"check-dead-code": "knip",
-		"quality": "bun run check-format && bun run lint && bun run check-types && bun run check-dead-code && bun test",
+		"quality": "bun run lint && bun run check-types && bun run check-dead-code && bun test",
 		"build": "bun build --compile --minify --sourcemap src/index.ts --outfile presta-sons",
 		"postbuild": "rm -f .*.bun-build"
 	},
