@@ -24,6 +24,9 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"javascript": {
+		"globals": ["Bun"]
+	},
 	"overrides": [
 		{
 			// VSCode JSON files are actually JSONC
