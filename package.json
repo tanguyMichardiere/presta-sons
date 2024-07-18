@@ -10,7 +10,9 @@
 		"lint": "biome ci --error-on-warnings .",
 		"check-types": "tsc",
 		"check-dead-code": "knip",
-		"quality": "bun run lint && bun run check-types && bun run check-dead-code && bun test",
+		"pretest": "bun run generate-migration",
+		"test": "bun test",
+		"quality": "bun run lint && bun run check-types && bun run check-dead-code && bun run test",
 		"prebuild": "bun run generate-migration",
 		"build": "bun build --compile --minify --sourcemap src/index.ts --outfile presta-sons",
 		"postbuild": "rm -f .*.bun-build"
