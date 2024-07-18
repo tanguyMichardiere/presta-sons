@@ -19,7 +19,8 @@
 		}
 	},
 	"formatter": {
-		"lineWidth": 100
+		"lineWidth": 100,
+		"ignore": ["src/db/meta/*.json"]
 	},
 	"organizeImports": {
 		"enabled": true
