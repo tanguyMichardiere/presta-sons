@@ -4,6 +4,21 @@ on:
   push:
 
 jobs:
+  check-migration:
+    name: Check migration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Check migration
+        run: |
+          bun run generate-migration
+          git diff --quiet src/db/_migration.sql
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
