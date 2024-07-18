@@ -19,8 +19,7 @@
 		}
 	},
 	"formatter": {
-		"lineWidth": 100,
-		"ignore": ["drizzle/meta/*.json"]
+		"lineWidth": 100
 	},
 	"organizeImports": {
 		"enabled": true

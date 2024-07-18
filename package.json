@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"update-dependencies": "npm-check-updates -u && bun install && bun update && biome format --write package.json",
-		"generate-db": "rm -rf drizzle src/db/db.sqlite && drizzle-kit generate && drizzle-kit migrate",
+		"generate-migration": "rm -f src/db/_migration.sql && drizzle-kit generate --name migration && rm -rf src/db/meta",
 		"dev": "bun run --watch src/index.ts",
 		"format": "biome format --write .",
 		"lint": "biome ci --error-on-warnings .",
