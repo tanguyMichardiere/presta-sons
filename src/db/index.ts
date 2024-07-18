@@ -7,6 +7,7 @@ import { schema } from "./schema";
 
 const sqlite = new Database();
 sqlite.run(await Bun.file(migrationFile).text());
+logger.debug("successfully applied the database migration");
 
 export const db = drizzle(sqlite, {
 	schema,
