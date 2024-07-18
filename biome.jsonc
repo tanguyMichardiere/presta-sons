@@ -20,7 +20,7 @@
 	},
 	"formatter": {
 		"lineWidth": 100,
-		"ignore": ["src/db/meta/*.json"]
+		"ignore": ["drizzle/meta/*.json"]
 	},
 	"organizeImports": {
 		"enabled": true
