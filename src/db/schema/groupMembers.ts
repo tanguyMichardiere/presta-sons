@@ -10,7 +10,7 @@ export const groupMembers = sqliteTable(
 		groupId: integer("group_id")
 			.references(() => groups.id, { onDelete: "cascade" })
 			.notNull(),
-		memberId: integer("member_ids")
+		memberId: integer("member_id")
 			.references(() => members.id, { onDelete: "cascade" })
 			.notNull(),
 	},
