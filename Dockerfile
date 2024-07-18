@@ -5,7 +5,6 @@ WORKDIR /home/bun/app
 COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile
 
-COPY drizzle.config.ts ./
 COPY src src
 RUN bun run build
 
