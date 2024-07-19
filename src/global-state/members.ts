@@ -109,14 +109,6 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
 				),
 			);
 		});
-		logger.debug(
-			await db.query.guilds.findMany({
-				with: {
-					groups: { with: { members: { with: { member: true } } } },
-					members: { with: { groups: { with: { group: true } } } },
-				},
-			}),
-		);
 	} catch (error) {
 		logger.error(error);
 	}

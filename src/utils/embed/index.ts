@@ -1,4 +1,7 @@
 import type { APIEmbed, APIEmbedField } from "@discordjs/core";
+import { eq } from "drizzle-orm";
+import { db } from "../../db";
+import { guilds } from "../../db/schema/guilds";
 import type { Members } from "../../global-state/members";
 import { membersState } from "../../global-state/members";
 import { logger } from "../../logger";
@@ -20,6 +23,49 @@ export const informationsFromEmbed = (embed: APIEmbed): string | undefined =>
 export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
 	// biome-ignore lint/style/noNonNullAssertion:
 	const members = structuredClone(membersState[guildId]!.pendingMembers);
+	try {
+		const groupNamesFromState = members.map(({ groupName }) => groupName);
+		groupNamesFromState.sort((a, b) => a.localeCompare(b));
+		db.query.guilds
+			.findFirst({
+				where: eq(guilds.discordId, guildId),
+				with: { groups: { with: { members: { with: { member: true } } } } },
+			})
+			.then((guild) => {
+				if (guild === undefined) {
+					throw new Error("guild not found");
+				}
+				const membersFromDb: Members = guild.groups.map(({ name, members }) => ({
+					groupName: name,
+					groupMembers: members.map(({ member }) => ({ id: member.discordId })),
+				}));
+				const groupNamesFromDb = membersFromDb.map(({ groupName }) => groupName);
+				groupNamesFromDb.sort((a, b) => a.localeCompare(b));
+				if (JSON.stringify(groupNamesFromDb) !== JSON.stringify(groupNamesFromState)) {
+					logger.error({ groupNamesFromDb, groupNamesFromState });
+					throw new Error("group names different");
+				}
+				for (const groupName of groupNamesFromDb) {
+					// biome-ignore lint/style/noNonNullAssertion:
+					const groupMembersFromDb = membersFromDb
+						.find((members) => members.groupName === groupName)!
+						.groupMembers.map(({ id }) => id);
+					groupMembersFromDb.sort((a, b) => a.localeCompare(b));
+					// biome-ignore lint/style/noNonNullAssertion:
+					const groupMembersFromState = members
+						.find((members) => members.groupName === groupName)!
+						.groupMembers.map(({ id }) => id);
+					groupMembersFromState.sort((a, b) => a.localeCompare(b));
+					if (JSON.stringify(groupMembersFromDb) !== JSON.stringify(groupMembersFromState)) {
+						logger.error({ groupName, groupMembersFromDb, groupMembersFromState });
+						throw new Error("group members different");
+					}
+				}
+				logger.warn("OK");
+			});
+	} catch (error) {
+		logger.error(error);
+	}
 
 	if (embed.fields === undefined) {
 		logger.warn({ guildId, embed }, "embed has no fields");
