@@ -13,7 +13,8 @@ export const db = drizzle(sqlite, {
 	schema,
 	logger: {
 		logQuery(query, params) {
-			logger.debug(params, query);
+			let index = 0;
+			logger.debug(query.replaceAll("?", () => JSON.stringify(params[index++])));
 		},
 	},
 });

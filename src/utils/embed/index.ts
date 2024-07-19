@@ -39,6 +39,7 @@ export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
 					groupName: name,
 					groupMembers: members.map(({ member }) => ({ id: member.discordId })),
 				}));
+				// equality check
 				const groupNamesFromDb = membersFromDb.map(({ groupName }) => groupName);
 				groupNamesFromDb.sort((a, b) => a.localeCompare(b));
 				if (JSON.stringify(groupNamesFromDb) !== JSON.stringify(groupNamesFromState)) {
