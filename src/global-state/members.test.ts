@@ -1,9 +1,9 @@
+import { describe, expect, mock, test } from "bun:test";
 import type {
 	API,
 	RESTGetAPIGuildMembersResult,
 	RESTGetAPIGuildRolesResult,
 } from "@discordjs/core";
-import { describe, expect, mock, test } from "bun:test";
 import { membersState, updateMembers } from "./members";
 
 const api: API = {

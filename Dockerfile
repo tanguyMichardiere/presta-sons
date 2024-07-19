@@ -1,6 +1,6 @@
 FROM oven/bun AS builder
 
-WORKDIR /app
+WORKDIR /home/bun/app
 
 COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile
@@ -14,6 +14,6 @@ FROM gcr.io/distroless/base-debian12
 
 ENV NODE_ENV="production"
 
-COPY --from=builder /app/presta-sons /app/presta-sons
+COPY --from=builder /home/bun/app/presta-sons /presta-sons
 
-CMD ["/app/presta-sons"]
+CMD ["/presta-sons"]

@@ -1,4 +1,10 @@
 import type { API, APIGuildMember, APIUser } from "@discordjs/core";
+import { eq } from "drizzle-orm";
+import { db } from "../db";
+import { groupMembers } from "../db/schema/groupMembers";
+import { groups } from "../db/schema/groups";
+import { guilds } from "../db/schema/guilds";
+import { members as membersTable } from "../db/schema/members";
 import { env } from "../env";
 import { logger } from "../logger";
 import type { Status } from "../utils/embed/status";
@@ -25,7 +31,7 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
 		childLogger.warn("too many members");
 	}
 	childLogger.debug("retrieving the admin role");
-	const adminRole = allRoles.find((role) => role.name === env.ADMIN_ROLE_NAME);
+	const adminRole = allRoles.find((role) => role.name === env.ADMIN_ROLE_NAME); // TODO what about multiple roles named env.ADMIN_ROLE_NAME?
 	if (adminRole !== undefined) {
 		childLogger.debug({ adminRole }, "found the admin role");
 	} else {
@@ -55,5 +61,64 @@ export async function updateMembers(api: API, guildId: string): Promise<void> {
 			groupMembers: members.filter(({ roles }) => roles.includes(roleId)).map(({ id }) => ({ id })),
 		})),
 	};
+	try {
+		await db.transaction(async (tx) => {
+			await tx.delete(guilds).where(eq(guilds.discordId, guildId));
+			// biome-ignore lint/style/noNonNullAssertion:
+			const insertedGuild = (
+				await tx.insert(guilds).values({ discordId: guildId }).returning({ id: guilds.id })
+			)[0]!;
+			const [insertedGroups, insertedMembers] = await Promise.all([
+				tx
+					.insert(groups)
+					.values(
+						groupRoles.map(({ id, groupName }) => ({
+							discordId: id,
+							guildId: insertedGuild.id,
+							name: groupName,
+						})),
+					)
+					.returning({ id: groups.id, discordId: groups.discordId }),
+				tx
+					.insert(membersTable)
+					.values(
+						members.map(({ id, roles }) => ({
+							discordId: id,
+							guildId: insertedGuild.id,
+							admin: adminRole !== undefined && roles.includes(adminRole.id),
+						})),
+					)
+					.returning({ id: membersTable.id, discordId: membersTable.discordId }),
+			]);
+			const groupIdByDiscordId = Object.fromEntries(
+				insertedGroups.map(({ id, discordId }) => [discordId, id]),
+			);
+			const memberIdByDiscordId = Object.fromEntries(
+				insertedMembers.map(({ id, discordId }) => [discordId, id]),
+			);
+			await tx.insert(groupMembers).values(
+				groupRoles.flatMap(({ id: groupDiscordId }) =>
+					members
+						.filter(({ roles }) => roles.includes(groupDiscordId))
+						.map(({ id: memberDiscordId }) => ({
+							// biome-ignore lint/style/noNonNullAssertion:
+							groupId: groupIdByDiscordId[groupDiscordId]!,
+							// biome-ignore lint/style/noNonNullAssertion:
+							memberId: memberIdByDiscordId[memberDiscordId]!,
+						})),
+				),
+			);
+		});
+		logger.debug(
+			await db.query.guilds.findMany({
+				with: {
+					groups: { with: { members: { with: { member: true } } } },
+					members: { with: { groups: { with: { group: true } } } },
+				},
+			}),
+		);
+	} catch (error) {
+		logger.error(error);
+	}
 	childLogger.debug("successfully updated the members and roles list");
 }

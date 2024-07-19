@@ -1,5 +1,6 @@
 import type { ManagerShardEventsMap } from "@discordjs/core";
-import { logger, type Logger } from "../logger";
+import type { Logger } from "../logger";
+import { logger } from "../logger";
 
 type Opts = {
 	logEvent: boolean;
@@ -20,9 +21,7 @@ export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 		try {
 			const result = listener(args, childLogger);
 			if (result instanceof Promise) {
-				result.catch((reason) => {
-					childLogger.error(reason);
-				});
+				result.catch(childLogger.error.bind(childLogger));
 			}
 		} catch (error) {
 			childLogger.error(error);

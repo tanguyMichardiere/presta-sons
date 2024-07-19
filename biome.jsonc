@@ -10,6 +10,11 @@
 			"all": true,
 			"style": {
 				"useNamingConvention": "off"
+			},
+			"nursery": {
+				"all": true,
+				"useImportExtensions": "off",
+				"useImportRestrictions": "off"
 			}
 		}
 	},
@@ -18,6 +23,9 @@
 	},
 	"organizeImports": {
 		"enabled": true
+	},
+	"javascript": {
+		"globals": ["Bun"]
 	},
 	"overrides": [
 		{
