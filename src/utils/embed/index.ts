@@ -1,7 +1,7 @@
 import type { APIEmbed, APIEmbedField, Snowflake } from "@discordjs/core";
 import type { Db } from "../../db";
-import type { Groups } from "../../global-state/members";
-import { getMembers } from "../../global-state/members";
+import type { Groups } from "../../global-state/groups";
+import { getGroups } from "../../global-state/groups";
 import { logger } from "../../logger";
 import { embedMessages } from "../../messages";
 import { buildGroupFields } from "./build-group-fields";
@@ -23,7 +23,7 @@ export async function membersFromEmbed(
 	embed: APIEmbed,
 	guildSnowflake: Snowflake,
 ): Promise<Groups> {
-	const members = await getMembers(db, guildSnowflake);
+	const members = await getGroups(db, guildSnowflake);
 
 	if (embed.fields === undefined) {
 		logger.warn({ guildSnowflake, embed }, "embed has no fields");

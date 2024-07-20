@@ -1,5 +1,5 @@
 import type { Snowflake } from "@discordjs/core";
-import type { Groups } from "../../../../global-state/members";
+import type { Groups } from "../../../../global-state/groups";
 import { uniquePredicate } from "../../../unique-predicate";
 
 export const extractPendingMembers = (members: Groups): Snowflake[] =>

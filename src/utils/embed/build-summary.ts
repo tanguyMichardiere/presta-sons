@@ -1,5 +1,5 @@
 import type { APIEmbedFooter } from "@discordjs/core";
-import type { Groups } from "../../global-state/members";
+import type { Groups } from "../../global-state/groups";
 import { Status } from "./status";
 
 export function buildSummary(members: Groups): APIEmbedFooter {

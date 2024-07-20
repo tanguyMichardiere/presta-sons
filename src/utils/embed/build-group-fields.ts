@@ -1,5 +1,5 @@
 import type { APIEmbedField, Snowflake } from "@discordjs/core";
-import type { Groups } from "../../global-state/members";
+import type { Groups } from "../../global-state/groups";
 import type { Status } from "./status";
 import { tagFromSnowflake } from "./tag";
 

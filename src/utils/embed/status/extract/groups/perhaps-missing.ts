@@ -1,6 +1,6 @@
 import type { Snowflake } from "@discordjs/core";
 import { Status } from "../..";
-import type { Groups } from "../../../../../global-state/members";
+import type { Groups } from "../../../../../global-state/groups";
 import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
 // TOOD: add logging

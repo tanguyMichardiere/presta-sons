@@ -1,7 +1,7 @@
 import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
 import { ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
 import type { Db } from "../../../db";
-import { getMembers } from "../../../global-state/members";
+import { getGroups } from "../../../global-state/groups";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
 import { embedFromMembers } from "../../../utils/embed";
@@ -49,7 +49,7 @@ export async function handleCreateSurveyCommand(
 		threadSnowflake !== undefined ? channelUrl(data.guild_id, threadSnowflake) : undefined;
 	await api.interactions.reply(data.id, data.token, {
 		embeds: [
-			embedFromMembers(await getMembers(db, data.guild_id), { title: embedTitle, url: threadUrl }),
+			embedFromMembers(await getGroups(db, data.guild_id), { title: embedTitle, url: threadUrl }),
 		],
 		components,
 	});

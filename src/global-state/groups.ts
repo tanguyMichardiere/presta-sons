@@ -49,7 +49,7 @@ async function getAllMembers(api: API, guildSnowflake: Snowflake): Promise<APIGu
 	return pages.flat();
 }
 
-export async function updateMembers(api: API, db: Db, guildSnowflake: Snowflake): Promise<void> {
+export async function updateGroups(api: API, db: Db, guildSnowflake: Snowflake): Promise<void> {
 	const childLogger = logger.child({ guildSnowflake });
 	childLogger.debug("updating the members and roles list");
 	const [allRoles, allMembers] = await Promise.all([
@@ -145,7 +145,7 @@ export async function updateMembers(api: API, db: Db, guildSnowflake: Snowflake)
 	childLogger.debug("successfully updated the members and roles list");
 }
 
-export async function getMembers(db: Db, guildSnowflake: Snowflake): Promise<Groups> {
+export async function getGroups(db: Db, guildSnowflake: Snowflake): Promise<Groups> {
 	const guild = await db.query.guilds.findFirst({
 		columns: {},
 		where: eq(guilds.snowflake, guildSnowflake),
