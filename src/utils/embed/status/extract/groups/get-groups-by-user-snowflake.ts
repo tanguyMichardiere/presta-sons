@@ -1,6 +1,6 @@
 import type { Members } from "../../../../../global-state/members";
 
-export const getGroupsByMemberId = (members: Members): Record<string, string[]> =>
+export const getGroupsByUserSnowflake = (members: Members): Record<string, string[]> =>
 	members
 		.flatMap(({ groupName, groupMembers }) => groupMembers.map(({ id }) => ({ id, groupName })))
 		.reduce<Record<string, string[]>>((result, { id, groupName }) => {

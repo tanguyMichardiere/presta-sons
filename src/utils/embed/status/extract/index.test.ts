@@ -13,7 +13,9 @@ describe("extractStatus", () => {
 
 	test("1 group, 1 person", () => {
 		expect(
-			extractStatus([{ name: "groupName", value: `${Status.Ok} <@personId>`, inline: true }]),
-		).toStrictEqual({ groupName: { personId: Status.Ok } });
+			extractStatus([
+				{ name: "groupName", value: `${Status.Ok} <@personSnowflake>`, inline: true },
+			]),
+		).toStrictEqual({ groupName: { personSnowflake: Status.Ok } });
 	});
 });

@@ -7,14 +7,14 @@ export const groups = sqliteTable(
 	"groups",
 	{
 		id: integer("id").primaryKey(),
-		discordId: text("discord_id").notNull(),
+		snowflake: text("snowflake").notNull(),
 		guildId: integer("guild_id")
 			.references(() => guilds.id, { onDelete: "cascade" })
 			.notNull(),
 		name: text("name").notNull(),
 	},
 	(table) => ({
-		discordIdIdx: uniqueIndex("groups_discord_id_idx").on(table.discordId),
+		snowflakeIdx: uniqueIndex("groups_snowflake_idx").on(table.snowflake),
 	}),
 );
 

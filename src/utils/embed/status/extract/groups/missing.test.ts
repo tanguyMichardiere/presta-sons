@@ -44,8 +44,8 @@ describe("extractMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{ groupName: "Trompette", overlaps: [{ userSnowflake: "a", otherGroupName: "Percus" }] },
+			{ groupName: "Percus", overlaps: [{ userSnowflake: "a", otherGroupName: "Trompette" }] },
 		]);
 	});
 
@@ -56,8 +56,8 @@ describe("extractMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Perhaps }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{ groupName: "Trompette", overlaps: [{ userSnowflake: "a", otherGroupName: "Percus" }] },
+			{ groupName: "Percus", overlaps: [{ userSnowflake: "a", otherGroupName: "Trompette" }] },
 		]);
 	});
 
@@ -83,7 +83,7 @@ describe("extractMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{ groupName: "Percus", overlaps: [{ userSnowflake: "a", otherGroupName: "Trompette" }] },
 		]);
 	});
 
@@ -100,7 +100,7 @@ describe("extractMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{ groupName: "Percus", overlaps: [{ userSnowflake: "a", otherGroupName: "Trompette" }] },
 		]);
 	});
 
@@ -117,8 +117,8 @@ describe("extractMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{ groupName: "Trompette", overlaps: [{ userSnowflake: "a", otherGroupName: "Percus" }] },
+			{ groupName: "Percus", overlaps: [{ userSnowflake: "a", otherGroupName: "Trompette" }] },
 		]);
 	});
 });

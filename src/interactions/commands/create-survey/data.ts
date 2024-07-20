@@ -51,11 +51,12 @@ export const CreateSurveyCommandData = z.object({
 			),
 		})
 		.refine((val) => {
-			const threadId = val.options?.find(
+			const threadSnowflake = val.options?.find(
 				(option) => option.name === createSurveyCommandMessages.threadOptionName,
 			)?.value;
 			return (
-				threadId === undefined || (val.resolved !== undefined && threadId in val.resolved.channels)
+				threadSnowflake === undefined ||
+				(val.resolved !== undefined && threadSnowflake in val.resolved.channels)
 			);
 		}),
 });

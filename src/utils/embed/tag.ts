@@ -1,3 +1,3 @@
-export const idFromTag = (tag: string): string => tag.slice(2, -1);
+export const snowflakeFromTag = (tag: string): string => tag.slice(2, -1);
 
-export const tagFromId = (id: string): string => `<@${id}>`;
+export const tagFromSnowflake = (snowflake: string): string => `<@${snowflake}>`;

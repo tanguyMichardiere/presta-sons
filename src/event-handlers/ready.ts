@@ -14,7 +14,7 @@ const commands: RESTPutAPIApplicationCommandsJSONBody | RESTPutAPIApplicationGui
 
 export const handleReady = createEventHandler(
 	GatewayDispatchEvents.Ready,
-	async ({ data, api }, logger) => {
+	async ({ api, data }, { logger }) => {
 		if (env.GUILD_ID !== undefined) {
 			await api.applicationCommands.bulkOverwriteGuildCommands(
 				data.user.id,

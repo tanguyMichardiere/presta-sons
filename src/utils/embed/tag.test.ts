@@ -1,22 +1,22 @@
 import { describe, expect, test } from "bun:test";
-import { idFromTag, tagFromId } from "./tag";
+import { snowflakeFromTag, tagFromSnowflake } from "./tag";
 
 describe("idFromTag", () => {
 	test("simple", () => {
-		expect(idFromTag("<@id>")).toBe("id");
+		expect(snowflakeFromTag("<@id>")).toBe("id");
 	});
 
 	test("long", () => {
-		expect(idFromTag("<@veryLongId>")).toBe("veryLongId");
+		expect(snowflakeFromTag("<@veryLongSnowflake>")).toBe("veryLongSnowflake");
 	});
 });
 
-describe("tagFromId", () => {
+describe("tagFromSnowflake", () => {
 	test("simple", () => {
-		expect(tagFromId("id")).toBe("<@id>");
+		expect(tagFromSnowflake("id")).toBe("<@id>");
 	});
 
 	test("long", () => {
-		expect(tagFromId("veryLongId")).toBe("<@veryLongId>");
+		expect(tagFromSnowflake("veryLongSnowflake")).toBe("<@veryLongSnowflake>");
 	});
 });

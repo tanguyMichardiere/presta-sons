@@ -92,7 +92,7 @@ describe("extractPerhapsMissingGroups", () => {
 				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
+			{ groupName: "Trompette", overlaps: [{ userSnowflake: "a", otherGroupName: "Percus" }] },
 		]);
 	});
 

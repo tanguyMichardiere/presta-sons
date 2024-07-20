@@ -4,7 +4,7 @@ import { updateMembers } from "../../global-state/members";
 
 export const handleGuildMemberRemove = createEventHandler(
 	GatewayDispatchEvents.GuildMemberRemove,
-	async ({ data, api }) => {
-		await updateMembers(api, data.guild_id);
+	async ({ api, data }, { db }) => {
+		await updateMembers(api, db, data.guild_id);
 	},
 );

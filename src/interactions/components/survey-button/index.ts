@@ -1,18 +1,20 @@
 import type { API } from "@discordjs/core";
 import { MessageFlags } from "@discordjs/core";
+import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { parseChannelUrl, surveyComponentInteractionMessages } from "../../../messages";
 import { embedFromMembers, informationsFromEmbed, membersFromEmbed } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
-import { tagFromId } from "../../../utils/embed/tag";
+import { tagFromSnowflake } from "../../../utils/embed/tag";
 import type { SurveyButtonComponentInteractionData } from "./data";
 
 export async function handleSurveyComponentInteraction(
 	api: API,
+	db: Db,
 	data: SurveyButtonComponentInteractionData,
 ): Promise<void> {
 	logger.debug({ componentInteractionData: data }, "updating survey results");
-	const members = membersFromEmbed(data.message.embeds[0], data.guild_id);
+	const members = await membersFromEmbed(db, data.message.embeds[0], data.guild_id);
 	const id = data.member.user.id;
 	const status = data.data.custom_id;
 
@@ -25,21 +27,23 @@ export async function handleSurveyComponentInteraction(
 	}
 
 	if (status === Status.Ok && data.message.embeds[0].url !== undefined) {
-		const threadId = parseChannelUrl(data.message.embeds[0].url)?.channelId;
-		if (threadId !== undefined) {
+		const threadSnowflake = parseChannelUrl(data.message.embeds[0].url)?.channelSnowflake;
+		if (threadSnowflake !== undefined) {
 			// PERMISSIONS: Send Messages in Threads
-			// await api.threads.addMember(threadId, id);
+			// await api.threads.addMember(threadSnowflake, id);
 			// alternative to avoid spamming with messages
 			try {
-				await api.threads.getMember(threadId, id);
+				await api.threads.getMember(threadSnowflake, id);
 			} catch {
 				// PERMISSIONS: Send Messages in Threads
-				const message = await api.channels.createMessage(threadId, {
+				const message = await api.channels.createMessage(threadSnowflake, {
 					content: surveyComponentInteractionMessages.temporaryMessage,
 					flags: MessageFlags.SuppressNotifications,
 				});
-				await api.channels.editMessage(threadId, message.id, { content: tagFromId(id) });
-				await api.channels.deleteMessage(threadId, message.id);
+				await api.channels.editMessage(threadSnowflake, message.id, {
+					content: tagFromSnowflake(id),
+				});
+				await api.channels.deleteMessage(threadSnowflake, message.id);
 			}
 		} else {
 			logger.warn(`invalid channel URL in embed: ${data.message.embeds[0].url}`);

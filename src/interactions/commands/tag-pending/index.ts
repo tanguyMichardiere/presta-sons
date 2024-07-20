@@ -1,15 +1,17 @@
 import type { API } from "@discordjs/core";
 import { ChannelType, ComponentType, MessageFlags } from "@discordjs/core";
-import { membersState } from "../../../global-state/members";
+import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { tagPendingCommandMessages } from "../../../messages";
 import { membersFromEmbed } from "../../../utils/embed";
 import { extractPendingMembers } from "../../../utils/embed/status/extract/pending-members";
 import { InteractionError } from "../../error";
+import { isAdmin } from "../is-admin";
 import type { TagPendingCommandData } from "./data";
 
 export async function handleTagPendingCommand(
 	api: API,
+	db: Db,
 	data: TagPendingCommandData,
 ): Promise<void> {
 	// biome-ignore lint/style/noNonNullAssertion:
@@ -18,15 +20,11 @@ export async function handleTagPendingCommand(
 		throw new InteractionError(tagPendingCommandMessages.errors.onlyUsableOnSurveyMessage);
 	}
 	// biome-ignore lint/style/noNonNullAssertion:
-	const adminRoleId = membersState[data.guild_id]!.adminRoleId;
-	if (adminRoleId === undefined) {
-		throw new InteractionError(tagPendingCommandMessages.errors.adminRoleDoesntExist);
-	}
-	if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
+	if (!(await isAdmin(db, data.guild_id, data.member.user!.id))) {
 		throw new InteractionError(tagPendingCommandMessages.errors.userIsNotAdmin);
 	}
 	// biome-ignore lint/style/noNonNullAssertion:
-	const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
+	const members = await membersFromEmbed(db, surveyMessage.embeds[0]!, data.guild_id);
 	const pending = extractPendingMembers(members);
 	if (pending.length === 0) {
 		throw new InteractionError(tagPendingCommandMessages.errors.everybodyAnswered);

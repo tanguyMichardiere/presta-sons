@@ -1,10 +1,11 @@
 import type { API, APIActionRowComponent, APITextInputComponent } from "@discordjs/core";
 import { ComponentType, TextInputStyle } from "@discordjs/core";
-import { membersState } from "../../../global-state/members";
+import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { editSurveyCommandMessages } from "../../../messages";
 import { informationsFromEmbed } from "../../../utils/embed";
 import { InteractionError } from "../../error";
+import { isAdmin } from "../is-admin";
 import type { EditSurveyCommandData } from "./data";
 
 const components = (
@@ -62,6 +63,7 @@ const components = (
 
 export async function handleEditSurveyCommand(
 	api: API,
+	db: Db,
 	data: EditSurveyCommandData,
 ): Promise<void> {
 	// biome-ignore lint/style/noNonNullAssertion:
@@ -70,11 +72,7 @@ export async function handleEditSurveyCommand(
 		throw new InteractionError(editSurveyCommandMessages.errors.onlyUsableOnSurveyMessage);
 	}
 	// biome-ignore lint/style/noNonNullAssertion:
-	const adminRoleId = membersState[data.guild_id]!.adminRoleId;
-	if (adminRoleId === undefined) {
-		throw new InteractionError(editSurveyCommandMessages.errors.adminRoleDoesntExist);
-	}
-	if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
+	if (!(await isAdmin(db, data.guild_id, data.member.user!.id))) {
 		throw new InteractionError(editSurveyCommandMessages.errors.userIsNotAdmin);
 	}
 	logger.debug({ commandData: data }, "creating a modal to edit a survey");

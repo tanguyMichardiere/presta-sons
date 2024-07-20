@@ -1,20 +1,18 @@
 import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
-import { groups } from "./groups";
 import { members } from "./members";
 
-export const guilds = sqliteTable(
-	"guilds",
+export const users = sqliteTable(
+	"users",
 	{
 		id: integer("id").primaryKey(),
 		snowflake: text("snowflake").notNull(),
 	},
 	(table) => ({
-		snowflakeIdx: uniqueIndex("guilds_snowflake_idx").on(table.snowflake),
+		snowflakeIdx: uniqueIndex("users_snowflake_idx").on(table.snowflake),
 	}),
 );
 
-export const guildsRelations = relations(guilds, ({ many }) => ({
-	groups: many(groups),
+export const usersRelations = relations(users, ({ many }) => ({
 	members: many(members),
 }));

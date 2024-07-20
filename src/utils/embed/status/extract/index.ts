@@ -1,8 +1,8 @@
 import type { APIEmbedField } from "@discordjs/core";
 import type { Status } from "..";
-import { idFromTag } from "../../tag";
+import { snowflakeFromTag } from "../../tag";
 
-/** @returns `Record<groupName, Record<memberId, Status>>` */
+/** @returns `Record<groupName, Record<userSnowflake, Status>>` */
 export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<string, Status>> =>
 	Object.fromEntries(
 		fields
@@ -12,7 +12,7 @@ export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<st
 				Object.fromEntries(
 					field.value.split("\n").map((line) => {
 						const [status, tag] = line.split(" ") as [Status, string];
-						return [idFromTag(tag), status];
+						return [snowflakeFromTag(tag), status];
 					}),
 				),
 			]),

@@ -1,16 +1,17 @@
 import { Status } from "../..";
 import type { Members } from "../../../../../global-state/members";
-import { getGroupsByMemberId } from "./get-groups-by-member-id";
+import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
 // TODO: add logging
-export function extractMissingGroups(
-	members: Members,
-): Array<{ groupName: string; overlaps?: Array<{ userId: string; otherGroupName: string }> }> {
+export function extractMissingGroups(members: Members): Array<{
+	groupName: string;
+	overlaps?: Array<{ userSnowflake: string; otherGroupName: string }>;
+}> {
 	const result: Array<{
 		groupName: string;
-		overlaps?: Array<{ userId: string; otherGroupName: string }>;
+		overlaps?: Array<{ userSnowflake: string; otherGroupName: string }>;
 	}> = [];
-	const groupsByMemberId = getGroupsByMemberId(members);
+	const groupsByUserSnowflake = getGroupsByUserSnowflake(members);
 	for (const { groupName, groupMembers } of members) {
 		// exclude groups where not everybody answered
 		if (groupMembers.some(({ status }) => status === undefined)) {
@@ -26,10 +27,10 @@ export function extractMissingGroups(
 		const overlaps = notNoGroupMembers
 			.flatMap(({ id }) =>
 				// biome-ignore lint/style/noNonNullAssertion:
-				groupsByMemberId[id]!.map((otherGroupName) => ({ userId: id, otherGroupName })),
+				groupsByUserSnowflake[id]!.map((otherGroupName) => ({ userSnowflake: id, otherGroupName })),
 			)
 			.filter(({ otherGroupName }) => otherGroupName !== groupName);
-		const overlappingUserIds = overlaps.map(({ userId }) => userId);
+		const overlappingUserIds = overlaps.map(({ userSnowflake }) => userSnowflake);
 		if (
 			overlaps.length > 0 &&
 			notNoGroupMembers.every(({ id }) => overlappingUserIds.includes(id))

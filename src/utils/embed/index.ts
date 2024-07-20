@@ -1,9 +1,7 @@
 import type { APIEmbed, APIEmbedField } from "@discordjs/core";
-import { eq } from "drizzle-orm";
-import { db } from "../../db";
-import { guilds } from "../../db/schema/guilds";
+import type { Db } from "../../db";
 import type { Members } from "../../global-state/members";
-import { membersState } from "../../global-state/members";
+import { getMembers } from "../../global-state/members";
 import { logger } from "../../logger";
 import { embedMessages } from "../../messages";
 import { buildGroupFields } from "./build-group-fields";
@@ -12,7 +10,7 @@ import { extractStatus } from "./status/extract";
 import { extractMissingGroups } from "./status/extract/groups/missing";
 import { extractPerhapsMissingGroups } from "./status/extract/groups/perhaps-missing";
 import { extractPendingMembers } from "./status/extract/pending-members";
-import { tagFromId } from "./tag";
+import { tagFromSnowflake } from "./tag";
 
 const separator: APIEmbedField = { name: "", value: embedMessages.separator };
 
@@ -20,56 +18,15 @@ export const informationsFromEmbed = (embed: APIEmbed): string | undefined =>
 	embed.fields?.find(({ name, inline }) => name === embedMessages.informations && inline !== true)
 		?.value;
 
-export function membersFromEmbed(embed: APIEmbed, guildId: string): Members {
-	// biome-ignore lint/style/noNonNullAssertion:
-	const members = structuredClone(membersState[guildId]!.pendingMembers);
-	try {
-		const groupNamesFromState = members.map(({ groupName }) => groupName);
-		groupNamesFromState.sort((a, b) => a.localeCompare(b));
-		db.query.guilds
-			.findFirst({
-				where: eq(guilds.discordId, guildId),
-				with: { groups: { with: { members: { with: { member: true } } } } },
-			})
-			.then((guild) => {
-				if (guild === undefined) {
-					throw new Error("guild not found");
-				}
-				const membersFromDb: Members = guild.groups.map(({ name, members }) => ({
-					groupName: name,
-					groupMembers: members.map(({ member }) => ({ id: member.discordId })),
-				}));
-				// equality check
-				const groupNamesFromDb = membersFromDb.map(({ groupName }) => groupName);
-				groupNamesFromDb.sort((a, b) => a.localeCompare(b));
-				if (JSON.stringify(groupNamesFromDb) !== JSON.stringify(groupNamesFromState)) {
-					logger.error({ groupNamesFromDb, groupNamesFromState });
-					throw new Error("group names different");
-				}
-				for (const groupName of groupNamesFromDb) {
-					// biome-ignore lint/style/noNonNullAssertion:
-					const groupMembersFromDb = membersFromDb
-						.find((members) => members.groupName === groupName)!
-						.groupMembers.map(({ id }) => id);
-					groupMembersFromDb.sort((a, b) => a.localeCompare(b));
-					// biome-ignore lint/style/noNonNullAssertion:
-					const groupMembersFromState = members
-						.find((members) => members.groupName === groupName)!
-						.groupMembers.map(({ id }) => id);
-					groupMembersFromState.sort((a, b) => a.localeCompare(b));
-					if (JSON.stringify(groupMembersFromDb) !== JSON.stringify(groupMembersFromState)) {
-						logger.error({ groupName, groupMembersFromDb, groupMembersFromState });
-						throw new Error("group members different");
-					}
-				}
-				logger.warn("OK");
-			});
-	} catch (error) {
-		logger.error(error);
-	}
+export async function membersFromEmbed(
+	db: Db,
+	embed: APIEmbed,
+	guildSnowflake: string,
+): Promise<Members> {
+	const members = await getMembers(db, guildSnowflake);
 
 	if (embed.fields === undefined) {
-		logger.warn({ guildId, embed }, "embed has no fields");
+		logger.warn({ guildSnowflake, embed }, "embed has no fields");
 		return members;
 	}
 
@@ -103,7 +60,10 @@ export function embedFromMembers(
 
 	const pending = extractPendingMembers(members);
 	if (pending.length > 0) {
-		fields.push({ name: embedMessages.didntAnswer, value: pending.map(tagFromId).join(" ") });
+		fields.push({
+			name: embedMessages.didntAnswer,
+			value: pending.map(tagFromSnowflake).join(" "),
+		});
 		needsSeparator = true;
 	}
 
