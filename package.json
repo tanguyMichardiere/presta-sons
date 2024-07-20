@@ -2,7 +2,6 @@
 	"name": "presta-sons",
 	"private": true,
 	"scripts": {
-		"postinstall": "sed -i.bak 's/export type Snowflake = string;/export type Snowflake = string \\& import(\"zod\").z.BRAND<\"Snowflake\">;/' node_modules/discord-api-types/globals.d.ts && rm node_modules/discord-api-types/globals.d.ts.bak",
 		"update-dependencies": "npm-check-updates -u && bun install && bun update",
 		"postupdate-dependencies": "biome format --write package.json",
 		"pregenerate-migration": "rm -f src/db/_migration.sql",
@@ -35,5 +34,8 @@
 		"npm-check-updates": "16.14.20",
 		"pino-pretty": "11.2.1",
 		"typescript": "5.5.3"
+	},
+	"patchedDependencies": {
+		"discord-api-types@0.37.83": "patches/discord-api-types@0.37.83.patch"
 	}
 }
