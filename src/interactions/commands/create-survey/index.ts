@@ -41,7 +41,7 @@ export async function handleCreateSurveyCommand(
 	)?.value;
 	if (threadSnowflake !== undefined) {
 		// biome-ignore lint/style/noNonNullAssertion:
-		threadSnowflake = data.data.resolved!.channels[threadSnowflake]!.id;
+		threadSnowflake = data.data.resolved!.channels[threadSnowflake]!.id; // TODO why?
 	} else if (data.channel.type === ChannelType.PublicThread) {
 		threadSnowflake = data.channel.id;
 	}

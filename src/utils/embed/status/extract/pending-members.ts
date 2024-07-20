@@ -1,9 +1,10 @@
-import type { Members } from "../../../../global-state/members";
+import type { Snowflake } from "@discordjs/core";
+import type { Groups } from "../../../../global-state/members";
 import { uniquePredicate } from "../../../unique-predicate";
 
-export const extractPendingMembers = (members: Members): string[] =>
+export const extractPendingMembers = (members: Groups): Snowflake[] =>
 	members
-		.flatMap(({ groupMembers }) => groupMembers)
+		.flatMap(({ members: groupMembers }) => groupMembers)
 		.filter(({ status }) => status === undefined)
-		.map(({ id }) => id)
+		.map(({ snowflake }) => snowflake)
 		.filter(uniquePredicate);

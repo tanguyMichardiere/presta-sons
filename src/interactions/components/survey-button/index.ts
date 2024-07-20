@@ -15,12 +15,12 @@ export async function handleSurveyComponentInteraction(
 ): Promise<void> {
 	logger.debug({ componentInteractionData: data }, "updating survey results");
 	const members = await membersFromEmbed(db, data.message.embeds[0], data.guild_id);
-	const id = data.member.user.id;
+	const userSnowflake = data.member.user.id;
 	const status = data.data.custom_id;
 
-	for (const { groupMembers } of members) {
+	for (const { members: groupMembers } of members) {
 		for (const member of groupMembers) {
-			if (member.id === id) {
+			if (member.snowflake === userSnowflake) {
 				member.status = status;
 			}
 		}
@@ -33,7 +33,7 @@ export async function handleSurveyComponentInteraction(
 			// await api.threads.addMember(threadSnowflake, id);
 			// alternative to avoid spamming with messages
 			try {
-				await api.threads.getMember(threadSnowflake, id);
+				await api.threads.getMember(threadSnowflake, userSnowflake);
 			} catch {
 				// PERMISSIONS: Send Messages in Threads
 				const message = await api.channels.createMessage(threadSnowflake, {
@@ -41,7 +41,7 @@ export async function handleSurveyComponentInteraction(
 					flags: MessageFlags.SuppressNotifications,
 				});
 				await api.channels.editMessage(threadSnowflake, message.id, {
-					content: tagFromSnowflake(id),
+					content: tagFromSnowflake(userSnowflake),
 				});
 				await api.channels.deleteMessage(threadSnowflake, message.id);
 			}

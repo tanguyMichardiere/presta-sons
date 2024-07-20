@@ -1,6 +1,6 @@
-import type { APIEmbed, APIEmbedField } from "@discordjs/core";
+import type { APIEmbed, APIEmbedField, Snowflake } from "@discordjs/core";
 import type { Db } from "../../db";
-import type { Members } from "../../global-state/members";
+import type { Groups } from "../../global-state/members";
 import { getMembers } from "../../global-state/members";
 import { logger } from "../../logger";
 import { embedMessages } from "../../messages";
@@ -21,8 +21,8 @@ export const informationsFromEmbed = (embed: APIEmbed): string | undefined =>
 export async function membersFromEmbed(
 	db: Db,
 	embed: APIEmbed,
-	guildSnowflake: string,
-): Promise<Members> {
+	guildSnowflake: Snowflake,
+): Promise<Groups> {
 	const members = await getMembers(db, guildSnowflake);
 
 	if (embed.fields === undefined) {
@@ -31,9 +31,9 @@ export async function membersFromEmbed(
 	}
 
 	const statuses = extractStatus(embed.fields);
-	for (const { groupName, groupMembers } of members) {
+	for (const { name: groupName, members: groupMembers } of members) {
 		for (const member of groupMembers) {
-			member.status = statuses[groupName]?.[member.id];
+			member.status = statuses[groupName]?.[member.snowflake];
 		}
 	}
 
@@ -47,7 +47,7 @@ type EmbedFromMembersOptions = {
 };
 
 export function embedFromMembers(
-	members: Members,
+	members: Groups,
 	{ title = embedMessages.defaultTitle, url, informations }: Partial<EmbedFromMembersOptions> = {},
 ): APIEmbed {
 	const fields: APIEmbedField[] = [];

@@ -1,4 +1,4 @@
-import type { API } from "@discordjs/core";
+import type { API, Snowflake } from "@discordjs/core";
 import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { messageUrl, tagPendingComponentInteractionMessages } from "../../../messages";
@@ -15,7 +15,7 @@ export async function handleTagPendingComponentInteraction(
 	const surveyMessage = await api.channels.getMessage(
 		data.channel_id,
 		// biome-ignore lint/style/noNonNullAssertion:
-		data.data.custom_id.split("-")[1]!,
+		data.data.custom_id.split("-")[1]! as Snowflake,
 	);
 	// biome-ignore lint/style/noNonNullAssertion:
 	const channel = data.data.resolved.channels[data.data.values[0]]!;

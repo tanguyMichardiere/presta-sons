@@ -1,3 +1,4 @@
+import type { Snowflake } from "@discordjs/core";
 import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { members } from "./members";
@@ -6,7 +7,7 @@ export const users = sqliteTable(
 	"users",
 	{
 		id: integer("id").primaryKey(),
-		snowflake: text("snowflake").notNull(),
+		snowflake: text("snowflake").$type<Snowflake>().notNull(),
 	},
 	(table) => ({
 		snowflakeIdx: uniqueIndex("users_snowflake_idx").on(table.snowflake),

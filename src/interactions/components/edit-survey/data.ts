@@ -1,14 +1,14 @@
 import { ComponentType } from "@discordjs/core";
 import { z } from "zod";
-import { Snowflake, snowflakeRegex } from "../../../schemas";
+import { SnowflakeSchema, snowflakeRegex } from "../../../schemas";
 
 const customIdRegex = new RegExp(`editSurvey-${snowflakeRegex.source}`);
 
 export const EditSurveyComponentInteractionData = z.object({
-	id: Snowflake,
+	id: SnowflakeSchema,
 	token: z.string(),
-	channel_id: Snowflake,
-	guild_id: Snowflake,
+	channel_id: SnowflakeSchema,
+	guild_id: SnowflakeSchema,
 	data: z.object({
 		custom_id: z.string().regex(customIdRegex),
 		components: z.tuple([

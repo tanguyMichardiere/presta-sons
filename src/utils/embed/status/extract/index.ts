@@ -1,9 +1,9 @@
-import type { APIEmbedField } from "@discordjs/core";
+import type { APIEmbedField, Snowflake } from "@discordjs/core";
 import type { Status } from "..";
 import { snowflakeFromTag } from "../../tag";
 
-/** @returns `Record<groupName, Record<userSnowflake, Status>>` */
-export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<string, Status>> =>
+/** @returns `Record<groupName, Record<userSnowflake, status>>` */
+export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<Snowflake, Status>> =>
 	Object.fromEntries(
 		fields
 			.filter(({ value, inline }) => inline === true && value.length > 0)

@@ -1,26 +1,26 @@
-import type { APIMessage } from "@discordjs/core";
+import type { APIMessage, Snowflake } from "@discordjs/core";
 import { env } from "./env";
 import { snowflakeRegex } from "./schemas";
 import { Status } from "./utils/embed/status";
 import { tagFromSnowflake } from "./utils/embed/tag";
 
 export const messageUrl = (
-	guildSnowflake: string,
-	channelSnowflake: string,
-	messageSnowflake: string,
+	guildSnowflake: Snowflake,
+	channelSnowflake: Snowflake,
+	messageSnowflake: Snowflake,
 ): string =>
 	`https://discord.com/channels/${guildSnowflake}/${channelSnowflake}/${messageSnowflake}`;
 
-export const channelUrl = (guildSnowflake: string, channelSnowflake: string): string =>
+export const channelUrl = (guildSnowflake: Snowflake, channelSnowflake: Snowflake): string =>
 	`https://discord.com/channels/${guildSnowflake}/${channelSnowflake}`;
 const channelUrlRegex = new RegExp(
 	`^https:\\/\\/discord\\.com\\/channels\\/(?<guildSnowflake>${snowflakeRegex.source})\\/(?<channelSnowflake>${snowflakeRegex.source})$`,
 );
 export const parseChannelUrl = (
 	channelUrl: string,
-): { guildSnowflake: string; channelSnowflake: string } | undefined =>
+): { guildSnowflake: Snowflake; channelSnowflake: Snowflake } | undefined =>
 	channelUrl.match(channelUrlRegex)?.groups as
-		| { guildSnowflake: string; channelSnowflake: string }
+		| { guildSnowflake: Snowflake; channelSnowflake: Snowflake }
 		| undefined;
 
 export const createSurveyCommandMessages = {
@@ -68,7 +68,11 @@ export const tagPendingCommandMessages = {
 };
 
 export const tagPendingComponentInteractionMessages = {
-	pleaseAnswer: (pending: string[], guildSnowflake: string, surveyMessage: APIMessage): string =>
+	pleaseAnswer: (
+		pending: Snowflake[],
+		guildSnowflake: Snowflake,
+		surveyMessage: APIMessage,
+	): string =>
 		`${pending.map(tagFromSnowflake).join(" ")}\n\nRépond${pending.length > 1 ? "ez" : "s"} s${
 			pending.length > 1 ? "v" : "t"
 		}p : ${messageUrl(guildSnowflake, surveyMessage.channel_id, surveyMessage.id)}`,
@@ -88,7 +92,7 @@ export const embedMessages = {
 	missingGroupsField: (
 		groups: Array<{
 			groupName: string;
-			overlaps?: Array<{ userSnowflake: string; otherGroupName: string }>;
+			overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 		}>,
 	): string =>
 		groups

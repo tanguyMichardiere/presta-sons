@@ -1,4 +1,4 @@
-import type { API } from "@discordjs/core";
+import type { API, Snowflake } from "@discordjs/core";
 import { ChannelType } from "@discordjs/core";
 import type { Db } from "../../../db";
 import { logger } from "../../../logger";
@@ -37,7 +37,7 @@ export async function handleEditSurveyComponentInteraction(
 	const surveyMessage = await api.channels.getMessage(
 		data.channel_id,
 		// biome-ignore lint/style/noNonNullAssertion:
-		data.data.custom_id.split("-")[1]!,
+		data.data.custom_id.split("-")[1]! as Snowflake,
 	);
 	logger.debug(
 		{ componentInteractionData: data },

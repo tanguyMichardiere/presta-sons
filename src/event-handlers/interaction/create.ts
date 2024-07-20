@@ -1,8 +1,8 @@
 import { GatewayDispatchEvents, MessageFlags } from "@discordjs/core";
 import { CreateSurveyCommandData } from "../../interactions/commands/create-survey/data.ts";
 import { handleCreateSurveyCommand } from "../../interactions/commands/create-survey/index.ts";
-import { EditSurveyCommandData } from "../../interactions/commands/edit-survey.ts/data.ts";
-import { handleEditSurveyCommand } from "../../interactions/commands/edit-survey.ts/index.ts";
+import { EditSurveyCommandData } from "../../interactions/commands/edit-survey/data.ts";
+import { handleEditSurveyCommand } from "../../interactions/commands/edit-survey/index.ts";
 import { TagPendingCommandData } from "../../interactions/commands/tag-pending/data.ts";
 import { handleTagPendingCommand } from "../../interactions/commands/tag-pending/index.ts";
 import { EditSurveyComponentInteractionData } from "../../interactions/components/edit-survey/data.ts";

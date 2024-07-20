@@ -1,21 +1,25 @@
+import type { Snowflake } from "@discordjs/core";
 import { Status } from "../..";
-import type { Members } from "../../../../../global-state/members";
+import type { Groups } from "../../../../../global-state/members";
 import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
 // TOOD: add logging
-export function extractPerhapsMissingGroups(members: Members): Array<{
+export function extractPerhapsMissingGroups(members: Groups): Array<{
 	groupName: string;
-	overlaps?: Array<{ userSnowflake: string; otherGroupName: string }>;
+	overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 }> {
 	const result: Array<{
 		groupName: string;
-		overlaps?: Array<{ userSnowflake: string; otherGroupName: string }>;
+		overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 	}> = [];
 	const groupsByUserSnowflake = getGroupsByUserSnowflake(members);
 	// no answer is the same as having answered perhaps here
-	for (const { groupName, groupMembers } of members.map(({ groupName, groupMembers }) => ({
-		groupName,
-		groupMembers: groupMembers.map(({ id, status }) => ({ id, status: status ?? Status.Perhaps })),
+	for (const { groupName, groupMembers } of members.map(({ name, members }) => ({
+		groupName: name,
+		groupMembers: members.map(({ snowflake, status }) => ({
+			snowflake,
+			status: status ?? Status.Perhaps,
+		})),
 	}))) {
 		// only include groups where some members answered perhaps
 		if (groupMembers.some(({ status }) => status === Status.Perhaps)) {
@@ -27,10 +31,10 @@ export function extractPerhapsMissingGroups(members: Members): Array<{
 			// include groups where the only members who answered ok are part of another group
 			const okGroupMembers = groupMembers.filter(({ status }) => status === Status.Ok);
 			const overlaps = okGroupMembers
-				.flatMap(({ id }) =>
+				.flatMap(({ snowflake: userSnowflake }) =>
 					// biome-ignore lint/style/noNonNullAssertion:
-					groupsByUserSnowflake[id]!.map((otherGroupName) => ({
-						userSnowflake: id,
+					groupsByUserSnowflake[userSnowflake]!.map((otherGroupName) => ({
+						userSnowflake,
 						otherGroupName,
 					})),
 				)
@@ -38,7 +42,7 @@ export function extractPerhapsMissingGroups(members: Members): Array<{
 			const overlappingUserIds = overlaps.map(({ userSnowflake }) => userSnowflake);
 			if (
 				overlaps.length > 0 &&
-				okGroupMembers.every(({ id }) => overlappingUserIds.includes(id))
+				okGroupMembers.every(({ snowflake }) => overlappingUserIds.includes(snowflake))
 			) {
 				result.push({ groupName, overlaps });
 			}

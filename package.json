@@ -2,6 +2,7 @@
 	"name": "presta-sons",
 	"private": true,
 	"scripts": {
+		"postinstall": "sed -i.bak 's/export type Snowflake = string;/export type Snowflake = string \\& import(\"zod\").z.BRAND<\"Snowflake\">;/' node_modules/discord-api-types/globals.d.ts && rm node_modules/discord-api-types/globals.d.ts.bak",
 		"update-dependencies": "npm-check-updates -u && bun install && bun update",
 		"postupdate-dependencies": "biome format --write package.json",
 		"pregenerate-migration": "rm -f src/db/_migration.sql",

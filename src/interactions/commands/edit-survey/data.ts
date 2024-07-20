@@ -6,13 +6,13 @@ import type {
 import { ApplicationCommandType } from "@discordjs/core";
 import { z } from "zod";
 import { editSurveyCommandMessages } from "../../../messages";
-import { Snowflake } from "../../../schemas";
+import { SnowflakeSchema } from "../../../schemas";
 
 export const EditSurveyCommandData = z.object({
-	id: Snowflake,
+	id: SnowflakeSchema,
 	token: z.string(),
-	application_id: Snowflake,
-	guild_id: Snowflake,
+	application_id: SnowflakeSchema,
+	guild_id: SnowflakeSchema,
 	member: z
 		.custom<APIGuildMember>((val) => val !== undefined)
 		.refine((val): val is APIGuildMember & { user: APIUser } => val.user !== undefined),
@@ -20,7 +20,7 @@ export const EditSurveyCommandData = z.object({
 		.object({
 			type: z.literal(ApplicationCommandType.Message),
 			name: z.literal(editSurveyCommandMessages.commandName),
-			target_id: Snowflake,
+			target_id: SnowflakeSchema,
 			resolved: z.custom<APIMessageApplicationCommandInteractionDataResolved>(
 				(val) => val !== undefined,
 			),

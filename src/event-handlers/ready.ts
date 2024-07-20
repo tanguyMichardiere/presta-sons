@@ -6,7 +6,7 @@ import { GatewayDispatchEvents } from "@discordjs/core";
 import { createEventHandler } from ".";
 import { env } from "../env";
 import { createSurveyCommand } from "../interactions/commands/create-survey/command";
-import { editSurveyCommand } from "../interactions/commands/edit-survey.ts/command";
+import { editSurveyCommand } from "../interactions/commands/edit-survey/command";
 import { tagPendingCommand } from "../interactions/commands/tag-pending/command";
 
 const commands: RESTPutAPIApplicationCommandsJSONBody | RESTPutAPIApplicationGuildCommandsJSONBody =

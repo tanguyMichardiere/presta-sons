@@ -1,14 +1,17 @@
-import type { Members } from "../../../../../global-state/members";
+import type { Snowflake } from "@discordjs/core";
+import type { Groups } from "../../../../../global-state/members";
 
-export const getGroupsByUserSnowflake = (members: Members): Record<string, string[]> =>
-	members
-		.flatMap(({ groupName, groupMembers }) => groupMembers.map(({ id }) => ({ id, groupName })))
-		.reduce<Record<string, string[]>>((result, { id, groupName }) => {
-			if (id in result) {
+export const getGroupsByUserSnowflake = (groups: Groups): Record<Snowflake, string[]> =>
+	groups
+		.flatMap(({ name: groupName, members: groupMembers }) =>
+			groupMembers.map(({ snowflake }) => ({ snowflake, groupName })),
+		)
+		.reduce<Record<Snowflake, string[]>>((result, { snowflake, groupName }) => {
+			if (snowflake in result) {
 				// biome-ignore lint/style/noNonNullAssertion:
-				result[id]!.push(groupName);
+				result[snowflake]!.push(groupName);
 			} else {
-				result[id] = [groupName];
+				result[snowflake] = [groupName];
 			}
 			return result;
 		}, {});

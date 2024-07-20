@@ -1,10 +1,11 @@
+import type { Snowflake } from "@discordjs/core";
 import { eq } from "drizzle-orm";
 import type { Db } from "../../db";
 import { guilds } from "../../db/schema/guilds";
 import { members } from "../../db/schema/members";
 import { users } from "../../db/schema/users";
 
-export async function isAdmin(db: Db, guildSnowflake: string, userSnowflake: string) {
+export async function isAdmin(db: Db, guildSnowflake: Snowflake, userSnowflake: Snowflake) {
 	const guild = await db.query.guilds.findFirst({
 		columns: { id: true },
 		where: eq(guilds.snowflake, guildSnowflake),
