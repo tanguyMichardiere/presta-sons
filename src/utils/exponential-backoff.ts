@@ -5,14 +5,14 @@ const sleep = (ms: number) =>
 		setTimeout(resolve, ms);
 	});
 
-type ExponentialBackoffOptions = {
+type Options = {
 	ms: number;
 	limit: number;
 };
 
 export async function exponentialBackoff<T>(
 	fn: () => Promise<T>,
-	{ ms = 100, limit = 3000 }: Partial<ExponentialBackoffOptions> = {},
+	{ ms = 100, limit = 3000 }: Partial<Options> = {},
 ): Promise<T> {
 	const start = Date.now();
 	try {
