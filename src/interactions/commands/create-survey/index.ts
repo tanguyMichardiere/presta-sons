@@ -4,7 +4,7 @@ import type { Db } from "../../../db";
 import { getGroups } from "../../../global-state/groups";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
-import { embedFromMembers } from "../../../utils/embed";
+import { embedFromGroups } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
 import { exponentialBackoff } from "../../../utils/exponential-backoff";
 import { InteractionError } from "../../error";
@@ -49,7 +49,7 @@ export async function handleCreateSurveyCommand(
 		threadSnowflake !== undefined ? channelUrl(data.guild_id, threadSnowflake) : undefined;
 	await api.interactions.reply(data.id, data.token, {
 		embeds: [
-			embedFromMembers(await getGroups(db, data.guild_id), { title: embedTitle, url: threadUrl }),
+			embedFromGroups(await getGroups(db, data.guild_id), { title: embedTitle, url: threadUrl }),
 		],
 		components,
 	});

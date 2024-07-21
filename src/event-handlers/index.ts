@@ -7,7 +7,7 @@ type Opts = {
 	logEvent: boolean;
 };
 
-type ListenerOpts = {
+type ListenerOptions = {
 	db: Db;
 	logger: Logger;
 };
@@ -15,7 +15,7 @@ type ListenerOpts = {
 /** Create an event handler, with logging and error handling */
 export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 	eventName: K,
-	listener: (args: ManagerShardEventsMap[K][0], opts: ListenerOpts) => Promise<void>,
+	listener: (args: ManagerShardEventsMap[K][0], opts: ListenerOptions) => Promise<void>,
 	{ logEvent = true }: Partial<Opts> = {},
 ): (args: ManagerShardEventsMap[K][0]) => Promise<void> {
 	const childLogger = logger.child({ eventName });

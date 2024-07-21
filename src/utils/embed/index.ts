@@ -23,21 +23,21 @@ export async function membersFromEmbed(
 	embed: APIEmbed,
 	guildSnowflake: Snowflake,
 ): Promise<Groups> {
-	const members = await getGroups(db, guildSnowflake);
+	const groups = await getGroups(db, guildSnowflake);
 
 	if (embed.fields === undefined) {
 		logger.warn({ guildSnowflake, embed }, "embed has no fields");
-		return members;
+		return groups;
 	}
 
 	const statuses = extractStatus(embed.fields);
-	for (const { name: groupName, members: groupMembers } of members) {
+	for (const { name: groupName, members: groupMembers } of groups) {
 		for (const member of groupMembers) {
 			member.status = statuses[groupName]?.[member.snowflake];
 		}
 	}
 
-	return members;
+	return groups;
 }
 
 type EmbedFromMembersOptions = {
@@ -46,8 +46,8 @@ type EmbedFromMembersOptions = {
 	informations: string;
 };
 
-export function embedFromMembers(
-	members: Groups,
+export function embedFromGroups(
+	groups: Groups,
 	{ title = embedMessages.defaultTitle, url, informations }: Partial<EmbedFromMembersOptions> = {},
 ): APIEmbed {
 	const fields: APIEmbedField[] = [];
@@ -58,7 +58,7 @@ export function embedFromMembers(
 
 	let needsSeparator = false;
 
-	const pending = extractPendingMembers(members);
+	const pending = extractPendingMembers(groups);
 	if (pending.length > 0) {
 		fields.push({
 			name: embedMessages.didntAnswer,
@@ -67,7 +67,7 @@ export function embedFromMembers(
 		needsSeparator = true;
 	}
 
-	const missing = extractMissingGroups(members);
+	const missing = extractMissingGroups(groups);
 	if (missing.length > 0) {
 		fields.push({
 			name: embedMessages.missingGroups,
@@ -76,7 +76,7 @@ export function embedFromMembers(
 		needsSeparator = true;
 	}
 
-	const perhapsMissing = extractPerhapsMissingGroups(members);
+	const perhapsMissing = extractPerhapsMissingGroups(groups);
 	if (perhapsMissing.length > 0) {
 		fields.push({
 			name: embedMessages.perhapsMissingGroups,
@@ -89,9 +89,9 @@ export function embedFromMembers(
 		fields.push(separator);
 	}
 
-	fields.push(...buildGroupFields(members));
+	fields.push(...buildGroupFields(groups));
 
-	const footer = buildSummary(members);
+	const footer = buildSummary(groups);
 
 	return { title, fields, url, footer };
 }
