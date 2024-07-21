@@ -1,5 +1,6 @@
 import type { ManagerShardEventsMap } from "@discordjs/core";
-import { type Db, db } from "../db";
+import type { Db } from "../db";
+import { db } from "../db";
 import type { Logger } from "../logger";
 import { logger } from "../logger";
 
