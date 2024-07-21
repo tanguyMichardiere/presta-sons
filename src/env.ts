@@ -1,6 +1,6 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import { Snowflake } from "./schemas";
+import { SnowflakeSchema } from "./schemas";
 
 export const env = createEnv({
 	server: {
@@ -9,7 +9,7 @@ export const env = createEnv({
 
 		DISCORD_TOKEN: z.string(),
 
-		GUILD_ID: z.optional(Snowflake),
+		GUILD_ID: z.optional(SnowflakeSchema),
 		ROLE_PREFIX: z.string().default("ps "),
 		ADMIN_ROLE_NAME: z.string().default("Admin Presta'sons"),
 	},

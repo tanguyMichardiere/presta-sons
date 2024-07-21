@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import type { Snowflake } from "@discordjs/core";
 import { extractStatus } from ".";
 import { Status } from "..";
 
@@ -13,7 +14,9 @@ describe("extractStatus", () => {
 
 	test("1 group, 1 person", () => {
 		expect(
-			extractStatus([{ name: "groupName", value: `${Status.Ok} <@personId>`, inline: true }]),
-		).toStrictEqual({ groupName: { personId: Status.Ok } });
+			extractStatus([
+				{ name: "groupName", value: `${Status.Ok} <@personSnowflake>`, inline: true },
+			]),
+		).toStrictEqual({ groupName: { ["personSnowflake" as Snowflake]: Status.Ok } });
 	});
 });

@@ -21,6 +21,6 @@
 		"isolatedModules": true,
 		"types": ["bun", "@total-typescript/ts-reset"]
 	},
-	"include": ["src/**/*.ts", "./*.js", "./.*.js", "./*.ts", "./*.mts"],
+	"include": ["src/**/*.ts", "./*.js", "./.*.js", "./*.ts"],
 	"exclude": ["node_modules"]
 }

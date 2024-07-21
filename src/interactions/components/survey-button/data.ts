@@ -7,14 +7,14 @@ import type {
 } from "@discordjs/core";
 import { ComponentType } from "@discordjs/core";
 import { z } from "zod";
-import { Snowflake } from "../../../schemas";
+import { SnowflakeSchema } from "../../../schemas";
 import { Status } from "../../../utils/embed/status";
 
 export const SurveyButtonComponentInteractionData = z.object({
-	id: Snowflake,
+	id: SnowflakeSchema,
 	token: z.string(),
-	channel_id: Snowflake,
-	guild_id: Snowflake,
+	channel_id: SnowflakeSchema,
+	guild_id: SnowflakeSchema,
 	message: z
 		.custom<APIMessage>((val) => val !== undefined)
 		.refine(

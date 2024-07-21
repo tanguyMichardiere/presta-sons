@@ -1,9 +1,9 @@
-import type { APIEmbedField } from "@discordjs/core";
+import type { APIEmbedField, Snowflake } from "@discordjs/core";
 import type { Status } from "..";
-import { idFromTag } from "../../tag";
+import { snowflakeFromTag } from "../../tag";
 
-/** @returns `Record<groupName, Record<memberId, Status>>` */
-export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<string, Status>> =>
+/** @returns `Record<groupName, Record<userSnowflake, status>>` */
+export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<Snowflake, Status>> =>
 	Object.fromEntries(
 		fields
 			.filter(({ value, inline }) => inline === true && value.length > 0)
@@ -12,7 +12,7 @@ export const extractStatus = (fields: APIEmbedField[]): Record<string, Record<st
 				Object.fromEntries(
 					field.value.split("\n").map((line) => {
 						const [status, tag] = line.split(" ") as [Status, string];
-						return [idFromTag(tag), status];
+						return [snowflakeFromTag(tag), status];
 					}),
 				),
 			]),

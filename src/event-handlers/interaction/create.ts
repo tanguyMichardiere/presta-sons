@@ -1,8 +1,8 @@
 import { GatewayDispatchEvents, MessageFlags } from "@discordjs/core";
 import { CreateSurveyCommandData } from "../../interactions/commands/create-survey/data.ts";
 import { handleCreateSurveyCommand } from "../../interactions/commands/create-survey/index.ts";
-import { EditSurveyCommandData } from "../../interactions/commands/edit-survey.ts/data.ts";
-import { handleEditSurveyCommand } from "../../interactions/commands/edit-survey.ts/index.ts";
+import { EditSurveyCommandData } from "../../interactions/commands/edit-survey/data.ts";
+import { handleEditSurveyCommand } from "../../interactions/commands/edit-survey/index.ts";
 import { TagPendingCommandData } from "../../interactions/commands/tag-pending/data.ts";
 import { handleTagPendingCommand } from "../../interactions/commands/tag-pending/index.ts";
 import { EditSurveyComponentInteractionData } from "../../interactions/components/edit-survey/data.ts";
@@ -16,17 +16,17 @@ import { createEventHandler } from "../index.ts";
 
 export const handleInteractionCreate = createEventHandler(
 	GatewayDispatchEvents.InteractionCreate,
-	async ({ data, api }, logger) => {
+	async ({ api, data }, { db, logger }) => {
 		try {
 			const createSurveyCommandData = CreateSurveyCommandData.safeParse(data);
 			if (createSurveyCommandData.success) {
-				await handleCreateSurveyCommand(api, createSurveyCommandData.data);
+				await handleCreateSurveyCommand(api, db, createSurveyCommandData.data);
 				return;
 			}
 
 			const editSurveyCommandData = EditSurveyCommandData.safeParse(data);
 			if (editSurveyCommandData.success) {
-				await handleEditSurveyCommand(api, editSurveyCommandData.data);
+				await handleEditSurveyCommand(api, db, editSurveyCommandData.data);
 				return;
 			}
 
@@ -35,6 +35,7 @@ export const handleInteractionCreate = createEventHandler(
 			if (editInformationsComponentInteractionData.success) {
 				await handleEditSurveyComponentInteraction(
 					api,
+					db,
 					editInformationsComponentInteractionData.data,
 				);
 				return;
@@ -43,19 +44,23 @@ export const handleInteractionCreate = createEventHandler(
 			const surveyButtonComponentInteractionData =
 				SurveyButtonComponentInteractionData.safeParse(data);
 			if (surveyButtonComponentInteractionData.success) {
-				await handleSurveyComponentInteraction(api, surveyButtonComponentInteractionData.data);
+				await handleSurveyComponentInteraction(api, db, surveyButtonComponentInteractionData.data);
 				return;
 			}
 
 			const tagPendingCommandData = TagPendingCommandData.safeParse(data);
 			if (tagPendingCommandData.success) {
-				await handleTagPendingCommand(api, tagPendingCommandData.data);
+				await handleTagPendingCommand(api, db, tagPendingCommandData.data);
 				return;
 			}
 
 			const tagPendingComponentInteractionData = TagPendingComponentInteractionData.safeParse(data);
 			if (tagPendingComponentInteractionData.success) {
-				await handleTagPendingComponentInteraction(api, tagPendingComponentInteractionData.data);
+				await handleTagPendingComponentInteraction(
+					api,
+					db,
+					tagPendingComponentInteractionData.data,
+				);
 				return;
 			}
 

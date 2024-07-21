@@ -1,12 +1,14 @@
 import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
 import { ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
-import { membersState } from "../../../global-state/members";
+import type { Db } from "../../../db";
+import { getGroups } from "../../../global-state/groups";
 import { logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
 import { embedFromMembers } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
 import { exponentialBackoff } from "../../../utils/exponential-backoff";
 import { InteractionError } from "../../error";
+import { isAdmin } from "../is-admin";
 import type { CreateSurveyCommandData } from "./data";
 
 const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [
@@ -23,37 +25,31 @@ const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [
 
 export async function handleCreateSurveyCommand(
 	api: API,
+	db: Db,
 	data: CreateSurveyCommandData,
 ): Promise<void> {
 	// biome-ignore lint/style/noNonNullAssertion:
-	const adminRoleId = membersState[data.guild_id]!.adminRoleId;
-	if (adminRoleId === undefined) {
-		throw new InteractionError(createSurveyCommandMessages.errors.adminRoleDoesntExist);
-	}
-	if (!data.member.roles.some((roleId) => roleId === adminRoleId)) {
+	if (!(await isAdmin(db, data.guild_id, data.member.user!.id))) {
 		throw new InteractionError(createSurveyCommandMessages.errors.userIsNotAdmin);
 	}
 	logger.debug({ commandData: data }, "creating a survey");
 	const embedTitle = data.data.options?.find(
 		(option) => option.name === createSurveyCommandMessages.nameOptionName,
 	)?.value;
-	let threadId = data.data.options?.find(
+	let threadSnowflake = data.data.options?.find(
 		(option) => option.name === createSurveyCommandMessages.threadOptionName,
 	)?.value;
-	if (threadId !== undefined) {
+	if (threadSnowflake !== undefined) {
 		// biome-ignore lint/style/noNonNullAssertion:
-		threadId = data.data.resolved!.channels[threadId]!.id;
+		threadSnowflake = data.data.resolved!.channels[threadSnowflake]!.id; // TODO why?
 	} else if (data.channel.type === ChannelType.PublicThread) {
-		threadId = data.channel.id;
+		threadSnowflake = data.channel.id;
 	}
-	const threadUrl = threadId !== undefined ? channelUrl(data.guild_id, threadId) : undefined;
+	const threadUrl =
+		threadSnowflake !== undefined ? channelUrl(data.guild_id, threadSnowflake) : undefined;
 	await api.interactions.reply(data.id, data.token, {
 		embeds: [
-			// biome-ignore lint/style/noNonNullAssertion:
-			embedFromMembers(membersState[data.guild_id]!.pendingMembers, {
-				title: embedTitle,
-				url: threadUrl,
-			}),
+			embedFromMembers(await getGroups(db, data.guild_id), { title: embedTitle, url: threadUrl }),
 		],
 		components,
 	});

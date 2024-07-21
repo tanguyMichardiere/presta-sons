@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import type { Snowflake } from "@discordjs/core";
 import { Status } from "../..";
 import { extractMissingGroups } from "./missing";
 
@@ -9,14 +10,14 @@ describe("extractMissingGroups", () => {
 
 	test("1 member, pending", () => {
 		expect(
-			extractMissingGroups([{ groupName: "Trompette", groupMembers: [{ id: "a" }] }]),
+			extractMissingGroups([{ name: "Trompette", members: [{ snowflake: "a" as Snowflake }] }]),
 		).toStrictEqual([]);
 	});
 
 	test("1 member, ok", () => {
 		expect(
 			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Ok }] },
+				{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
 			]),
 		).toStrictEqual([]);
 	});
@@ -24,7 +25,7 @@ describe("extractMissingGroups", () => {
 	test("1 member, perhaps", () => {
 		expect(
 			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
+				{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Perhaps }] },
 			]),
 		).toStrictEqual([]);
 	});
@@ -32,7 +33,7 @@ describe("extractMissingGroups", () => {
 	test("1 member, no", () => {
 		expect(
 			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
+				{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.No }] },
 			]),
 		).toStrictEqual([{ groupName: "Trompette" }]);
 	});
@@ -40,32 +41,44 @@ describe("extractMissingGroups", () => {
 	test("1 member overlapping, ok", () => {
 		expect(
 			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Ok }] },
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
+				{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
+				{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{
+				groupName: "Trompette",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Percus" }],
+			},
+			{
+				groupName: "Percus",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Trompette" }],
+			},
 		]);
 	});
 
 	test("1 member overlapping, perhaps", () => {
 		expect(
 			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.Perhaps }] },
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Perhaps }] },
+				{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Perhaps }] },
+				{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Perhaps }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{
+				groupName: "Trompette",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Percus" }],
+			},
+			{
+				groupName: "Percus",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Trompette" }],
+			},
 		]);
 	});
 
 	test("1 member overlapping, no", () => {
 		expect(
 			extractMissingGroups([
-				{ groupName: "Trompette", groupMembers: [{ id: "a", status: Status.No }] },
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.No }] },
+				{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.No }] },
+				{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.No }] },
 			]),
 		).toStrictEqual([{ groupName: "Trompette" }, { groupName: "Percus" }]);
 	});
@@ -74,16 +87,19 @@ describe("extractMissingGroups", () => {
 		expect(
 			extractMissingGroups([
 				{
-					groupName: "Trompette",
-					groupMembers: [
-						{ id: "a", status: Status.Ok },
-						{ id: "b", status: Status.Ok },
+					name: "Trompette",
+					members: [
+						{ snowflake: "a" as Snowflake, status: Status.Ok },
+						{ snowflake: "b" as Snowflake, status: Status.Ok },
 					],
 				},
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
+				{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{
+				groupName: "Percus",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Trompette" }],
+			},
 		]);
 	});
 
@@ -91,16 +107,19 @@ describe("extractMissingGroups", () => {
 		expect(
 			extractMissingGroups([
 				{
-					groupName: "Trompette",
-					groupMembers: [
-						{ id: "a", status: Status.Ok },
-						{ id: "b", status: Status.Perhaps },
+					name: "Trompette",
+					members: [
+						{ snowflake: "a" as Snowflake, status: Status.Ok },
+						{ snowflake: "b" as Snowflake, status: Status.Perhaps },
 					],
 				},
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
+				{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{
+				groupName: "Percus",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Trompette" }],
+			},
 		]);
 	});
 
@@ -108,17 +127,23 @@ describe("extractMissingGroups", () => {
 		expect(
 			extractMissingGroups([
 				{
-					groupName: "Trompette",
-					groupMembers: [
-						{ id: "a", status: Status.Ok },
-						{ id: "b", status: Status.No },
+					name: "Trompette",
+					members: [
+						{ snowflake: "a" as Snowflake, status: Status.Ok },
+						{ snowflake: "b" as Snowflake, status: Status.No },
 					],
 				},
-				{ groupName: "Percus", groupMembers: [{ id: "a", status: Status.Ok }] },
+				{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
 			]),
 		).toStrictEqual([
-			{ groupName: "Trompette", overlaps: [{ userId: "a", otherGroupName: "Percus" }] },
-			{ groupName: "Percus", overlaps: [{ userId: "a", otherGroupName: "Trompette" }] },
+			{
+				groupName: "Trompette",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Percus" }],
+			},
+			{
+				groupName: "Percus",
+				overlaps: [{ userSnowflake: "a" as Snowflake, otherGroupName: "Trompette" }],
+			},
 		]);
 	});
 });

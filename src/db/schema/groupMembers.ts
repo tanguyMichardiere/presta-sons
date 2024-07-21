@@ -7,19 +7,19 @@ export const groupMembers = sqliteTable(
 	"group_members",
 	{
 		id: integer("id").primaryKey(),
-		groupId: integer("group_id")
-			.references(() => groups.id, { onDelete: "cascade" })
-			.notNull(),
 		memberId: integer("member_id")
 			.references(() => members.id, { onDelete: "cascade" })
 			.notNull(),
+		groupId: integer("group_id")
+			.references(() => groups.id, { onDelete: "cascade" })
+			.notNull(),
 	},
 	(table) => ({
-		idx: uniqueIndex("group_members_idx").on(table.groupId, table.memberId),
+		idx: uniqueIndex("group_members_idx").on(table.memberId, table.groupId),
 	}),
 );
 
 export const groupMembersRelations = relations(groupMembers, ({ one }) => ({
-	group: one(groups, { fields: [groupMembers.groupId], references: [groups.id] }),
 	member: one(members, { fields: [groupMembers.memberId], references: [members.id] }),
+	group: one(groups, { fields: [groupMembers.groupId], references: [groups.id] }),
 }));

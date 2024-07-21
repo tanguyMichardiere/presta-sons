@@ -1,17 +1,17 @@
 import type { APIEmbedFooter } from "@discordjs/core";
-import type { Members } from "../../global-state/members";
+import type { Groups } from "../../global-state/groups";
 import { Status } from "./status";
 
-export function buildSummary(members: Members): APIEmbedFooter {
+export function buildSummary(members: Groups): APIEmbedFooter {
 	const totals = {
 		[Status.Ok]: new Set(),
 		[Status.Perhaps]: new Set(),
 		[Status.No]: new Set(),
 	};
-	for (const { groupMembers } of members) {
-		for (const { id, status } of groupMembers) {
+	for (const { members: groupMembers } of members) {
+		for (const { snowflake, status } of groupMembers) {
 			if (status !== undefined) {
-				totals[status].add(id);
+				totals[status].add(snowflake);
 			}
 		}
 	}

@@ -1,17 +1,19 @@
+import type { Snowflake } from "@discordjs/core";
 import { Status } from "../..";
-import type { Members } from "../../../../../global-state/members";
-import { getGroupsByMemberId } from "./get-groups-by-member-id";
+import type { Groups } from "../../../../../global-state/groups";
+import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
 // TODO: add logging
-export function extractMissingGroups(
-	members: Members,
-): Array<{ groupName: string; overlaps?: Array<{ userId: string; otherGroupName: string }> }> {
+export function extractMissingGroups(members: Groups): Array<{
+	groupName: string;
+	overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
+}> {
 	const result: Array<{
 		groupName: string;
-		overlaps?: Array<{ userId: string; otherGroupName: string }>;
+		overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 	}> = [];
-	const groupsByMemberId = getGroupsByMemberId(members);
-	for (const { groupName, groupMembers } of members) {
+	const groupsByUserSnowflake = getGroupsByUserSnowflake(members);
+	for (const { name: groupName, members: groupMembers } of members) {
 		// exclude groups where not everybody answered
 		if (groupMembers.some(({ status }) => status === undefined)) {
 			continue;
@@ -24,15 +26,18 @@ export function extractMissingGroups(
 		// include groups where the only members who answered perhaps or ok are also part of another group
 		const notNoGroupMembers = groupMembers.filter(({ status }) => status !== Status.No);
 		const overlaps = notNoGroupMembers
-			.flatMap(({ id }) =>
+			.flatMap(({ snowflake: userSnowflake }) =>
 				// biome-ignore lint/style/noNonNullAssertion:
-				groupsByMemberId[id]!.map((otherGroupName) => ({ userId: id, otherGroupName })),
+				groupsByUserSnowflake[userSnowflake]!.map((otherGroupName) => ({
+					userSnowflake,
+					otherGroupName,
+				})),
 			)
 			.filter(({ otherGroupName }) => otherGroupName !== groupName);
-		const overlappingUserIds = overlaps.map(({ userId }) => userId);
+		const overlappingUserSnowflakes = overlaps.map(({ userSnowflake }) => userSnowflake);
 		if (
 			overlaps.length > 0 &&
-			notNoGroupMembers.every(({ id }) => overlappingUserIds.includes(id))
+			notNoGroupMembers.every(({ snowflake }) => overlappingUserSnowflakes.includes(snowflake))
 		) {
 			result.push({ groupName, overlaps });
 		}

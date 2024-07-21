@@ -2,22 +2,26 @@ import type {
 	APIGuildMember,
 	APIInteractionDataResolved,
 	APIInteractionDataResolvedChannel,
+	APIUser,
+	Snowflake,
 } from "@discordjs/core";
 import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from "@discordjs/core";
 import { z } from "zod";
 import { createSurveyCommandMessages } from "../../../messages";
-import { Snowflake } from "../../../schemas";
+import { SnowflakeSchema } from "../../../schemas";
 
 export const CreateSurveyCommandData = z.object({
-	id: Snowflake,
+	id: SnowflakeSchema,
 	token: z.string(),
-	application_id: Snowflake,
-	guild_id: Snowflake,
+	application_id: SnowflakeSchema,
+	guild_id: SnowflakeSchema,
 	channel: z.object({
-		id: Snowflake,
+		id: SnowflakeSchema,
 		type: z.nativeEnum(ChannelType),
 	}),
-	member: z.custom<APIGuildMember>((val) => val !== undefined),
+	member: z
+		.custom<APIGuildMember>((val) => val !== undefined)
+		.refine((val): val is APIGuildMember & { user: APIUser } => val.user !== undefined),
 	data: z
 		.object({
 			type: z.literal(ApplicationCommandType.ChatInput),
@@ -33,7 +37,7 @@ export const CreateSurveyCommandData = z.object({
 						z.object({
 							name: z.literal(createSurveyCommandMessages.threadOptionName),
 							type: z.literal(ApplicationCommandOptionType.Channel),
-							value: Snowflake,
+							value: SnowflakeSchema,
 						}),
 					]),
 				),
@@ -45,17 +49,18 @@ export const CreateSurveyCommandData = z.object({
 						(
 							val,
 						): val is APIInteractionDataResolved & {
-							channels: Record<string, APIInteractionDataResolvedChannel>;
+							channels: Record<Snowflake, APIInteractionDataResolvedChannel>;
 						} => val.channels !== undefined,
 					),
 			),
 		})
 		.refine((val) => {
-			const threadId = val.options?.find(
+			const threadSnowflake = val.options?.find(
 				(option) => option.name === createSurveyCommandMessages.threadOptionName,
 			)?.value;
 			return (
-				threadId === undefined || (val.resolved !== undefined && threadId in val.resolved.channels)
+				threadSnowflake === undefined ||
+				(val.resolved !== undefined && threadSnowflake in val.resolved.channels)
 			);
 		}),
 });

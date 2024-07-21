@@ -34,5 +34,8 @@
 		"npm-check-updates": "16.14.20",
 		"pino-pretty": "11.2.1",
 		"typescript": "5.5.3"
+	},
+	"patchedDependencies": {
+		"discord-api-types@0.37.83": "patches/discord-api-types@0.37.83.patch"
 	}
 }

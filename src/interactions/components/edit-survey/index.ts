@@ -1,5 +1,6 @@
-import type { API } from "@discordjs/core";
+import type { API, Snowflake } from "@discordjs/core";
 import { ChannelType } from "@discordjs/core";
+import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { editSurveyComponentInteractionMessages, parseChannelUrl } from "../../../messages";
 import { embedFromMembers, membersFromEmbed } from "../../../utils/embed";
@@ -10,6 +11,7 @@ const notEmptyOrUndefined = (string: string) => (string !== "" ? string : undefi
 
 export async function handleEditSurveyComponentInteraction(
 	api: API,
+	db: Db,
 	data: EditSurveyComponentInteractionData,
 ): Promise<void> {
 	const title = notEmptyOrUndefined(data.data.components[0].components[0].value);
@@ -21,7 +23,7 @@ export async function handleEditSurveyComponentInteraction(
 			throw new InteractionError(editSurveyComponentInteractionMessages.errors.invalidChannelUrl);
 		}
 		try {
-			const thread = await api.channels.get(match.channelId);
+			const thread = await api.channels.get(match.channelSnowflake);
 			if (thread.type !== ChannelType.PublicThread) {
 				throw new InteractionError(editSurveyComponentInteractionMessages.errors.notAThread);
 			}
@@ -35,14 +37,14 @@ export async function handleEditSurveyComponentInteraction(
 	const surveyMessage = await api.channels.getMessage(
 		data.channel_id,
 		// biome-ignore lint/style/noNonNullAssertion:
-		data.data.custom_id.split("-")[1]!,
+		data.data.custom_id.split("-")[1]! as Snowflake,
 	);
 	logger.debug(
 		{ componentInteractionData: data },
 		`editing the survey ${surveyMessage.channel_id}/${surveyMessage.id}`,
 	);
 	// biome-ignore lint/style/noNonNullAssertion:
-	const members = membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id);
+	const members = await membersFromEmbed(db, surveyMessage.embeds[0]!, data.guild_id);
 	await api.interactions.deferMessageUpdate(data.id, data.token);
 	// PERMISSIONS: Embed Links
 	await api.channels.editMessage(surveyMessage.channel_id, surveyMessage.id, {

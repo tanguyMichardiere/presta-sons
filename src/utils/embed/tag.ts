@@ -1,3 +1,5 @@
-export const idFromTag = (tag: string): string => tag.slice(2, -1);
+import type { Snowflake } from "@discordjs/core";
 
-export const tagFromId = (id: string): string => `<@${id}>`;
+export const snowflakeFromTag = (tag: string): Snowflake => tag.slice(2, -1) as Snowflake;
+
+export const tagFromSnowflake = (snowflake: Snowflake): string => `<@${snowflake}>`;

@@ -1,0 +1,13 @@
+diff --git a/globals.d.ts b/globals.d.ts
+index bd4145c11a6b431126526127d9df3f4e526e8d56..f4d10dd97ef55a2a2f9257eed8f04610513f3d04 100644
+--- a/globals.d.ts
++++ b/globals.d.ts
+@@ -1,7 +1,7 @@
+ /**
+  * https://discord.com/developers/docs/reference#snowflakes
+  */
+-export type Snowflake = string;
++export type Snowflake = string & import("zod").BRAND<"Snowflake">;
+ /**
+  * https://discord.com/developers/docs/topics/permissions
+  *
