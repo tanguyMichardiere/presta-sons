@@ -7,7 +7,8 @@ import { embedFromGroups, membersFromEmbed } from "../../../utils/embed";
 import { InteractionError } from "../../error";
 import type { EditSurveyComponentInteractionData } from "./data";
 
-const notEmptyOrUndefined = (string: string) => (string !== "" ? string : undefined);
+const notEmptyOrUndefined = (string: string): string | undefined =>
+	string !== "" ? string : undefined;
 
 export async function handleEditSurveyComponentInteraction(
 	api: API,

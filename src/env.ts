@@ -13,6 +13,7 @@ export const env = createEnv({
 		ROLE_PREFIX: z.string().default("ps "),
 		ADMIN_ROLE_NAME: z.string().default("Admin Presta'sons"),
 	},
+	// biome-ignore lint/nursery/noProcessEnv: checked by t3env
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,
 });

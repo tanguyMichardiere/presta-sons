@@ -8,12 +8,16 @@
 	"linter": {
 		"rules": {
 			"all": true,
+			"correctness": {
+				"useImportExtensions": "off"
+			},
 			"style": {
 				"useNamingConvention": "off"
 			},
 			"nursery": {
 				"all": true,
-				"useImportExtensions": "off",
+				"noEnum": "off",
+				"noSecrets": "off",
 				"useImportRestrictions": "off"
 			}
 		}

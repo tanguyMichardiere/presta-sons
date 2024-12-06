@@ -20,20 +20,20 @@
 		"@discordjs/core": "1.2.0",
 		"@discordjs/rest": "2.3.0",
 		"@discordjs/ws": "1.1.1",
-		"@t3-oss/env-core": "0.10.1",
-		"drizzle-orm": "0.32.0",
-		"pino": "9.3.1",
+		"@t3-oss/env-core": "0.11.1",
+		"drizzle-orm": "0.37.0",
+		"pino": "9.5.0",
 		"zod": "3.23.8"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.8.3",
-		"@total-typescript/ts-reset": "0.5.1",
-		"@types/bun": "1.1.6",
-		"drizzle-kit": "0.23.0",
-		"knip": "5.26.0",
+		"@biomejs/biome": "1.9.4",
+		"@total-typescript/ts-reset": "0.6.1",
+		"@types/bun": "1.1.14",
+		"drizzle-kit": "0.29.1",
+		"knip": "5.39.2",
 		"npm-check-updates": "16.14.20",
-		"pino-pretty": "11.2.1",
-		"typescript": "5.5.3"
+		"pino-pretty": "11.3.0",
+		"typescript": "5.7.2"
 	},
 	"patchedDependencies": {
 		"discord-api-types@0.37.83": "patches/discord-api-types@0.37.83.patch"

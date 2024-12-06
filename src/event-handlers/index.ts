@@ -21,12 +21,13 @@ export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 ): (args: ManagerShardEventsMap[K][0]) => Promise<void> {
 	const childLogger = logger.child({ eventName });
 	childLogger.info("registering a handler");
-	return async (args) => {
+	return async (args): Promise<void> => {
 		if (logEvent) {
 			logger.info({ event: args.data }, eventName);
 		}
 		try {
 			await db.transaction(async (tx) => {
+				// @ts-expect-error
 				await listener(args, { db: tx, logger: childLogger });
 			});
 		} catch (error) {

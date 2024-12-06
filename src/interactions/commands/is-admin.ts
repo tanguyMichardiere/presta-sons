@@ -5,7 +5,11 @@ import { guilds } from "../../db/schema/guilds";
 import { members } from "../../db/schema/members";
 import { users } from "../../db/schema/users";
 
-export async function isAdmin(db: Db, guildSnowflake: Snowflake, userSnowflake: Snowflake) {
+export async function isAdmin(
+	db: Db,
+	guildSnowflake: Snowflake,
+	userSnowflake: Snowflake,
+): Promise<boolean> {
 	const guild = await db.query.guilds.findFirst({
 		columns: { id: true },
 		where: eq(guilds.snowflake, guildSnowflake),

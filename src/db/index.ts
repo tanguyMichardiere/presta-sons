@@ -13,7 +13,7 @@ logger.debug("successfully applied the database migration");
 export const db = drizzle(sqlite, {
 	schema,
 	logger: {
-		logQuery(query, params) {
+		logQuery(query, params): void {
 			let index = 0;
 			logger.debug(query.replaceAll("?", () => JSON.stringify(params[index++])));
 		},
