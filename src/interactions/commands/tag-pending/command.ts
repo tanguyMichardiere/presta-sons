@@ -5,10 +5,8 @@ import type {
 import { ApplicationCommandType } from "@discordjs/core";
 import { tagPendingCommandMessages } from "../../../messages";
 
-export const tagPendingCommand: (
-	| RESTPutAPIApplicationCommandsJSONBody
-	| RESTPutAPIApplicationGuildCommandsJSONBody
-)[number] = {
+export const tagPendingCommand: (RESTPutAPIApplicationCommandsJSONBody &
+	RESTPutAPIApplicationGuildCommandsJSONBody)[number] = {
 	type: ApplicationCommandType.Message,
 	name: tagPendingCommandMessages.commandName,
 };

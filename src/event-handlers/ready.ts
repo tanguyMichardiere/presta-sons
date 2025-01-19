@@ -9,7 +9,7 @@ import { createSurveyCommand } from "../interactions/commands/create-survey/comm
 import { editSurveyCommand } from "../interactions/commands/edit-survey/command";
 import { tagPendingCommand } from "../interactions/commands/tag-pending/command";
 
-const commands: RESTPutAPIApplicationCommandsJSONBody | RESTPutAPIApplicationGuildCommandsJSONBody =
+const commands: RESTPutAPIApplicationCommandsJSONBody & RESTPutAPIApplicationGuildCommandsJSONBody =
 	[createSurveyCommand, editSurveyCommand, tagPendingCommand];
 
 export const handleReady = createEventHandler(
