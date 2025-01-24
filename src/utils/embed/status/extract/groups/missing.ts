@@ -4,7 +4,7 @@ import type { Groups } from "../../../../../global-state/groups";
 import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
 // TODO: add logging
-export function extractMissingGroups(members: Groups): Array<{
+export function extractMissingGroups(groups: Groups): Array<{
 	groupName: string;
 	overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 }> {
@@ -12,8 +12,8 @@ export function extractMissingGroups(members: Groups): Array<{
 		groupName: string;
 		overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 	}> = [];
-	const groupsByUserSnowflake = getGroupsByUserSnowflake(members);
-	for (const { name: groupName, members: groupMembers } of members) {
+	const groupsByUserSnowflake = getGroupsByUserSnowflake(groups);
+	for (const { name: groupName, members: groupMembers } of groups) {
 		// exclude groups where not everybody answered
 		if (groupMembers.some(({ status }) => status === undefined)) {
 			continue;

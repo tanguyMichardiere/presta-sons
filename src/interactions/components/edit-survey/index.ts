@@ -3,11 +3,12 @@ import { ChannelType } from "@discordjs/core";
 import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { editSurveyComponentInteractionMessages, parseChannelUrl } from "../../../messages";
-import { embedFromMembers, membersFromEmbed } from "../../../utils/embed";
+import { embedFromGroups, membersFromEmbed } from "../../../utils/embed";
 import { InteractionError } from "../../error";
 import type { EditSurveyComponentInteractionData } from "./data";
 
-const notEmptyOrUndefined = (string: string) => (string !== "" ? string : undefined);
+const notEmptyOrUndefined = (string: string): string | undefined =>
+	string !== "" ? string : undefined;
 
 export async function handleEditSurveyComponentInteraction(
 	api: API,
@@ -48,6 +49,6 @@ export async function handleEditSurveyComponentInteraction(
 	await api.interactions.deferMessageUpdate(data.id, data.token);
 	// PERMISSIONS: Embed Links
 	await api.channels.editMessage(surveyMessage.channel_id, surveyMessage.id, {
-		embeds: [embedFromMembers(members, { title, url, informations })],
+		embeds: [embedFromGroups(members, { title, url, informations })],
 	});
 }

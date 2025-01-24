@@ -1,13 +1,14 @@
 import type { ManagerShardEventsMap } from "@discordjs/core";
-import { type Db, db } from "../db";
+import type { Db } from "../db";
+import { db } from "../db";
 import type { Logger } from "../logger";
 import { logger } from "../logger";
 
-type Opts = {
+type Options = {
 	logEvent: boolean;
 };
 
-type ListenerOpts = {
+type ListenerOptions = {
 	db: Db;
 	logger: Logger;
 };
@@ -15,17 +16,18 @@ type ListenerOpts = {
 /** Create an event handler, with logging and error handling */
 export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 	eventName: K,
-	listener: (args: ManagerShardEventsMap[K][0], opts: ListenerOpts) => Promise<void>,
-	{ logEvent = true }: Partial<Opts> = {},
+	listener: (args: ManagerShardEventsMap[K][0], opts: ListenerOptions) => Promise<void>,
+	{ logEvent = true }: Partial<Options> = {},
 ): (args: ManagerShardEventsMap[K][0]) => Promise<void> {
 	const childLogger = logger.child({ eventName });
 	childLogger.info("registering a handler");
-	return async (args) => {
+	return async (args): Promise<void> => {
 		if (logEvent) {
 			logger.info({ event: args.data }, eventName);
 		}
 		try {
 			await db.transaction(async (tx) => {
+				// @ts-expect-error
 				await listener(args, { db: tx, logger: childLogger });
 			});
 		} catch (error) {

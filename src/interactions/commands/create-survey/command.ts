@@ -5,10 +5,8 @@ import type {
 import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from "@discordjs/core";
 import { createSurveyCommandMessages } from "../../../messages";
 
-export const createSurveyCommand: (
-	| RESTPutAPIApplicationCommandsJSONBody
-	| RESTPutAPIApplicationGuildCommandsJSONBody
-)[number] = {
+export const createSurveyCommand: (RESTPutAPIApplicationCommandsJSONBody &
+	RESTPutAPIApplicationGuildCommandsJSONBody)[number] = {
 	type: ApplicationCommandType.ChatInput,
 	name: createSurveyCommandMessages.commandName,
 	description: createSurveyCommandMessages.commandDescription,

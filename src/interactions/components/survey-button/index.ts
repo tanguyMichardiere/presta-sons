@@ -3,7 +3,7 @@ import { MessageFlags } from "@discordjs/core";
 import type { Db } from "../../../db";
 import { logger } from "../../../logger";
 import { parseChannelUrl, surveyComponentInteractionMessages } from "../../../messages";
-import { embedFromMembers, informationsFromEmbed, membersFromEmbed } from "../../../utils/embed";
+import { embedFromGroups, informationsFromEmbed, membersFromEmbed } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
 import { tagFromSnowflake } from "../../../utils/embed/tag";
 import type { SurveyButtonComponentInteractionData } from "./data";
@@ -52,7 +52,7 @@ export async function handleSurveyComponentInteraction(
 
 	await api.interactions.updateMessage(data.id, data.token, {
 		embeds: [
-			embedFromMembers(members, {
+			embedFromGroups(members, {
 				title: data.message.embeds[0].title,
 				url: data.message.embeds[0].url,
 				informations: informationsFromEmbed(data.message.embeds[0]),

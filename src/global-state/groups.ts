@@ -22,7 +22,7 @@ const getMembersPage = (
 	api: API,
 	guildSnowflake: Snowflake,
 	previousPage?: RESTGetAPIGuildMembersResult,
-) =>
+): Promise<RESTGetAPIGuildMembersResult> =>
 	// PERMISSIONS: Server Members Intent (Privileged Gateway Intents)
 	api.guilds.getMembers(guildSnowflake, {
 		limit: maxLimit,

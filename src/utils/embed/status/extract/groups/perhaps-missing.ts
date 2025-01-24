@@ -4,7 +4,7 @@ import type { Groups } from "../../../../../global-state/groups";
 import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
 // TOOD: add logging
-export function extractPerhapsMissingGroups(members: Groups): Array<{
+export function extractPerhapsMissingGroups(groups: Groups): Array<{
 	groupName: string;
 	overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 }> {
@@ -12,9 +12,9 @@ export function extractPerhapsMissingGroups(members: Groups): Array<{
 		groupName: string;
 		overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
 	}> = [];
-	const groupsByUserSnowflake = getGroupsByUserSnowflake(members);
+	const groupsByUserSnowflake = getGroupsByUserSnowflake(groups);
 	// no answer is the same as having answered perhaps here
-	for (const { groupName, groupMembers } of members.map(({ name, members }) => ({
+	for (const { groupName, groupMembers } of groups.map(({ name, members }) => ({
 		groupName: name,
 		groupMembers: members.map(({ snowflake, status }) => ({
 			snowflake,

@@ -3,8 +3,8 @@ import type { Groups } from "../../global-state/groups";
 import type { Status } from "./status";
 import { tagFromSnowflake } from "./tag";
 
-export const buildGroupFields = (members: Groups): APIEmbedField[] =>
-	members.map(({ name: groupName, members: groupMembers }) => ({
+export const buildGroupFields = (groups: Groups): APIEmbedField[] =>
+	groups.map(({ name: groupName, members: groupMembers }) => ({
 		name: groupName,
 		value: groupMembers
 			.filter(

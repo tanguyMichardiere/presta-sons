@@ -24,7 +24,7 @@
 	"explorer.fileNesting.enabled": true,
 	"explorer.fileNesting.patterns": {
 		".env": ".env.*",
-		"package.json": "bun.lockb",
+		"package.json": "bun.lock",
 		"README.md": "LICENSE",
 		"tsconfig.json": "bunfig.toml, biome.jsonc, *.config.ts"
 	},
