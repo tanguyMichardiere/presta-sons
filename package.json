@@ -12,7 +12,7 @@
 		"check-types": "tsc",
 		"check-dead-code": "knip",
 		"quality": "bun run lint && bun run check-types && bun run check-dead-code && bun test",
-		"build": "bun build --compile --minify --sourcemap --bytecode src/index.ts --outfile presta-sons",
+		"build": "bun build --compile --minify --sourcemap src/index.ts --outfile presta-sons",
 		"postbuild": "rm -f .*.bun-build"
 	},
 	"dependencies": {
