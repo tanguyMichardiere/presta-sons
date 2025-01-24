@@ -1,5 +1,5 @@
 diff --git a/globals.d.ts b/globals.d.ts
-index bd4145c11a6b431126526127d9df3f4e526e8d56..f4d10dd97ef55a2a2f9257eed8f04610513f3d04 100644
+index f9d5d3d7fb9606a5aaec2234d4139b1d61eaf84c..8a938814c9d579f92150b8cf1e97d552f7cf5c30 100644
 --- a/globals.d.ts
 +++ b/globals.d.ts
 @@ -1,7 +1,7 @@

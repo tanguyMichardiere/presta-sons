@@ -3,7 +3,6 @@
 	"private": true,
 	"scripts": {
 		"update-dependencies": "npm-check-updates -u && bun install && bun update",
-		"postupdate-dependencies": "biome format --write package.json",
 		"pregenerate-migration": "rm -f src/db/_migration.sql",
 		"generate-migration": "drizzle-kit generate --name migration",
 		"postgenerate-migration": "rm -rf src/db/meta",
@@ -13,7 +12,7 @@
 		"check-types": "tsc",
 		"check-dead-code": "knip",
 		"quality": "bun run lint && bun run check-types && bun run check-dead-code && bun test",
-		"build": "bun build --compile --minify --sourcemap src/index.ts --outfile presta-sons",
+		"build": "bun build --compile --minify --sourcemap --bytecode src/index.ts --outfile presta-sons",
 		"postbuild": "rm -f .*.bun-build"
 	},
 	"dependencies": {
@@ -28,14 +27,14 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@total-typescript/ts-reset": "0.6.1",
-		"@types/bun": "1.1.17",
+		"@types/bun": "1.2.0",
 		"drizzle-kit": "0.30.2",
-		"knip": "5.42.2",
+		"knip": "5.43.3",
 		"npm-check-updates": "17.1.14",
 		"pino-pretty": "13.0.0",
 		"typescript": "5.7.3"
 	},
 	"patchedDependencies": {
-		"discord-api-types@0.37.83": "patches/discord-api-types@0.37.83.patch"
+		"discord-api-types@0.37.117": "patches/discord-api-types@0.37.117.patch"
 	}
 }
