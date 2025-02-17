@@ -92,7 +92,7 @@ export const embedMessages = {
 	missingGroupsField: (
 		groups: {
 			groupName: string;
-			overlaps: { userSnowflake: Snowflake; otherGroupName: string }[];
+			overlaps: { userSnowflake: Snowflake; otherGroupNames: string[] }[];
 		}[],
 	): string =>
 		groups
@@ -100,8 +100,8 @@ export const embedMessages = {
 				overlaps.length > 0
 					? `${groupName} (si ${overlaps
 							.map(
-								({ userSnowflake, otherGroupName }) =>
-									`${tagFromSnowflake(userSnowflake)} -> ${otherGroupName}`,
+								({ userSnowflake, otherGroupNames }) =>
+									`${tagFromSnowflake(userSnowflake)} -> ${otherGroupNames.join(" / ")}`,
 							)
 							.join(" et ")})`
 					: groupName,
