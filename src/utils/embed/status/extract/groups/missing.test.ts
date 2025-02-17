@@ -1,5 +1,5 @@
-import type { Snowflake } from "@discordjs/core";
 import { describe, expect, test } from "bun:test";
+import type { Snowflake } from "@discordjs/core";
 import { Status } from "../..";
 import { logger } from "../../../../../logger";
 import { extractMissingGroups } from "./missing";
