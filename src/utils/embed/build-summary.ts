@@ -4,7 +4,7 @@ import { Status } from "./status";
 
 export function buildSummary(groups: Groups): APIEmbedFooter {
 	const totals = {
-		[Status.Ok]: new Set(),
+		[Status.Yes]: new Set(),
 		[Status.Perhaps]: new Set(),
 		[Status.No]: new Set(),
 	};
@@ -16,7 +16,7 @@ export function buildSummary(groups: Groups): APIEmbedFooter {
 		}
 	}
 	return {
-		text: `${Status.Ok} ${totals[Status.Ok].size.toString()} - ${Status.Perhaps} ${totals[
+		text: `${Status.Yes} ${totals[Status.Yes].size.toString()} - ${Status.Perhaps} ${totals[
 			Status.Perhaps
 		].size.toString()} - ${Status.No} ${totals[Status.No].size.toString()}`,
 	};

@@ -14,7 +14,7 @@ import type { CreateSurveyCommandData } from "./data";
 const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [
 	{
 		type: ComponentType.ActionRow,
-		components: [Status.Ok, Status.Perhaps, Status.No].map((status) => ({
+		components: [Status.Yes, Status.Perhaps, Status.No].map((status) => ({
 			type: ComponentType.Button,
 			style: ButtonStyle.Secondary,
 			emoji: { name: status },

@@ -29,13 +29,13 @@ export function extractPerhapsMissingGroups(
 		// only include groups where some members answered perhaps
 		if (groupMembers.some(({ status }) => status === Status.Perhaps)) {
 			// include groups where nobody answered ok
-			if (groupMembers.every(({ status }) => status !== Status.Ok)) {
+			if (groupMembers.every(({ status }) => status !== Status.Yes)) {
 				childLogger.debug({ groupName }, "including because nobody answered ok");
 				result.push({ groupName, overlaps: [] });
 				continue;
 			}
 			// include groups where the only members who answered ok are part of another group
-			const okGroupMembers = groupMembers.filter(({ status }) => status === Status.Ok);
+			const okGroupMembers = groupMembers.filter(({ status }) => status === Status.Yes);
 			const overlaps = okGroupMembers
 				.flatMap(({ snowflake: userSnowflake }) =>
 					// biome-ignore lint/style/noNonNullAssertion:

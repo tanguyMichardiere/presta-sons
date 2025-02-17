@@ -1,5 +1,5 @@
-import { describe, expect, test } from "bun:test";
 import type { Snowflake } from "@discordjs/core";
+import { describe, expect, test } from "bun:test";
 import { Status } from "../..";
 import { logger } from "../../../../../logger";
 import { extractMissingGroups } from "./missing";
@@ -20,7 +20,7 @@ describe("extractMissingGroups", () => {
 	test("1 member, ok", () => {
 		expect(
 			extractMissingGroups(
-				[{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] }],
+				[{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Yes }] }],
 				{ logger },
 			),
 		).toStrictEqual([]);
@@ -48,8 +48,8 @@ describe("extractMissingGroups", () => {
 		expect(
 			extractMissingGroups(
 				[
-					{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
-					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
+					{ name: "Trompette", members: [{ snowflake: "a" as Snowflake, status: Status.Yes }] },
+					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Yes }] },
 				],
 				{ logger },
 			),
@@ -108,11 +108,11 @@ describe("extractMissingGroups", () => {
 					{
 						name: "Trompette",
 						members: [
-							{ snowflake: "a" as Snowflake, status: Status.Ok },
-							{ snowflake: "b" as Snowflake, status: Status.Ok },
+							{ snowflake: "a" as Snowflake, status: Status.Yes },
+							{ snowflake: "b" as Snowflake, status: Status.Yes },
 						],
 					},
-					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
+					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Yes }] },
 				],
 				{ logger },
 			),
@@ -131,11 +131,11 @@ describe("extractMissingGroups", () => {
 					{
 						name: "Trompette",
 						members: [
-							{ snowflake: "a" as Snowflake, status: Status.Ok },
+							{ snowflake: "a" as Snowflake, status: Status.Yes },
 							{ snowflake: "b" as Snowflake, status: Status.Perhaps },
 						],
 					},
-					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
+					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Yes }] },
 				],
 				{ logger },
 			),
@@ -154,11 +154,11 @@ describe("extractMissingGroups", () => {
 					{
 						name: "Trompette",
 						members: [
-							{ snowflake: "a" as Snowflake, status: Status.Ok },
+							{ snowflake: "a" as Snowflake, status: Status.Yes },
 							{ snowflake: "b" as Snowflake, status: Status.No },
 						],
 					},
-					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Ok }] },
+					{ name: "Percus", members: [{ snowflake: "a" as Snowflake, status: Status.Yes }] },
 				],
 				{ logger },
 			),
