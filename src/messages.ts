@@ -106,7 +106,7 @@ export const embedMessages = {
 							.join(" et ")})`
 					: groupName,
 			)
-			.join(", "),
+			.join("\n"),
 };
 
 export const surveyComponentInteractionMessages = {

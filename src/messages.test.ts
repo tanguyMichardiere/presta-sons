@@ -63,7 +63,7 @@ describe("embedMessages", () => {
 					},
 				]),
 			).toBe(
-				"group 8 (si <@e> -> group 4 et <@e> -> group 9 et <@q> -> group 9 et <@q> -> group 10), group 9 (si <@e> -> group 4 et <@e> -> group 8 et <@q> -> group 8 et <@q> -> group 10 et <@m> -> group 6)",
+				"group 8 (si <@e> -> group 4 et <@e> -> group 9 et <@q> -> group 9 et <@q> -> group 10)\ngroup 9 (si <@e> -> group 4 et <@e> -> group 8 et <@q> -> group 8 et <@q> -> group 10 et <@m> -> group 6)",
 			);
 		});
 	});
