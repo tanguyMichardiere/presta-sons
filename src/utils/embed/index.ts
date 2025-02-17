@@ -2,7 +2,7 @@ import type { APIEmbed, APIEmbedField, Snowflake } from "@discordjs/core";
 import type { Db } from "../../db";
 import type { Groups } from "../../global-state/groups";
 import { getGroups } from "../../global-state/groups";
-import { logger } from "../../logger";
+import type { Logger } from "../../logger";
 import { embedMessages } from "../../messages";
 import { buildGroupFields } from "./build-group-fields";
 import { buildSummary } from "./build-summary";
@@ -19,11 +19,11 @@ export const informationsFromEmbed = (embed: APIEmbed): string | undefined =>
 		?.value;
 
 export async function membersFromEmbed(
-	db: Db,
 	embed: APIEmbed,
 	guildSnowflake: Snowflake,
+	{ db, logger }: { db: Db; logger: Logger },
 ): Promise<Groups> {
-	const groups = await getGroups(db, guildSnowflake);
+	const groups = await getGroups(guildSnowflake, { db });
 
 	if (embed.fields === undefined) {
 		logger.warn({ guildSnowflake, embed }, "embed has no fields");
@@ -40,15 +40,14 @@ export async function membersFromEmbed(
 	return groups;
 }
 
-type EmbedFromMembersOptions = {
-	title: string;
-	url: string;
-	informations: string;
-};
-
 export function embedFromGroups(
 	groups: Groups,
-	{ title = embedMessages.defaultTitle, url, informations }: Partial<EmbedFromMembersOptions> = {},
+	{
+		title = embedMessages.defaultTitle,
+		url,
+		informations,
+		logger,
+	}: { title?: string; url?: string; informations?: string; logger: Logger },
 ): APIEmbed {
 	const fields: APIEmbedField[] = [];
 
@@ -67,7 +66,7 @@ export function embedFromGroups(
 		needsSeparator = true;
 	}
 
-	const missing = extractMissingGroups(groups);
+	const missing = extractMissingGroups(groups, { logger });
 	if (missing.length > 0) {
 		fields.push({
 			name: embedMessages.missingGroups,
@@ -76,7 +75,7 @@ export function embedFromGroups(
 		needsSeparator = true;
 	}
 
-	const perhapsMissing = extractPerhapsMissingGroups(groups);
+	const perhapsMissing = extractPerhapsMissingGroups(groups, { logger });
 	if (perhapsMissing.length > 0) {
 		fields.push({
 			name: embedMessages.perhapsMissingGroups,

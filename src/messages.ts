@@ -90,14 +90,14 @@ export const embedMessages = {
 	missingGroups: `${Status.No} Pupitres manquants`,
 	perhapsMissingGroups: `${Status.Perhaps} Pupitres peut-être manquants`,
 	missingGroupsField: (
-		groups: Array<{
+		groups: {
 			groupName: string;
-			overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
-		}>,
+			overlaps: { userSnowflake: Snowflake; otherGroupName: string }[];
+		}[],
 	): string =>
 		groups
 			.map(({ groupName, overlaps }) =>
-				overlaps !== undefined
+				overlaps.length > 0
 					? `${groupName} (si ${overlaps
 							.map(
 								({ userSnowflake, otherGroupName }) =>

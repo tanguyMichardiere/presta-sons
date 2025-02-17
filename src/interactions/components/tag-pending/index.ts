@@ -1,15 +1,14 @@
 import type { API, Snowflake } from "@discordjs/core";
 import type { Db } from "../../../db";
-import { logger } from "../../../logger";
+import type { Logger } from "../../../logger";
 import { messageUrl, tagPendingComponentInteractionMessages } from "../../../messages";
 import { membersFromEmbed } from "../../../utils/embed";
 import { extractPendingMembers } from "../../../utils/embed/status/extract/pending-members";
 import type { TagPendingComponentInteractionData } from "./data";
 
 export async function handleTagPendingComponentInteraction(
-	api: API,
-	db: Db,
 	data: TagPendingComponentInteractionData,
+	{ api, db, logger }: { api: API; db: Db; logger: Logger },
 ): Promise<void> {
 	// PERMISSIONS: Read Messages/View Channels + Read Message History
 	const surveyMessage = await api.channels.getMessage(
@@ -24,7 +23,7 @@ export async function handleTagPendingComponentInteraction(
 		`tagging all pending members for ${surveyMessage.channel_id}/${surveyMessage.id} in ${channel.id}`,
 	);
 	// biome-ignore lint/style/noNonNullAssertion:
-	const members = await membersFromEmbed(db, surveyMessage.embeds[0]!, data.guild_id);
+	const members = await membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id, { db, logger });
 	const pending = extractPendingMembers(members);
 	// PERMISSIONS: Send Messages
 	const tagMessage = await api.channels.createMessage(channel.id, {

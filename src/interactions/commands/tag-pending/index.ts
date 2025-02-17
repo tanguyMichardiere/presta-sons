@@ -1,7 +1,7 @@
 import type { API } from "@discordjs/core";
 import { ChannelType, ComponentType, MessageFlags } from "@discordjs/core";
 import type { Db } from "../../../db";
-import { logger } from "../../../logger";
+import type { Logger } from "../../../logger";
 import { tagPendingCommandMessages } from "../../../messages";
 import { membersFromEmbed } from "../../../utils/embed";
 import { extractPendingMembers } from "../../../utils/embed/status/extract/pending-members";
@@ -10,9 +10,8 @@ import { isAdmin } from "../is-admin";
 import type { TagPendingCommandData } from "./data";
 
 export async function handleTagPendingCommand(
-	api: API,
-	db: Db,
 	data: TagPendingCommandData,
+	{ api, db, logger }: { api: API; db: Db; logger: Logger },
 ): Promise<void> {
 	// biome-ignore lint/style/noNonNullAssertion:
 	const surveyMessage = data.data.resolved.messages[data.data.target_id]!;
@@ -20,11 +19,11 @@ export async function handleTagPendingCommand(
 		throw new InteractionError(tagPendingCommandMessages.errors.onlyUsableOnSurveyMessage);
 	}
 	// biome-ignore lint/style/noNonNullAssertion:
-	if (!(await isAdmin(db, data.guild_id, data.member.user!.id))) {
+	if (!(await isAdmin(data.member.user!.id, { guildSnowflake: data.guild_id, db }))) {
 		throw new InteractionError(tagPendingCommandMessages.errors.userIsNotAdmin);
 	}
 	// biome-ignore lint/style/noNonNullAssertion:
-	const members = await membersFromEmbed(db, surveyMessage.embeds[0]!, data.guild_id);
+	const members = await membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id, { db, logger });
 	const pending = extractPendingMembers(members);
 	if (pending.length === 0) {
 		throw new InteractionError(tagPendingCommandMessages.errors.everybodyAnswered);

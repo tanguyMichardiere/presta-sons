@@ -1,7 +1,7 @@
 import type { API, Snowflake } from "@discordjs/core";
 import { ChannelType } from "@discordjs/core";
 import type { Db } from "../../../db";
-import { logger } from "../../../logger";
+import type { Logger } from "../../../logger";
 import { editSurveyComponentInteractionMessages, parseChannelUrl } from "../../../messages";
 import { embedFromGroups, membersFromEmbed } from "../../../utils/embed";
 import { InteractionError } from "../../error";
@@ -11,9 +11,8 @@ const notEmptyOrUndefined = (string: string): string | undefined =>
 	string !== "" ? string : undefined;
 
 export async function handleEditSurveyComponentInteraction(
-	api: API,
-	db: Db,
 	data: EditSurveyComponentInteractionData,
+	{ api, db, logger }: { api: API; db: Db; logger: Logger },
 ): Promise<void> {
 	const title = notEmptyOrUndefined(data.data.components[0].components[0].value);
 	const url = notEmptyOrUndefined(data.data.components[1].components[0].value);
@@ -45,10 +44,10 @@ export async function handleEditSurveyComponentInteraction(
 		`editing the survey ${surveyMessage.channel_id}/${surveyMessage.id}`,
 	);
 	// biome-ignore lint/style/noNonNullAssertion:
-	const members = await membersFromEmbed(db, surveyMessage.embeds[0]!, data.guild_id);
+	const members = await membersFromEmbed(surveyMessage.embeds[0]!, data.guild_id, { db, logger });
 	await api.interactions.deferMessageUpdate(data.id, data.token);
 	// PERMISSIONS: Embed Links
 	await api.channels.editMessage(surveyMessage.channel_id, surveyMessage.id, {
-		embeds: [embedFromGroups(members, { title, url, informations })],
+		embeds: [embedFromGroups(members, { title, url, informations, logger })],
 	});
 }

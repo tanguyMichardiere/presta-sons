@@ -4,7 +4,7 @@ import { updateGroups } from "../../global-state/groups";
 
 export const handleGuildMemberUpdate = createEventHandler(
 	GatewayDispatchEvents.GuildMemberUpdate,
-	async ({ api, data }, { db }) => {
-		await updateGroups(api, db, data.guild_id);
+	async ({ api, data }, { db, logger }) => {
+		await updateGroups(data.guild_id, { api, db, logger });
 	},
 );

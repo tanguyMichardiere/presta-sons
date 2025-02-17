@@ -1,7 +1,7 @@
 import type { API } from "@discordjs/core";
 import { MessageFlags } from "@discordjs/core";
 import type { Db } from "../../../db";
-import { logger } from "../../../logger";
+import type { Logger } from "../../../logger";
 import { parseChannelUrl, surveyComponentInteractionMessages } from "../../../messages";
 import { embedFromGroups, informationsFromEmbed, membersFromEmbed } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
@@ -9,12 +9,11 @@ import { tagFromSnowflake } from "../../../utils/embed/tag";
 import type { SurveyButtonComponentInteractionData } from "./data";
 
 export async function handleSurveyComponentInteraction(
-	api: API,
-	db: Db,
 	data: SurveyButtonComponentInteractionData,
+	{ api, db, logger }: { api: API; db: Db; logger: Logger },
 ): Promise<void> {
 	logger.debug({ componentInteractionData: data }, "updating survey results");
-	const members = await membersFromEmbed(db, data.message.embeds[0], data.guild_id);
+	const members = await membersFromEmbed(data.message.embeds[0], data.guild_id, { db, logger });
 	const userSnowflake = data.member.user.id;
 	const status = data.data.custom_id;
 
@@ -56,6 +55,7 @@ export async function handleSurveyComponentInteraction(
 				title: data.message.embeds[0].title,
 				url: data.message.embeds[0].url,
 				informations: informationsFromEmbed(data.message.embeds[0]),
+				logger,
 			}),
 		],
 	});

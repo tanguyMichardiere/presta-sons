@@ -20,47 +20,51 @@ export const handleInteractionCreate = createEventHandler(
 		try {
 			const createSurveyCommandData = CreateSurveyCommandData.safeParse(data);
 			if (createSurveyCommandData.success) {
-				await handleCreateSurveyCommand(api, db, createSurveyCommandData.data);
+				await handleCreateSurveyCommand(createSurveyCommandData.data, { api, db, logger });
 				return;
 			}
 
 			const editSurveyCommandData = EditSurveyCommandData.safeParse(data);
 			if (editSurveyCommandData.success) {
-				await handleEditSurveyCommand(api, db, editSurveyCommandData.data);
+				await handleEditSurveyCommand(editSurveyCommandData.data, { api, db, logger });
 				return;
 			}
 
 			const editInformationsComponentInteractionData =
 				EditSurveyComponentInteractionData.safeParse(data);
 			if (editInformationsComponentInteractionData.success) {
-				await handleEditSurveyComponentInteraction(
+				await handleEditSurveyComponentInteraction(editInformationsComponentInteractionData.data, {
 					api,
 					db,
-					editInformationsComponentInteractionData.data,
-				);
+					logger,
+				});
 				return;
 			}
 
 			const surveyButtonComponentInteractionData =
 				SurveyButtonComponentInteractionData.safeParse(data);
 			if (surveyButtonComponentInteractionData.success) {
-				await handleSurveyComponentInteraction(api, db, surveyButtonComponentInteractionData.data);
+				await handleSurveyComponentInteraction(surveyButtonComponentInteractionData.data, {
+					api,
+					db,
+					logger,
+				});
 				return;
 			}
 
 			const tagPendingCommandData = TagPendingCommandData.safeParse(data);
 			if (tagPendingCommandData.success) {
-				await handleTagPendingCommand(api, db, tagPendingCommandData.data);
+				await handleTagPendingCommand(tagPendingCommandData.data, { api, db, logger });
 				return;
 			}
 
 			const tagPendingComponentInteractionData = TagPendingComponentInteractionData.safeParse(data);
 			if (tagPendingComponentInteractionData.success) {
-				await handleTagPendingComponentInteraction(
+				await handleTagPendingComponentInteraction(tagPendingComponentInteractionData.data, {
 					api,
 					db,
-					tagPendingComponentInteractionData.data,
-				);
+					logger,
+				});
 				return;
 			}
 

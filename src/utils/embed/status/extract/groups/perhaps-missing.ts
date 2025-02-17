@@ -1,17 +1,22 @@
 import type { Snowflake } from "@discordjs/core";
 import { Status } from "../..";
 import type { Groups } from "../../../../../global-state/groups";
+import type { Logger } from "../../../../../logger";
 import { getGroupsByUserSnowflake } from "./get-groups-by-user-snowflake";
 
-// TOOD: add logging
-export function extractPerhapsMissingGroups(groups: Groups): Array<{
+export function extractPerhapsMissingGroups(
+	groups: Groups,
+	{ logger }: { logger: Logger },
+): {
 	groupName: string;
-	overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
-}> {
-	const result: Array<{
+	overlaps: { userSnowflake: Snowflake; otherGroupName: string }[];
+}[] {
+	const childLogger = logger.child({ groups });
+	childLogger.debug("extracting perhaps missing groups");
+	const result: {
 		groupName: string;
-		overlaps?: Array<{ userSnowflake: Snowflake; otherGroupName: string }>;
-	}> = [];
+		overlaps: { userSnowflake: Snowflake; otherGroupName: string }[];
+	}[] = [];
 	const groupsByUserSnowflake = getGroupsByUserSnowflake(groups);
 	// no answer is the same as having answered perhaps here
 	for (const { groupName, groupMembers } of groups.map(({ name, members }) => ({
@@ -25,7 +30,8 @@ export function extractPerhapsMissingGroups(groups: Groups): Array<{
 		if (groupMembers.some(({ status }) => status === Status.Perhaps)) {
 			// include groups where nobody answered ok
 			if (groupMembers.every(({ status }) => status !== Status.Ok)) {
-				result.push({ groupName });
+				childLogger.debug({ groupName }, "including because nobody answered ok");
+				result.push({ groupName, overlaps: [] });
 				continue;
 			}
 			// include groups where the only members who answered ok are part of another group
