@@ -25,7 +25,7 @@ export async function handleSurveyComponentInteraction(
 		}
 	}
 
-	if (status === Status.Ok && data.message.embeds[0].url !== undefined) {
+	if (status === Status.Yes && data.message.embeds[0].url !== undefined) {
 		const threadSnowflake = parseChannelUrl(data.message.embeds[0].url)?.channelSnowflake;
 		if (threadSnowflake !== undefined) {
 			// PERMISSIONS: Send Messages in Threads

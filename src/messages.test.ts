@@ -19,7 +19,7 @@ describe("embedMessages", () => {
 				embedMessages.missingGroupsField([
 					{
 						groupName: "Trompette",
-						overlaps: [{ userSnowflake: "id" as Snowflake, otherGroupName: "Percus" }],
+						overlaps: [{ userSnowflake: "id" as Snowflake, otherGroupNames: ["Percus"] }],
 					},
 				]),
 			).toBe("Trompette (si <@id> -> Percus)");
@@ -31,12 +31,36 @@ describe("embedMessages", () => {
 					{
 						groupName: "Trompette",
 						overlaps: [
-							{ userSnowflake: "id" as Snowflake, otherGroupName: "Percus" },
-							{ userSnowflake: "id" as Snowflake, otherGroupName: "Trombone" },
+							{ userSnowflake: "id" as Snowflake, otherGroupNames: ["Percus"] },
+							{ userSnowflake: "id" as Snowflake, otherGroupNames: ["Trombone"] },
 						],
 					},
 				]),
 			).toBe("Trompette (si <@id> -> Percus et <@id> -> Trombone)");
+		});
+
+		test("complex", () => {
+			expect(
+				embedMessages.missingGroupsField([
+					{
+						groupName: "group 8",
+						overlaps: [
+							{ userSnowflake: "e" as Snowflake, otherGroupNames: ["group 4", "group 9"] },
+							{ userSnowflake: "q" as Snowflake, otherGroupNames: ["group 9", "group 10"] },
+						],
+					},
+					{
+						groupName: "group 9",
+						overlaps: [
+							{ userSnowflake: "e" as Snowflake, otherGroupNames: ["group 4", "group 8"] },
+							{ userSnowflake: "q" as Snowflake, otherGroupNames: ["group 8", "group 10"] },
+							{ userSnowflake: "m" as Snowflake, otherGroupNames: ["group 6"] },
+						],
+					},
+				]),
+			).toBe(
+				"group 8 (si <@e> -> group 4 / group 9 et <@q> -> group 9 / group 10)\ngroup 9 (si <@e> -> group 4 / group 8 et <@q> -> group 8 / group 10 et <@m> -> group 6)",
+			);
 		});
 	});
 });

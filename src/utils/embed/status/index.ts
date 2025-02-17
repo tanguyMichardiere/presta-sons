@@ -1,5 +1,5 @@
 export enum Status {
-	Ok = "✅",
+	Yes = "✅",
 	Perhaps = "❔",
 	No = "❌",
 }
