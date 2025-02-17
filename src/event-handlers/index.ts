@@ -4,20 +4,11 @@ import { db } from "../db";
 import type { Logger } from "../logger";
 import { logger } from "../logger";
 
-type Options = {
-	logEvent: boolean;
-};
-
-type ListenerOptions = {
-	db: Db;
-	logger: Logger;
-};
-
 /** Create an event handler, with logging and error handling */
 export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 	eventName: K,
-	listener: (args: ManagerShardEventsMap[K][0], opts: ListenerOptions) => Promise<void>,
-	{ logEvent = true }: Partial<Options> = {},
+	listener: (args: ManagerShardEventsMap[K][0], opts: { db: Db; logger: Logger }) => Promise<void>,
+	{ logEvent = true }: { logEvent?: boolean } = {},
 ): (args: ManagerShardEventsMap[K][0]) => Promise<void> {
 	const childLogger = logger.child({ eventName });
 	childLogger.info("registering a handler");

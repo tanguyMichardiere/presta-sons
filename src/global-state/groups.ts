@@ -7,21 +7,17 @@ import { guilds } from "../db/schema/guilds";
 import { members as membersTable } from "../db/schema/members";
 import { users } from "../db/schema/users";
 import { env } from "../env";
-import { logger } from "../logger";
+import type { Logger } from "../logger";
 import type { Status } from "../utils/embed/status";
 
-export type Groups = Array<{
-	name: string;
-	members: Array<{ snowflake: Snowflake; status?: Status }>;
-}>;
+export type Groups = { name: string; members: { snowflake: Snowflake; status?: Status }[] }[];
 
 // https://discord.com/developers/docs/resources/guild#list-guild-members
 const maxLimit = 1000;
 
 const getMembersPage = (
-	api: API,
 	guildSnowflake: Snowflake,
-	previousPage?: RESTGetAPIGuildMembersResult,
+	{ api, previousPage }: { api: API; previousPage?: RESTGetAPIGuildMembersResult },
 ): Promise<RESTGetAPIGuildMembersResult> =>
 	// PERMISSIONS: Server Members Intent (Privileged Gateway Intents)
 	api.guilds.getMembers(guildSnowflake, {
@@ -39,22 +35,28 @@ const getMembersPage = (
 				: undefined,
 	});
 
-async function getAllMembers(api: API, guildSnowflake: Snowflake): Promise<APIGuildMember[]> {
-	const pages = [await getMembersPage(api, guildSnowflake)];
+async function getAllMembers(
+	guildSnowflake: Snowflake,
+	{ api }: { api: API },
+): Promise<APIGuildMember[]> {
+	const pages = [await getMembersPage(guildSnowflake, { api })];
 	// biome-ignore lint/style/noNonNullAssertion: there is at least the first page
 	while (pages.at(-1)!.length === maxLimit) {
 		// biome-ignore lint/style/noNonNullAssertion: there is at least the first page
-		pages.push(await getMembersPage(api, guildSnowflake, pages.at(-1)!));
+		pages.push(await getMembersPage(guildSnowflake, { api, previousPage: pages.at(-1)! }));
 	}
 	return pages.flat();
 }
 
-export async function updateGroups(api: API, db: Db, guildSnowflake: Snowflake): Promise<void> {
+export async function updateGroups(
+	guildSnowflake: Snowflake,
+	{ api, db, logger }: { api: API; db: Db; logger: Logger },
+): Promise<void> {
 	const childLogger = logger.child({ guildSnowflake });
 	childLogger.debug("updating the members and roles list");
 	const [allRoles, allMembers] = await Promise.all([
 		api.guilds.getRoles(guildSnowflake),
-		getAllMembers(api, guildSnowflake),
+		getAllMembers(guildSnowflake, { api }),
 	]);
 	childLogger.debug("retrieving the admin role(s)");
 	const adminRoles = allRoles.filter((role) => role.name === env.ADMIN_ROLE_NAME);
@@ -145,7 +147,7 @@ export async function updateGroups(api: API, db: Db, guildSnowflake: Snowflake):
 	childLogger.debug("successfully updated the members and roles list");
 }
 
-export async function getGroups(db: Db, guildSnowflake: Snowflake): Promise<Groups> {
+export async function getGroups(guildSnowflake: Snowflake, { db }: { db: Db }): Promise<Groups> {
 	const guild = await db.query.guilds.findFirst({
 		columns: {},
 		where: eq(guilds.snowflake, guildSnowflake),

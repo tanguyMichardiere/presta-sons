@@ -2,7 +2,7 @@ import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@
 import { ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
 import type { Db } from "../../../db";
 import { getGroups } from "../../../global-state/groups";
-import { logger } from "../../../logger";
+import type { Logger } from "../../../logger";
 import { channelUrl, createSurveyCommandMessages } from "../../../messages";
 import { embedFromGroups } from "../../../utils/embed";
 import { Status } from "../../../utils/embed/status";
@@ -24,12 +24,11 @@ const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [
 ];
 
 export async function handleCreateSurveyCommand(
-	api: API,
-	db: Db,
 	data: CreateSurveyCommandData,
+	{ api, db, logger }: { api: API; db: Db; logger: Logger },
 ): Promise<void> {
 	// biome-ignore lint/style/noNonNullAssertion:
-	if (!(await isAdmin(db, data.guild_id, data.member.user!.id))) {
+	if (!(await isAdmin(data.member.user!.id, { guildSnowflake: data.guild_id, db }))) {
 		throw new InteractionError(createSurveyCommandMessages.errors.userIsNotAdmin);
 	}
 	logger.debug({ commandData: data }, "creating a survey");
@@ -49,12 +48,17 @@ export async function handleCreateSurveyCommand(
 		threadSnowflake !== undefined ? channelUrl(data.guild_id, threadSnowflake) : undefined;
 	await api.interactions.reply(data.id, data.token, {
 		embeds: [
-			embedFromGroups(await getGroups(db, data.guild_id), { title: embedTitle, url: threadUrl }),
+			embedFromGroups(await getGroups(data.guild_id, { db }), {
+				title: embedTitle,
+				url: threadUrl,
+				logger,
+			}),
 		],
 		components,
 	});
-	const surveyMessage = await exponentialBackoff(() =>
-		api.interactions.getOriginalReply(data.application_id, data.token),
+	const surveyMessage = await exponentialBackoff(
+		() => api.interactions.getOriginalReply(data.application_id, data.token),
+		{ logger },
 	);
 	// PERMISSIONS: Manage Messages
 	await api.channels.pinMessage(data.channel.id, surveyMessage.id);

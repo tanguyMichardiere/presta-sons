@@ -1,18 +1,13 @@
-import { logger } from "../logger";
+import type { Logger } from "../logger";
 
 const sleep = (ms: number): Promise<void> =>
 	new Promise((resolve) => {
 		setTimeout(resolve, ms);
 	});
 
-type Options = {
-	ms: number;
-	limit: number;
-};
-
 export async function exponentialBackoff<T>(
 	fn: () => Promise<T>,
-	{ ms = 100, limit = 3000 }: Partial<Options> = {},
+	{ ms = 100, limit = 3000, logger }: { ms?: number; limit?: number; logger: Logger },
 ): Promise<T> {
 	const start = Date.now();
 	try {

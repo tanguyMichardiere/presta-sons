@@ -6,9 +6,8 @@ import { members } from "../../db/schema/members";
 import { users } from "../../db/schema/users";
 
 export async function isAdmin(
-	db: Db,
-	guildSnowflake: Snowflake,
 	userSnowflake: Snowflake,
+	{ guildSnowflake, db }: { guildSnowflake: Snowflake; db: Db },
 ): Promise<boolean> {
 	const guild = await db.query.guilds.findFirst({
 		columns: { id: true },
