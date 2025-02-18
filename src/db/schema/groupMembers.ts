@@ -14,9 +14,7 @@ export const groupMembers = sqliteTable(
 			.references(() => groups.id, { onDelete: "cascade" })
 			.notNull(),
 	},
-	(table) => ({
-		idx: uniqueIndex("group_members_idx").on(table.memberId, table.groupId),
-	}),
+	(table) => [uniqueIndex("group_members_idx").on(table.memberId, table.groupId)],
 );
 
 export const groupMembersRelations = relations(groupMembers, ({ one }) => ({

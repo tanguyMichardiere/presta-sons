@@ -9,9 +9,7 @@ export const users = sqliteTable(
 		id: integer("id").primaryKey(),
 		snowflake: text("snowflake").$type<Snowflake>().notNull(),
 	},
-	(table) => ({
-		snowflakeIdx: uniqueIndex("users_snowflake_idx").on(table.snowflake),
-	}),
+	(table) => [uniqueIndex("users_snowflake_idx").on(table.snowflake)],
 );
 
 export const usersRelations = relations(users, ({ many }) => ({

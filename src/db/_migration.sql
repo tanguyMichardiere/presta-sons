@@ -16,6 +16,7 @@ CREATE TABLE `groups` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `groups_snowflake_idx` ON `groups` (`snowflake`);--> statement-breakpoint
+CREATE INDEX `groups_guild_id_idx` ON `groups` (`guild_id`);--> statement-breakpoint
 CREATE TABLE `guilds` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`snowflake` text NOT NULL

@@ -1,6 +1,6 @@
 import type { Snowflake } from "@discordjs/core";
 import { relations } from "drizzle-orm";
-import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { groupMembers } from "./groupMembers";
 import { guilds } from "./guilds";
 
@@ -14,9 +14,10 @@ export const groups = sqliteTable(
 			.notNull(),
 		name: text("name").notNull(),
 	},
-	(table) => ({
-		snowflakeIdx: uniqueIndex("groups_snowflake_idx").on(table.snowflake),
-	}),
+	(table) => [
+		uniqueIndex("groups_snowflake_idx").on(table.snowflake),
+		index("groups_guild_id_idx").on(table.guildId),
+	],
 );
 
 export const groupsRelations = relations(groups, ({ one, many }) => ({
