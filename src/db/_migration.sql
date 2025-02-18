@@ -1,12 +1,11 @@
 CREATE TABLE `group_members` (
-	`id` integer PRIMARY KEY NOT NULL,
 	`member_id` integer NOT NULL,
 	`group_id` integer NOT NULL,
+	PRIMARY KEY(`member_id`, `group_id`),
 	FOREIGN KEY (`member_id`) REFERENCES `members`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `group_members_idx` ON `group_members` (`member_id`,`group_id`);--> statement-breakpoint
 CREATE TABLE `groups` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`snowflake` text NOT NULL,
