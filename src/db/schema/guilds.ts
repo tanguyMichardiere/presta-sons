@@ -10,9 +10,7 @@ export const guilds = sqliteTable(
 		id: integer("id").primaryKey(),
 		snowflake: text("snowflake").$type<Snowflake>().notNull(),
 	},
-	(table) => ({
-		snowflakeIdx: uniqueIndex("guilds_snowflake_idx").on(table.snowflake),
-	}),
+	(table) => [uniqueIndex("guilds_snowflake_idx").on(table.snowflake)],
 );
 
 export const guildsRelations = relations(guilds, ({ many }) => ({

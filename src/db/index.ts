@@ -19,4 +19,4 @@ export const db = drizzle(sqlite, {
 		},
 	},
 });
-export type Db = typeof db;
+export type Db = Omit<typeof db, "$client">;

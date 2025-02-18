@@ -94,7 +94,7 @@ export async function updateGroups(
 			.values(members.map(({ snowflake }) => ({ snowflake })))
 			.onConflictDoNothing()
 			.then(() =>
-				// INSERT ON CONFLICT DO NOTHING RETURNING doesn't return updated rows
+				// INSERT ON CONFLICT DO NOTHING RETURNING doesn't return existing rows
 				// so we have to select after the insert
 				db.query.users.findMany({
 					where: inArray(

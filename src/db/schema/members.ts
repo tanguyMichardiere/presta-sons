@@ -16,9 +16,7 @@ export const members = sqliteTable(
 			.notNull(),
 		admin: integer("admin", { mode: "boolean" }).notNull(),
 	},
-	(table) => ({
-		idx: uniqueIndex("members_idx").on(table.userId, table.guildId),
-	}),
+	(table) => [uniqueIndex("members_idx").on(table.userId, table.guildId)],
 );
 
 export const membersRelations = relations(members, ({ one, many }) => ({
