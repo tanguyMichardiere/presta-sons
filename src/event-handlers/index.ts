@@ -18,8 +18,7 @@ export function createEventHandler<K extends keyof ManagerShardEventsMap>(
 		}
 		try {
 			await db.transaction(async (tx) => {
-				// @ts-expect-error
-				await listener(args, { db: tx, logger: childLogger });
+				await listener(args, { db: tx, logger: childLogger as Logger });
 			});
 		} catch (error) {
 			childLogger.error(error);
