@@ -1,0 +1,16 @@
+[variables]
+NODE_ENV = "production"
+
+[phases.setup]
+nixPkgs = ["bun"]
+
+[phases.install]
+cmds = ["bun install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["bun run build"]
+
+[start]
+runImage = "gcr.io/distroless/base-debian12"
+onlyIncludeFiles = ["./presta-sons"]
+cmd = "./presta-sons"
