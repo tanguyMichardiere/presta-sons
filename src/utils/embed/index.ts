@@ -34,7 +34,7 @@ export async function membersFromEmbed(
 	logger.debug({ statuses }, "extracted statuses");
 	for (const { name: groupName, members: groupMembers } of groups) {
 		for (const member of groupMembers) {
-			member.status = statuses[groupName]?.[member.snowflake];
+			member.status ??= statuses[groupName]?.[member.snowflake];
 		}
 	}
 	logger.debug({ groups }, "extracted groups");
