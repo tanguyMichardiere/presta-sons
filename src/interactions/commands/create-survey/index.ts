@@ -1,4 +1,4 @@
-import type { API, APIActionRowComponent, APIMessageActionRowComponent } from "@discordjs/core";
+import type { API, APIActionRowComponent, APIComponentInMessageActionRow } from "@discordjs/core";
 import { ButtonStyle, ChannelType, ComponentType } from "@discordjs/core";
 import type { Db } from "../../../db";
 import { getGroups } from "../../../global-state/groups";
@@ -11,7 +11,7 @@ import { InteractionError } from "../../error";
 import { isAdmin } from "../is-admin";
 import type { CreateSurveyCommandData } from "./data";
 
-const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [
+const components: APIActionRowComponent<APIComponentInMessageActionRow>[] = [
 	{
 		type: ComponentType.ActionRow,
 		components: [Status.Yes, Status.Perhaps, Status.No].map((status) => ({

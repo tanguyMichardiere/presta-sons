@@ -16,25 +16,25 @@
 		"postbuild": "rm -f .*.bun-build"
 	},
 	"dependencies": {
-		"@discordjs/core": "2.0.1",
-		"@discordjs/rest": "2.4.2",
-		"@discordjs/ws": "2.0.1",
-		"@t3-oss/env-core": "0.12.0",
-		"drizzle-orm": "0.39.3",
+		"@discordjs/core": "2.1.0",
+		"@discordjs/rest": "2.5.0",
+		"@discordjs/ws": "2.0.2",
+		"@t3-oss/env-core": "0.13.4",
+		"drizzle-orm": "0.43.1",
 		"pino": "9.6.0",
-		"zod": "3.24.2"
+		"zod": "3.24.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@total-typescript/ts-reset": "0.6.1",
-		"@types/bun": "1.2.2",
-		"drizzle-kit": "0.30.4",
-		"knip": "5.44.1",
-		"npm-check-updates": "17.1.14",
+		"@types/bun": "1.2.13",
+		"drizzle-kit": "0.31.1",
+		"knip": "5.55.1",
+		"npm-check-updates": "18.0.1",
 		"pino-pretty": "13.0.0",
-		"typescript": "5.7.3"
+		"typescript": "5.8.3"
 	},
 	"patchedDependencies": {
-		"discord-api-types@0.37.117": "patches/discord-api-types@0.37.117.patch"
+		"discord-api-types@0.38.1": "patches/discord-api-types.patch"
 	}
 }
