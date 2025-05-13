@@ -31,11 +31,13 @@ export async function membersFromEmbed(
 	}
 
 	const statuses = extractStatus(embed.fields);
+	logger.debug({ statuses }, "extracted statuses");
 	for (const { name: groupName, members: groupMembers } of groups) {
 		for (const member of groupMembers) {
 			member.status = statuses[groupName]?.[member.snowflake];
 		}
 	}
+	logger.debug({ groups }, "extracted groups");
 
 	return groups;
 }
@@ -58,6 +60,7 @@ export function embedFromGroups(
 	let needsSeparator = false;
 
 	const pending = extractPendingMembers(groups);
+	logger.debug({ pending }, "extracted pending members");
 	if (pending.length > 0) {
 		fields.push({
 			name: embedMessages.didntAnswer,
@@ -67,6 +70,7 @@ export function embedFromGroups(
 	}
 
 	const missing = extractMissingGroups(groups, { logger });
+	logger.debug({ missing }, "extracted missing members");
 	if (missing.length > 0) {
 		fields.push({
 			name: embedMessages.missingGroups,
@@ -76,6 +80,7 @@ export function embedFromGroups(
 	}
 
 	const perhapsMissing = extractPerhapsMissingGroups(groups, { logger });
+	logger.debug({ perhapsMissing }, "extracted perhaps missing members");
 	if (perhapsMissing.length > 0) {
 		fields.push({
 			name: embedMessages.perhapsMissingGroups,
